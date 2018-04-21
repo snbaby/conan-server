@@ -1,4 +1,4 @@
-package com.conan.crawler.server.post;
+package com.conan.console.server;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
