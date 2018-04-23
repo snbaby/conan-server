@@ -199,4 +199,36 @@ public class UserService {
 		userAuth.setUpdated_at(new Date());
 		userAuthMapper.updateByPrimaryKeySelective(userAuth);
 	}
+	
+	@Transactional
+	public void resetUserPaasword(String user_phone,String new_passwd) {
+		UserInfo userInfo = userInfoMapper.selectByPhoneNo(user_phone);
+		if (userInfo == null) {
+			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+		}
+		
+		UserAuth userAuth = userAuthMapper.selectByPrimaryKey(userInfo.getId());// 用户信息 用户权限 用户金额 所使用的ID 均为同一ID
+		if (userAuth == null) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		userAuth.setHashed_passwd(new_passwd);
+		userAuth.setUpdated_at(new Date());
+		userAuthMapper.updateByPrimaryKeySelective(userAuth);
+	}
+	
+	@Transactional
+	public void updateUserPhone(String user_id,String new_phone) {
+		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_id);
+		if (userInfo == null) {
+			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+		}
+		userInfo.setPhone_no(new_phone);
+		userInfo.setUpdated_at(new Date());
+	}
 }

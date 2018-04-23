@@ -17,6 +17,7 @@ import com.conan.console.server.parameter.GetUserInfoParameters;
 import com.conan.console.server.parameter.UserLoginParameters;
 import com.conan.console.server.parameter.UserModifyNickParameters;
 import com.conan.console.server.parameter.UserModifyPasswdParameters;
+import com.conan.console.server.parameter.UserModifyPhoneParameters;
 import com.conan.console.server.parameter.UserModifyPhotoParameters;
 import com.conan.console.server.parameter.UserRegisterParameters;
 import com.conan.console.server.parameter.UserResetPasswdParameters;
@@ -142,9 +143,10 @@ public class UserController {
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success");
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 修改用户密码
+	 * 
 	 * @param userModifyPasswdParameters
 	 * @param bindingResult
 	 * @return
@@ -164,7 +166,7 @@ public class UserController {
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success");
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("user_reset_passwd")
 	@ResponseBody
 	public ResponseEntity<ResponseSuccessResult> userResetPasswd(
@@ -175,12 +177,25 @@ public class UserController {
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
 		}
 
-		userService.updateUserPaasword(userModifyPasswdParameters.getUser_id(),
-				userModifyPasswdParameters.getOld_passwd(), userModifyPasswdParameters.getNew_passwd());
+		userService.resetUserPaasword(userResetPasswdParameters.getUser_phone(),
+				userResetPasswdParameters.getNew_passwd());
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success");
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
-	
-	
+
+	@PostMapping("user_modify_phone")
+	@ResponseBody
+	public ResponseEntity<ResponseSuccessResult> userModifyPhone(
+			@Valid UserModifyPhoneParameters userModifyPhoneParameters, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+		}
+
+		userService.updateUserPhone(userModifyPhoneParameters.getUser_id(), userModifyPhoneParameters.getNew_phone());
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success");
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
+	}
 
 }
