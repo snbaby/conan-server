@@ -1,16 +1,22 @@
 package com.conan.console.server.parameter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class UserLoginParameters {
 	
-	@NotNull(message="电话号码不能为空")
-	@Size (min=1, max=50, message="电话号码长度只能在1-50之间")
+	@NotNull(message = "电话号码不能为空")
+	@NotBlank(message = "电话号码不能为空")
+	@NotEmpty(message = "电话号码不能为空")
+	@Size(max = 50, message = "电话号码长度最大长度为50")
 	private String user_phone;
 	
 	@NotNull(message="密码不能为空")
-	@Size (min=1, max=255, message="密码长度只能在1-255之间")
+	@NotBlank(message="密码不能为空")
+	@NotEmpty(message="密码不能为空")
+	@Size (max=255, message="密码最大长度为255")
 	private String user_passwd;
 
 	public String getUser_phone() {

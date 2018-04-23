@@ -111,4 +111,92 @@ public class UserService {
 
 		return resultJsonObject;
 	}
+	
+	@Transactional
+	public JSONObject getUserInfo(String user_id) {
+		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_id);
+		if (userInfo == null) {
+			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+		}
+
+		UserRemain userRemain = userRemainMapper.selectByPrimaryKey(user_id);// 用户信息 用户权限 用户金额 所使用的ID 均为同一ID
+		if (userRemain == null) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		JSONObject resultJsonObject = new JSONObject();
+		JSONObject userInfoJsonObject = new JSONObject();
+		JSONObject userRemainJsonObject = new JSONObject();
+		userRemainJsonObject = (JSONObject) JSON.toJSON(userRemain);
+		userRemainJsonObject.put("remain_info_id", userRemain.getId());
+		int scan_cnt = (int) (userRemain.getGold_amount() + userRemain.getGold_coupon());// 直接丢掉小数部分
+		userRemainJsonObject.put("scan_cnt", scan_cnt);
+		userRemainJsonObject.remove("id");
+		userRemainJsonObject.remove("user_info_id");
+
+		userInfoJsonObject = (JSONObject) JSON.toJSON(userInfo);
+		userInfoJsonObject.put("user_info_id", userInfo.getId());
+		userInfoJsonObject.put("user_remain_info", userRemainJsonObject);
+		userInfoJsonObject.remove("id");
+
+		resultJsonObject = userInfoJsonObject;
+
+		return resultJsonObject;
+	}
+	
+	@Transactional
+	public void updateUserPhoto(String user_id,String photo_url) {
+		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_id);
+		if (userInfo == null) {
+			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+		}
+		userInfo.setUser_photo(photo_url);
+		userInfo.setUpdated_at(new Date());
+		userInfoMapper.updateByPrimaryKeySelective(userInfo);
+	}
+	
+	@Transactional
+	public void updateUserNick(String user_id,String nick_name) {
+		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_id);
+		if (userInfo == null) {
+			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+		}
+		userInfo.setNick_name(nick_name);;
+		userInfo.setUpdated_at(new Date());
+		userInfoMapper.updateByPrimaryKeySelective(userInfo);
+	}
+	
+	@Transactional
+	public void updateUserPaasword(String user_id,String old_passwd,String new_passwd) {
+		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_id);
+		if (userInfo == null) {
+			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+		}
+		
+		UserAuth userAuth = userAuthMapper.selectByPrimaryKey(userInfo.getId());// 用户信息 用户权限 用户金额 所使用的ID 均为同一ID
+		if (userAuth == null) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		
+		if(!old_passwd.equals(userAuth.getHashed_passwd())) {
+			throw new ConanException(ConanExceptionConstants.USER_PASSWD_VALIDATED_EXCEPTION_CODE,
+					ConanExceptionConstants.USER_PASSWD_VALIDATED_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.USER_PASSWD_VALIDATED_EXCEPTION_HTTP_STATUS);
+		}
+		
+		userAuth.setHashed_passwd(new_passwd);
+		userAuth.setUpdated_at(new Date());
+		userAuthMapper.updateByPrimaryKeySelective(userAuth);
+	}
 }

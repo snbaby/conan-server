@@ -6,13 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.conan.console.server.exception.ConanException;
+import com.conan.console.server.parameter.GetUserInfoParameters;
 import com.conan.console.server.parameter.UserLoginParameters;
+import com.conan.console.server.parameter.UserModifyNickParameters;
+import com.conan.console.server.parameter.UserModifyPasswdParameters;
+import com.conan.console.server.parameter.UserModifyPhotoParameters;
 import com.conan.console.server.parameter.UserRegisterParameters;
 import com.conan.console.server.response.ResponseSuccessResult;
 import com.conan.console.server.service.UserService;
@@ -25,6 +30,13 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
+	/**
+	 * 用戶登錄
+	 * 
+	 * @param userLoginParameters
+	 * @param bindingResult
+	 * @return
+	 */
 	@PostMapping("user_login")
 	@ResponseBody
 	public ResponseEntity<ResponseSuccessResult> userLogin(@Valid UserLoginParameters userLoginParameters,
@@ -40,6 +52,13 @@ public class UserController {
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 
+	/**
+	 * 用戶註冊
+	 * 
+	 * @param userRegisterParameters
+	 * @param bindingResult
+	 * @return
+	 */
 	@PostMapping("user_register")
 	@ResponseBody
 	public ResponseEntity<ResponseSuccessResult> userRegister(@Valid UserRegisterParameters userRegisterParameters,
@@ -52,23 +71,91 @@ public class UserController {
 		// 用户注册
 		userService.registerUser(userRegisterParameters.getUser_phone(), userRegisterParameters.getUser_passwd());
 
-		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(),"success");
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(), "success");
 		return new ResponseEntity<>(responseResult, HttpStatus.CREATED);
 	}
 
-	/*
-	 * public static void main(String[] args) { UserAuth userAuth = new UserAuth();
-	 * userAuth.setId("123"); JSONObject jsonObject = new JSONObject(); jsonObject =
-	 * JSONObject.fromObject(userAuth); ResponseSuccessResult responseResult = new
-	 * ResponseSuccessResult(); responseResult.setCode(HttpStatus.CREATED.value());
-	 * responseResult.setContent(jsonObject);
-	 * responseResult.setDescription("success");
-	 * ResponseEntity<ResponseSuccessResult> responseEntity = new
-	 * ResponseEntity<>(responseResult, HttpStatus.CREATED);
+	/**
+	 * 獲取用戶信息
 	 * 
-	 * JSONObject resultJsonObject = new JSONObject(); resultJsonObject =
-	 * JSONObject.fromObject(responseEntity);
-	 * System.out.println(resultJsonObject.toString()); }
-	 * 
+	 * @param getUserInfoParameters
+	 * @param bindingResult
+	 * @return
 	 */
+	@GetMapping("get_user_info")
+	@ResponseBody
+	public ResponseEntity<ResponseSuccessResult> getUserInfo(@Valid GetUserInfoParameters getUserInfoParameters,
+			BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+		}
+
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(), "success",
+				userService.getUserInfo(getUserInfoParameters.getUser_id()));
+		return new ResponseEntity<>(responseResult, HttpStatus.CREATED);
+	}
+
+	/**
+	 * 修改用户的头像
+	 * 
+	 * @param userModifyPhotoParameters
+	 * @param bindingResult
+	 * @return
+	 */
+	@PostMapping("user_modify_photo")
+	@ResponseBody
+	public ResponseEntity<ResponseSuccessResult> userModifyPhoto(
+			@Valid UserModifyPhotoParameters userModifyPhotoParameters, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+		}
+
+		userService.updateUserPhoto(userModifyPhotoParameters.getUser_id(), userModifyPhotoParameters.getPhoto_url());
+
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success");
+		return new ResponseEntity<>(responseResult, HttpStatus.CREATED);
+	}
+
+	/**
+	 * 修改用户昵称
+	 * 
+	 * @param userModifyNickParameters
+	 * @param bindingResult
+	 * @return
+	 */
+	@PostMapping("user_modify_nick")
+	@ResponseBody
+	public ResponseEntity<ResponseSuccessResult> userModifyNick(
+			@Valid UserModifyNickParameters userModifyNickParameters, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+		}
+
+		userService.updateUserNick(userModifyNickParameters.getUser_id(), userModifyNickParameters.getNew_nick());
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success");
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
+	}
+
+	@PostMapping("user_modify_passwd")
+	@ResponseBody
+	public ResponseEntity<ResponseSuccessResult> userModifyPasswd(
+			@Valid UserModifyPasswdParameters userModifyPasswdParameters, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+		}
+
+		userService.updateUserPaasword(userModifyPasswdParameters.getUser_id(),
+				userModifyPasswdParameters.getOld_passwd(), userModifyPasswdParameters.getNew_passwd());
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success");
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
+	}
+
 }
