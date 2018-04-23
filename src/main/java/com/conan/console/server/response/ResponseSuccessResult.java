@@ -5,6 +5,18 @@ public class ResponseSuccessResult {
 	private String description;
 	private Object content;
 
+	public ResponseSuccessResult(int code, String description, Object content) {
+		this.code = code;
+		this.description = description;
+		this.content = content;
+	}
+	
+	public ResponseSuccessResult(int code, String description) {
+		this.code = code;
+		this.description = description;
+		this.content = "";
+	}
+
 	public int getCode() {
 		return code;
 	}

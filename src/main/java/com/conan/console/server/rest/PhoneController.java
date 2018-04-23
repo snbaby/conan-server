@@ -9,40 +9,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.conan.console.server.parameter.CheckValidationCodeParameters;
-import com.conan.console.server.parameter.UserLoginParameters;
+import com.conan.console.server.exception.ConanException;
+import com.conan.console.server.parameter.GetValidationCodeParameters;
 import com.conan.console.server.response.ResponseSuccessResult;
+import com.conan.console.server.utils.ConanExceptionConstants;
 
 @RestController
 @RequestMapping(value = "api/v2.0")
 public class PhoneController {
 
 	@PostMapping("get_validation_code")
-	public ResponseEntity<ResponseSuccessResult> getValidationCode(@Valid UserLoginParameters getValidationCodeParameters, BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> getValidationCode(@Valid GetValidationCodeParameters getValidationCodeParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			ResponseSuccessResult responseResult = new ResponseSuccessResult();
-			responseResult.setCode(HttpStatus.BAD_REQUEST.value());
-			responseResult.setContent(bindingResult.getFieldError());
-            return new ResponseEntity<>(responseResult,HttpStatus.BAD_REQUEST);
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
         }
-		ResponseSuccessResult responseResult = new ResponseSuccessResult();
-		responseResult.setCode(HttpStatus.OK.value());
 		
-		responseResult.setDescription("登陆成功");
-		return new ResponseEntity<>(responseResult,HttpStatus.OK);
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(),"success");
+		return new ResponseEntity<>(responseResult,HttpStatus.CREATED);
 	}
-	@PostMapping("check_validation_code")
-	public ResponseEntity<ResponseSuccessResult> checkValidationCode(@Valid CheckValidationCodeParameters checkValidationCodeParameters, BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			ResponseSuccessResult responseResult = new ResponseSuccessResult();
-			responseResult.setCode(HttpStatus.BAD_REQUEST.value());
-			responseResult.setContent(bindingResult.getFieldError());
-            return new ResponseEntity<>(responseResult,HttpStatus.BAD_REQUEST);
-        }
-		ResponseSuccessResult responseResult = new ResponseSuccessResult();
-		responseResult.setCode(HttpStatus.OK.value());
-		
-		responseResult.setDescription("登陆成功");
-		return new ResponseEntity<>(responseResult,HttpStatus.OK);
-	}
+	
 }

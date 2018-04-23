@@ -8,6 +8,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.conan.console.server.entity.UserAuth;
 import com.conan.console.server.entity.UserInfo;
 import com.conan.console.server.entity.UserRemain;
@@ -17,11 +19,6 @@ import com.conan.console.server.mapper.UserInfoMapper;
 import com.conan.console.server.mapper.UserRemainMapper;
 import com.conan.console.server.utils.ConanApplicationConstants;
 import com.conan.console.server.utils.ConanExceptionConstants;
-
-import net.sf.json.JSONNull;
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
-import net.sf.json.processors.DefaultValueProcessor;
 
 @Service
 public class UserService {
@@ -98,14 +95,14 @@ public class UserService {
 		JSONObject resultJsonObject = new JSONObject();
 		JSONObject userInfoJsonObject = new JSONObject();
 		JSONObject userRemainJsonObject = new JSONObject();
-		userRemainJsonObject = JSONObject.fromObject(userRemain);
+		userRemainJsonObject = (JSONObject) JSON.toJSON(userRemain);
 		userRemainJsonObject.put("remain_info_id", userRemain.getId());
 		int scan_cnt = (int) (userRemain.getGold_amount() + userRemain.getGold_coupon());// 直接丢掉小数部分
 		userRemainJsonObject.put("scan_cnt", scan_cnt);
 		userRemainJsonObject.remove("id");
 		userRemainJsonObject.remove("user_info_id");
 
-		userInfoJsonObject = JSONObject.fromObject(userInfo);
+		userInfoJsonObject = (JSONObject) JSON.toJSON(userInfo);
 		userInfoJsonObject.put("user_info_id", userInfo.getId());
 		userInfoJsonObject.put("user_remain_info", userRemainJsonObject);
 		userInfoJsonObject.remove("id");

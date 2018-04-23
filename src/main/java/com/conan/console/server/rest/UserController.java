@@ -34,12 +34,9 @@ public class UserController {
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
 		}
-		
-		
-		ResponseSuccessResult responseResult = new ResponseSuccessResult();
-		responseResult.setCode(HttpStatus.OK.value());
-		responseResult.setContent(userService.getUserInfo(userLoginParameters.getUser_phone(), userLoginParameters.getUser_passwd()));
-		responseResult.setDescription("success");
+
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success",
+				userService.getUserInfo(userLoginParameters.getUser_phone(), userLoginParameters.getUser_passwd()));
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 
@@ -52,12 +49,26 @@ public class UserController {
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
 		}
-		//用户注册
+		// 用户注册
 		userService.registerUser(userRegisterParameters.getUser_phone(), userRegisterParameters.getUser_passwd());
 
-		ResponseSuccessResult responseResult = new ResponseSuccessResult();
-		responseResult.setCode(HttpStatus.CREATED.value());
-		responseResult.setDescription("success");
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(),"success");
 		return new ResponseEntity<>(responseResult, HttpStatus.CREATED);
 	}
+
+	/*
+	 * public static void main(String[] args) { UserAuth userAuth = new UserAuth();
+	 * userAuth.setId("123"); JSONObject jsonObject = new JSONObject(); jsonObject =
+	 * JSONObject.fromObject(userAuth); ResponseSuccessResult responseResult = new
+	 * ResponseSuccessResult(); responseResult.setCode(HttpStatus.CREATED.value());
+	 * responseResult.setContent(jsonObject);
+	 * responseResult.setDescription("success");
+	 * ResponseEntity<ResponseSuccessResult> responseEntity = new
+	 * ResponseEntity<>(responseResult, HttpStatus.CREATED);
+	 * 
+	 * JSONObject resultJsonObject = new JSONObject(); resultJsonObject =
+	 * JSONObject.fromObject(responseEntity);
+	 * System.out.println(resultJsonObject.toString()); }
+	 * 
+	 */
 }
