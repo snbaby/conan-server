@@ -5,4 +5,6 @@ public class ConanApplicationConstants {
 	public static final Float INIT_GOLD_AMOUNT = 0f;
 	//金币信息 初始化为0
 	public static final Float INIT_GOLD_COUPON = 0f;
+	//金币信息 初始化为0
+	public static final int INIT_PAGE_SIZE = 10;
 }

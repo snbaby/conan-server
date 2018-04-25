@@ -18,6 +18,7 @@ public class UserModifyNickParameters {
 	@NotEmpty(message = "用户ID不能为空")
 	@Size(max = 45, message = "用户ID最大长度为45")
 	private String user_id;
+	
 
 	public String getNew_nick() {
 		return new_nick;
@@ -34,5 +35,8 @@ public class UserModifyNickParameters {
 	public void setUser_id(String user_id) {
 		this.user_id = user_id;
 	}
+
+	
+	
 
 }
