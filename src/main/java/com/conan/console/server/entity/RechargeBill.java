@@ -37,7 +37,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    private Byte recharge_type;
+    private String recharge_type;
 
     /**
      *
@@ -200,7 +200,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public Byte getRecharge_type() {
+    public String getRecharge_type() {
         return recharge_type;
     }
 
@@ -212,7 +212,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public void setRecharge_type(Byte recharge_type) {
+    public void setRecharge_type(String recharge_type) {
         this.recharge_type = recharge_type;
     }
 

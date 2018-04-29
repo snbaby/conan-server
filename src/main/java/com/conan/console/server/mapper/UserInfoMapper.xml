@@ -13,7 +13,7 @@
     <result column="created_at" jdbcType="DATE" property="created_at" />
     <result column="updated_at" jdbcType="DATE" property="updated_at" />
     <result column="last_login_at" jdbcType="DATE" property="last_login_at" />
-    <result column="activate" jdbcType="TINYINT" property="activate" />
+    <result column="activate" jdbcType="VARCHAR" property="activate" />
     <result column="user_photo" jdbcType="VARCHAR" property="user_photo" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -66,7 +66,7 @@
       activate, user_photo)
     values (#{id,jdbcType=VARCHAR}, #{phone_no,jdbcType=VARCHAR}, #{nick_name,jdbcType=VARCHAR}, 
       #{created_at,jdbcType=DATE}, #{updated_at,jdbcType=DATE}, #{last_login_at,jdbcType=DATE}, 
-      #{activate,jdbcType=TINYINT}, #{user_photo,jdbcType=VARCHAR})
+      #{activate,jdbcType=VARCHAR}, #{user_photo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.conan.console.server.entity.UserInfo">
     <!--
@@ -121,7 +121,7 @@
         #{last_login_at,jdbcType=DATE},
       </if>
       <if test="activate != null">
-        #{activate,jdbcType=TINYINT},
+        #{activate,jdbcType=VARCHAR},
       </if>
       <if test="user_photo != null">
         #{user_photo,jdbcType=VARCHAR},
@@ -152,7 +152,7 @@
         last_login_at = #{last_login_at,jdbcType=DATE},
       </if>
       <if test="activate != null">
-        activate = #{activate,jdbcType=TINYINT},
+        activate = #{activate,jdbcType=VARCHAR},
       </if>
       <if test="user_photo != null">
         user_photo = #{user_photo,jdbcType=VARCHAR},
@@ -172,7 +172,7 @@
       created_at = #{created_at,jdbcType=DATE},
       updated_at = #{updated_at,jdbcType=DATE},
       last_login_at = #{last_login_at,jdbcType=DATE},
-      activate = #{activate,jdbcType=TINYINT},
+      activate = #{activate,jdbcType=VARCHAR},
       user_photo = #{user_photo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>

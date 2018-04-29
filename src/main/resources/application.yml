@@ -11,8 +11,8 @@ spring:
 logging:
     path: /var/log/conan/console
     level:
-        org.springframework.web: TRACE
-        guru.springframework.controllers: TRACE
-        com.dy.springboot.server.mapper: DEBUG
+        org.springframework: INFO
+        org.spring.springboot.dao: DEBUG
+        com.conan.console.server.mapper: DEBUG
         
 

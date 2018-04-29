@@ -66,7 +66,7 @@ public class UserInfo {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    private Byte activate;
+    private String activate;
 
     /**
      *
@@ -229,7 +229,7 @@ public class UserInfo {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public Byte getActivate() {
+    public String getActivate() {
         return activate;
     }
 
@@ -241,7 +241,7 @@ public class UserInfo {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public void setActivate(Byte activate) {
+    public void setActivate(String activate) {
         this.activate = activate;
     }
 

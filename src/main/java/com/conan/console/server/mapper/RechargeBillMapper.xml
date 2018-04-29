@@ -10,7 +10,7 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="created_at" jdbcType="DATE" property="created_at" />
     <result column="updated_at" jdbcType="DATE" property="updated_at" />
-    <result column="recharge_type" jdbcType="TINYINT" property="recharge_type" />
+    <result column="recharge_type" jdbcType="VARCHAR" property="recharge_type" />
     <result column="photo" jdbcType="VARCHAR" property="photo" />
     <result column="comment" jdbcType="VARCHAR" property="comment" />
     <result column="rmb_amount" jdbcType="REAL" property="rmb_amount" />
@@ -62,7 +62,7 @@
       gold_total, user_info_id, verified_time, 
       success_time)
     values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=DATE}, #{updated_at,jdbcType=DATE}, 
-      #{recharge_type,jdbcType=TINYINT}, #{photo,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR}, 
+      #{recharge_type,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR}, 
       #{rmb_amount,jdbcType=REAL}, #{gold_amount,jdbcType=REAL}, #{gold_coupon,jdbcType=REAL}, 
       #{gold_total,jdbcType=REAL}, #{user_info_id,jdbcType=VARCHAR}, #{verified_time,jdbcType=DATE}, 
       #{success_time,jdbcType=DATE})
@@ -126,7 +126,7 @@
         #{updated_at,jdbcType=DATE},
       </if>
       <if test="recharge_type != null">
-        #{recharge_type,jdbcType=TINYINT},
+        #{recharge_type,jdbcType=VARCHAR},
       </if>
       <if test="photo != null">
         #{photo,jdbcType=VARCHAR},
@@ -172,7 +172,7 @@
         updated_at = #{updated_at,jdbcType=DATE},
       </if>
       <if test="recharge_type != null">
-        recharge_type = #{recharge_type,jdbcType=TINYINT},
+        recharge_type = #{recharge_type,jdbcType=VARCHAR},
       </if>
       <if test="photo != null">
         photo = #{photo,jdbcType=VARCHAR},
@@ -213,7 +213,7 @@
     update recharge_bill
     set created_at = #{created_at,jdbcType=DATE},
       updated_at = #{updated_at,jdbcType=DATE},
-      recharge_type = #{recharge_type,jdbcType=TINYINT},
+      recharge_type = #{recharge_type,jdbcType=VARCHAR},
       photo = #{photo,jdbcType=VARCHAR},
       comment = #{comment,jdbcType=VARCHAR},
       rmb_amount = #{rmb_amount,jdbcType=REAL},

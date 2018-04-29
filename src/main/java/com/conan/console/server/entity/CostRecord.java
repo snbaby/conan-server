@@ -37,7 +37,7 @@ public class CostRecord {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    private Byte cost_type;
+    private String cost_type;
 
     /**
      *
@@ -155,7 +155,7 @@ public class CostRecord {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public Byte getCost_type() {
+    public String getCost_type() {
         return cost_type;
     }
 
@@ -167,7 +167,7 @@ public class CostRecord {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public void setCost_type(Byte cost_type) {
+    public void setCost_type(String cost_type) {
         this.cost_type = cost_type;
     }
 

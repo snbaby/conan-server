@@ -28,7 +28,7 @@ public class UserBill {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    private Byte bill_type;
+    private String bill_type;
 
     /**
      *
@@ -55,7 +55,7 @@ public class UserBill {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    private Byte bill_status;
+    private String bill_status;
 
     /**
      *
@@ -131,7 +131,7 @@ public class UserBill {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public Byte getBill_type() {
+    public String getBill_type() {
         return bill_type;
     }
 
@@ -143,7 +143,7 @@ public class UserBill {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public void setBill_type(Byte bill_type) {
+    public void setBill_type(String bill_type) {
         this.bill_type = bill_type;
     }
 
@@ -203,7 +203,7 @@ public class UserBill {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public Byte getBill_status() {
+    public String getBill_status() {
         return bill_status;
     }
 
@@ -215,7 +215,7 @@ public class UserBill {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public void setBill_status(Byte bill_status) {
+    public void setBill_status(String bill_status) {
         this.bill_status = bill_status;
     }
 

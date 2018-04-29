@@ -10,7 +10,7 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="created_at" jdbcType="DATE" property="created_at" />
     <result column="updated_at" jdbcType="DATE" property="updated_at" />
-    <result column="cost_type" jdbcType="TINYINT" property="cost_type" />
+    <result column="cost_type" jdbcType="VARCHAR" property="cost_type" />
     <result column="user_info_id" jdbcType="VARCHAR" property="user_info_id" />
     <result column="cost_gold" jdbcType="REAL" property="cost_gold" />
     <result column="remain_gold" jdbcType="REAL" property="remain_gold" />
@@ -54,7 +54,7 @@
       cost_type, user_info_id, cost_gold, 
       remain_gold, user_bill_id)
     values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=DATE}, #{updated_at,jdbcType=DATE}, 
-      #{cost_type,jdbcType=TINYINT}, #{user_info_id,jdbcType=VARCHAR}, #{cost_gold,jdbcType=REAL}, 
+      #{cost_type,jdbcType=VARCHAR}, #{user_info_id,jdbcType=VARCHAR}, #{cost_gold,jdbcType=REAL}, 
       #{remain_gold,jdbcType=REAL}, #{user_bill_id,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.conan.console.server.entity.CostRecord">
@@ -101,7 +101,7 @@
         #{updated_at,jdbcType=DATE},
       </if>
       <if test="cost_type != null">
-        #{cost_type,jdbcType=TINYINT},
+        #{cost_type,jdbcType=VARCHAR},
       </if>
       <if test="user_info_id != null">
         #{user_info_id,jdbcType=VARCHAR},
@@ -132,7 +132,7 @@
         updated_at = #{updated_at,jdbcType=DATE},
       </if>
       <if test="cost_type != null">
-        cost_type = #{cost_type,jdbcType=TINYINT},
+        cost_type = #{cost_type,jdbcType=VARCHAR},
       </if>
       <if test="user_info_id != null">
         user_info_id = #{user_info_id,jdbcType=VARCHAR},
@@ -158,7 +158,7 @@
     update cost_record
     set created_at = #{created_at,jdbcType=DATE},
       updated_at = #{updated_at,jdbcType=DATE},
-      cost_type = #{cost_type,jdbcType=TINYINT},
+      cost_type = #{cost_type,jdbcType=VARCHAR},
       user_info_id = #{user_info_id,jdbcType=VARCHAR},
       cost_gold = #{cost_gold,jdbcType=REAL},
       remain_gold = #{remain_gold,jdbcType=REAL},
