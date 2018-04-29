@@ -21,7 +21,7 @@
 		<javaClientGenerator targetPackage="com.conan.console.server.mapper"
 			targetProject="conan-server/src/main/java" type="XMLMAPPER">
 		</javaClientGenerator>
-		<table schema="tknDb2" tableName="user_auth"
+		<!-- <table schema="tknDb2" tableName="user_auth"
 			domainObjectName="UserAuth" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false">
@@ -44,14 +44,14 @@
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false">
 			<property name="useActualColumnNames" value="true" />
-		</table>
+		</table> -->
 		<table schema="tknDb2" tableName="recharge_bill"
 			domainObjectName="RechargeBill" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false">
 			<property name="useActualColumnNames" value="true" />
 		</table>
-		<table schema="tknDb2" tableName="cost_record"
+		<!-- <table schema="tknDb2" tableName="cost_record"
 			domainObjectName="CostRecord" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false">
@@ -62,7 +62,7 @@
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false">
 			<property name="useActualColumnNames" value="true" />
-		</table>
+		</table> -->
 		
 	</context>
 </generatorConfiguration>
