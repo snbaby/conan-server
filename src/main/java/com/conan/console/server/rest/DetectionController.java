@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.conan.console.server.exception.ConanException;
+import com.conan.console.server.parameter.GetBillDetailParameters;
 import com.conan.console.server.parameter.UserGetScanHistoryParameters;
 import com.conan.console.server.response.ResponseSuccessResult;
 import com.conan.console.server.service.DetectionService;
@@ -37,4 +38,8 @@ public class DetectionController {
 				detectionService.getDetectionAccountPages(userGetScanHistoryParameters,"1"));
 		return new ResponseEntity<>(responseResult,HttpStatus.CREATED);
 	}
+	
+	
+	
+	
 }

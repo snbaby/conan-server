@@ -14,7 +14,7 @@ public class UserGetScanHistoryParameters {
 
 	@NotNull(message = "scan_status不能为空")
 	@Min(value = 1, message = "scan_status最小为1")
-	@Max(value = 3, message = "scan_status最大为3")
+	@Max(value = 4, message = "scan_status最大为4")
 	private int scan_status;
 
 	@Size(max = 255, message = "scan_account最大长度为255")

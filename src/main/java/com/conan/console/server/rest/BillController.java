@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.conan.console.server.exception.ConanException;
+import com.conan.console.server.parameter.GetBillDetailParameters;
 import com.conan.console.server.parameter.UserGetBillParameters;
 import com.conan.console.server.response.ResponseSuccessResult;
 import com.conan.console.server.service.BillService;
@@ -36,5 +37,17 @@ public class BillController {
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",
 				billService.getUserBillPages(userGetBillParameters,"1"));
 		return new ResponseEntity<>(responseResult,HttpStatus.OK);
+	}
+	
+	@PostMapping("get_bill_detail")
+	public ResponseEntity<ResponseSuccessResult> getBillDetail(@Valid GetBillDetailParameters getBillDetail, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+        }
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(),"success",
+				billService.getBillDetail(getBillDetail,"1"));
+		return new ResponseEntity<>(responseResult,HttpStatus.CREATED);
 	}
 }
