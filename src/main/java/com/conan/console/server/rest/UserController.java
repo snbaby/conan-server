@@ -1,5 +1,6 @@
 package com.conan.console.server.rest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
@@ -43,7 +44,7 @@ public class UserController {
 	 */
 	@PostMapping("user_login")
 	@ResponseBody
-	public ResponseEntity<ResponseSuccessResult> userLogin(@Valid UserLoginParameters userLoginParameters,
+	public ResponseEntity<ResponseSuccessResult> userLogin(HttpServletRequest request,@Valid UserLoginParameters userLoginParameters,
 			BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
@@ -53,6 +54,7 @@ public class UserController {
 
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success",
 				userService.getUserInfo(userLoginParameters.getUser_phone(), userLoginParameters.getUser_passwd()));
+		request.getSession().setAttribute("isLogin","yes");//登录成功
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 
@@ -65,15 +67,23 @@ public class UserController {
 	 */
 	@PostMapping("user_register")
 	@ResponseBody
-	public ResponseEntity<ResponseSuccessResult> userRegister(@Valid UserRegisterParameters userRegisterParameters,
+	public ResponseEntity<ResponseSuccessResult> userRegister(HttpServletRequest request,@Valid UserRegisterParameters userRegisterParameters,
 			BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
 		}
+		String validationCode = (String) request.getSession().getAttribute("validation_code");
+		if(StringUtils.isBlank(validationCode)||!userRegisterParameters.getValidate_code().equals(validationCode)) {
+			throw new ConanException(ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_CODE,
+					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
+		}
+		
 		// 用户注册
 		userService.registerUser(userRegisterParameters.getUser_phone(), userRegisterParameters.getUser_passwd());
+		request.getSession().removeAttribute("validation_code");
 
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(), "success");
 		return new ResponseEntity<>(responseResult, HttpStatus.CREATED);

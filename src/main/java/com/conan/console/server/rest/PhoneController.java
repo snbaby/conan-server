@@ -1,5 +1,6 @@
 package com.conan.console.server.rest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +25,7 @@ public class PhoneController {
 	private String validateUrl;
 
 	@PostMapping("get_validation_code")
-	public ResponseEntity<ResponseSuccessResult> getValidationCode(@Valid GetValidationCodeParameters getValidationCodeParameters, BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> getValidationCode(HttpServletRequest request,@Valid GetValidationCodeParameters getValidationCodeParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
@@ -34,7 +35,9 @@ public class PhoneController {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("user_phone", getValidationCodeParameters.getUser_phone());
 		jsonObject.put("validation_code", "123456");
-		ConanHttpClientUtils.httpPostWithJson(jsonObject, validateUrl);
+		if(ConanHttpClientUtils.httpPostWithJson(jsonObject, validateUrl)) {
+			request.getSession().setAttribute("validation_code","123456");
+		};
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(),"success");
 		return new ResponseEntity<>(responseResult,HttpStatus.CREATED);
 	}

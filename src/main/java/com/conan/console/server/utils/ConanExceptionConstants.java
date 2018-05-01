@@ -47,5 +47,9 @@ public class ConanExceptionConstants {
 	public static final String SCAN_FILE_EXCEPTION_CODE = "SCAN_FILE_EXCEPTION";
 	public static final String SCAN_FILE_EXCEPTION_MESSAGE = "scan_file文件解析异常";
 	public static final HttpStatus SCAN_FILE_EXCEPTION_HTTP_STATUS = HttpStatus.BAD_REQUEST;
+	//验证码错误错误
+	public static final String VALIDATE_CODE_NOT_MATCHED_EXCEPTION_CODE = "VALIDATE_CODE_NOT_MATCHED_EXCEPTION";
+	public static final String VALIDATE_CODE_NOT_MATCHED_EXCEPTION_MESSAGE = "验证码不匹配";
+	public static final HttpStatus VALIDATE_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS = HttpStatus.BAD_REQUEST;
 	
 }
