@@ -1,5 +1,7 @@
 package com.conan.console.server.rest;
 
+import java.util.Random;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -34,9 +36,11 @@ public class PhoneController {
 		
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("user_phone", getValidationCodeParameters.getUser_phone());
-		jsonObject.put("validation_code", "123456");
+		int random = new Random().nextInt(999999);
+		jsonObject.put("validation_code", random>100000?random:random+100000 + "");
 		if(ConanHttpClientUtils.httpPostWithJson(jsonObject, validateUrl)) {
 			request.getSession().setAttribute("validation_code","123456");
+			request.getSession().setAttribute("user_phone",getValidationCodeParameters.getUser_phone());
 		};
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(),"success");
 		return new ResponseEntity<>(responseResult,HttpStatus.CREATED);

@@ -51,5 +51,13 @@ public class ConanExceptionConstants {
 	public static final String VALIDATE_CODE_NOT_MATCHED_EXCEPTION_CODE = "VALIDATE_CODE_NOT_MATCHED_EXCEPTION";
 	public static final String VALIDATE_CODE_NOT_MATCHED_EXCEPTION_MESSAGE = "验证码不匹配";
 	public static final HttpStatus VALIDATE_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS = HttpStatus.BAD_REQUEST;
+	//手机号码错误错误
+	public static final String USER_PHONE_NOT_MATCHED_EXCEPTION_CODE = "USER_PHONE_NOT_MATCHED_EXCEPTION";
+	public static final String USER_PHONE_NOT_MATCHED_EXCEPTION_MESSAGE = "手机号码不匹配";
+	public static final HttpStatus USER_PHONE_NOT_MATCHED_EXCEPTION_HTTP_STATUS = HttpStatus.BAD_REQUEST;
+	//验证码错误错误
+	public static final String USER_NOT_LOGIN_EXCEPTION_CODE = "USER_NOT_LOGIN_EXCEPTION";
+	public static final String USER_NOT_LOGIN_EXCEPTION_MESSAGE = "用户未登录";
+	public static final HttpStatus USER_NOT_LOGIN_EXCEPTION_HTTP_STATUS = HttpStatus.UNAUTHORIZED;
 	
 }

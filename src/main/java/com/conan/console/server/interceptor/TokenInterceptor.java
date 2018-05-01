@@ -8,6 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.conan.console.server.exception.ConanException;
+import com.conan.console.server.utils.ConanExceptionConstants;
+
 /**
  * 
  * @author Paul token 拦截器，当请求中未带token时，拦截请求，并验证token是否过期
@@ -35,10 +38,11 @@ public class TokenInterceptor implements HandlerInterceptor {
         //如果登录状态不为空则返回true，返回true则会执行相应controller的方法
         if(str!=null){
             return true;
+        }else {
+        	throw new ConanException(ConanExceptionConstants.USER_NOT_LOGIN_EXCEPTION_CODE,
+    				ConanExceptionConstants.USER_NOT_LOGIN_EXCEPTION_MESSAGE,
+    				ConanExceptionConstants.USER_NOT_LOGIN_EXCEPTION_HTTP_STATUS);
         }
-        //如果登录状态为空则重定向到登录页面，并返回false，不执行原来controller的方法
-        response.sendRedirect("/backend/loginPage");
-        return false;
 	}
 	
 	/**
