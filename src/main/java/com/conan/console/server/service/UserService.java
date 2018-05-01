@@ -1,8 +1,11 @@
 package com.conan.console.server.service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ import com.conan.console.server.exception.ConanException;
 import com.conan.console.server.mapper.UserAuthMapper;
 import com.conan.console.server.mapper.UserInfoMapper;
 import com.conan.console.server.mapper.UserRemainMapper;
+import com.conan.console.server.parameter.QueryPreCheckParameters;
 import com.conan.console.server.utils.ConanApplicationConstants;
 import com.conan.console.server.utils.ConanExceptionConstants;
 
@@ -230,5 +234,80 @@ public class UserService {
 		}
 		userInfo.setPhone_no(new_phone);
 		userInfo.setUpdated_at(new Date());
+	}
+	
+	@Transactional
+	public JSONObject queryPreCheck(QueryPreCheckParameters queryPreCheckParameters,String user_info_id) {
+		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_info_id);
+		if (userInfo == null) {
+			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+		}
+		
+		JSONObject resultJsonObject = new JSONObject();
+		UserRemain userRemain = userRemainMapper.selectByPrimaryKey(user_info_id);// 用户信息 用户权限 用户金额 所使用的ID 均为同一ID
+		if (userRemain == null) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		
+		if(queryPreCheckParameters.getScan_type() == 1) {
+			if(userRemain.getGold_amount()>=1) {
+				resultJsonObject.put("scan_cnt", 1);
+				resultJsonObject.put("scan_total", 1);
+				resultJsonObject.put("cost_will", 1);
+				resultJsonObject.put("cost_total", 1);
+				resultJsonObject.put("scan_remain", userRemain.getGold_amount()-1);
+			}else {
+				resultJsonObject.put("scan_cnt", 0);
+				resultJsonObject.put("scan_total", 1);
+				resultJsonObject.put("cost_will",0);
+				resultJsonObject.put("cost_total", 1);
+				resultJsonObject.put("scan_remain", userRemain.getGold_amount());
+			}
+		}else if(queryPreCheckParameters.getScan_type() == 2){
+			XSSFWorkbook xwb = null;
+			try {
+				xwb = new XSSFWorkbook(queryPreCheckParameters.getScan_file().getInputStream());
+				XSSFSheet xssfSheet = xwb.getSheetAt(0);
+				int scanAccountNo = xssfSheet.getLastRowNum()-1;
+				if(userRemain.getGold_amount() >= scanAccountNo) {
+					resultJsonObject.put("scan_cnt", scanAccountNo);
+					resultJsonObject.put("scan_total", scanAccountNo);
+					resultJsonObject.put("cost_will", scanAccountNo);
+					resultJsonObject.put("cost_total", scanAccountNo);
+					resultJsonObject.put("scan_remain", userRemain.getGold_amount()-scanAccountNo);
+				}else {
+					if(userRemain.getGold_amount()>=1) {
+						resultJsonObject.put("scan_cnt",  Math.floor(userRemain.getGold_amount()));
+						resultJsonObject.put("scan_total", scanAccountNo);
+						resultJsonObject.put("cost_will", Math.floor(userRemain.getGold_amount()));
+						resultJsonObject.put("cost_total", Math.floor(userRemain.getGold_amount()));
+						resultJsonObject.put("scan_remain", userRemain.getGold_amount() - Math.floor(userRemain.getGold_amount()));	
+					}else {
+						resultJsonObject.put("scan_cnt",  0);
+						resultJsonObject.put("scan_total", scanAccountNo);
+						resultJsonObject.put("cost_will", 0);
+						resultJsonObject.put("cost_total", 0);
+						resultJsonObject.put("scan_remain", userRemain.getGold_amount());
+					}
+				}
+				xwb.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				throw new ConanException(ConanExceptionConstants.SCAN_FILE_EXCEPTION_CODE,
+						ConanExceptionConstants.SCAN_FILE_EXCEPTION_MESSAGE,
+						ConanExceptionConstants.SCAN_FILE_EXCEPTION_HTTP_STATUS);
+			}
+		}else {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		
+		
+		return resultJsonObject;
 	}
 }

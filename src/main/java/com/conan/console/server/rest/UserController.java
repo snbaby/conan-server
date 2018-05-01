@@ -2,6 +2,7 @@ package com.conan.console.server.rest;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.conan.console.server.exception.ConanException;
 import com.conan.console.server.parameter.GetUserInfoParameters;
+import com.conan.console.server.parameter.QueryPreCheckParameters;
 import com.conan.console.server.parameter.UserLoginParameters;
 import com.conan.console.server.parameter.UserModifyNickParameters;
 import com.conan.console.server.parameter.UserModifyPasswdParameters;
@@ -198,4 +200,27 @@ public class UserController {
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 
+	@PostMapping("query_pre_check")
+	public ResponseEntity<ResponseSuccessResult> queryPreCheck(@Valid QueryPreCheckParameters queryPreCheckParameters, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+        }
+		
+		if(queryPreCheckParameters.getScan_type() == 1 && StringUtils.isBlank(queryPreCheckParameters.getScan_account())) {
+			throw new ConanException(ConanExceptionConstants.SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+		}
+		
+		if(queryPreCheckParameters.getScan_type() == 2 && queryPreCheckParameters.getScan_file()==null) {
+			throw new ConanException(ConanExceptionConstants.SCAN_FILE_NOT_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.SCAN_FILE_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.SCAN_FILE_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+		}
+		
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",userService.queryPreCheck(queryPreCheckParameters,"1"));
+		return new ResponseEntity<>(responseResult,HttpStatus.OK);
+	}
 }

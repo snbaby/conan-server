@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
 import com.conan.console.server.exception.ConanException;
-import com.conan.console.server.parameter.GetBillDetailParameters;
+import com.conan.console.server.parameter.QueryPreCheckParameters;
 import com.conan.console.server.parameter.UserGetScanHistoryParameters;
 import com.conan.console.server.response.ResponseSuccessResult;
 import com.conan.console.server.service.DetectionService;
@@ -38,8 +40,5 @@ public class DetectionController {
 				detectionService.getDetectionAccountPages(userGetScanHistoryParameters,"1"));
 		return new ResponseEntity<>(responseResult,HttpStatus.CREATED);
 	}
-	
-	
-	
 	
 }

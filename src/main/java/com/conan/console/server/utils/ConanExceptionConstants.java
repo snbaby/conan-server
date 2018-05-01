@@ -31,9 +31,21 @@ public class ConanExceptionConstants {
 	public static final String USER_PASSWD_VALIDATED_EXCEPTION_CODE = "USER_PASSWD_VALIDATED_EXCEPTION";
 	public static final String USER_PASSWD_VALIDATED_EXCEPTION_MESSAGE = "用户密码校验失败";
 	public static final HttpStatus USER_PASSWD_VALIDATED_EXCEPTION_HTTP_STATUS = HttpStatus.FORBIDDEN;
-	// 用户或密码错误
+	// 账单查询
 	public static final String BILL_NOT_EXISTS_EXCEPTION_CODE = "BILL_NOT_EXISTS_EXCEPTION";
 	public static final String BILL_NOT_EXISTS_EXCEPTION_MESSAGE = "该用户账单不存在";
 	public static final HttpStatus BILL_NOT_EXISTS_EXCEPTION_HTTP_STATUS = HttpStatus.NOT_FOUND;
+	// 账单查询预扣费错误
+	public static final String SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_CODE = "SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION";
+	public static final String SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_MESSAGE = "scan_account未传入错误";
+	public static final HttpStatus SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_HTTP_STATUS = HttpStatus.BAD_REQUEST;
+	// 账单查询预扣费错误
+	public static final String SCAN_FILE_NOT_EXISTS_EXCEPTION_CODE = "SCAN_FILE_NOT_EXISTS_EXCEPTION";
+	public static final String SCAN_FILE_EXISTS_EXCEPTION_MESSAGE = "scan_file未传入错误";
+	public static final HttpStatus SCAN_FILE_NOT_EXISTS_EXCEPTION_HTTP_STATUS = HttpStatus.BAD_REQUEST;
+	// 账单查询预扣费错误
+	public static final String SCAN_FILE_EXCEPTION_CODE = "SCAN_FILE_EXCEPTION";
+	public static final String SCAN_FILE_EXCEPTION_MESSAGE = "scan_file文件解析异常";
+	public static final HttpStatus SCAN_FILE_EXCEPTION_HTTP_STATUS = HttpStatus.BAD_REQUEST;
 	
 }
