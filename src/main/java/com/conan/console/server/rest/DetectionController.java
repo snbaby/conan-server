@@ -46,4 +46,25 @@ public class DetectionController {
 		return new ResponseEntity<>(responseResult,HttpStatus.CREATED);
 	}
 	
+	@PostMapping("get_recent_scan_stat")
+	public ResponseEntity<ResponseSuccessResult> getRecentScanStat(HttpServletRequest request,@Valid UserGetScanHistoryParameters userGetScanHistoryParameters, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+        }
+		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
+		if(StringUtils.isBlank(userInfoId)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		userGetScanHistoryParameters.setScan_date_start(new Date());
+		userGetScanHistoryParameters.setScan_date_end(new Date());
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(),"success",
+				detectionService.getDetectionAccountPages(userGetScanHistoryParameters,userInfoId));
+		return new ResponseEntity<>(responseResult,HttpStatus.CREATED);
+	}
+	
+	
 }

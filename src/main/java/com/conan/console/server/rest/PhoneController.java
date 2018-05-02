@@ -37,9 +37,10 @@ public class PhoneController {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("user_phone", getValidationCodeParameters.getUser_phone());
 		int random = new Random().nextInt(999999);
-		jsonObject.put("validation_code", random>100000?random:random+100000 + "");
+		int result = random > 100000 ? random : random + 100000;
+		jsonObject.put("validation_code", result + "");
 		if(ConanHttpClientUtils.httpPostWithJson(jsonObject, validateUrl)) {
-			request.getSession().setAttribute("validation_code","123456");
+			request.getSession().setAttribute("validation_code",result+"");
 			request.getSession().setAttribute("user_phone",getValidationCodeParameters.getUser_phone());
 		};
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(),"success");
