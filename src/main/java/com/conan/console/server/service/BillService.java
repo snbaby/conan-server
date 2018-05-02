@@ -1,6 +1,8 @@
 package com.conan.console.server.service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +16,13 @@ import com.conan.console.server.entity.master.CostRecord;
 import com.conan.console.server.entity.master.DetectionAccount;
 import com.conan.console.server.entity.master.RechargeBill;
 import com.conan.console.server.entity.master.UserBill;
+import com.conan.console.server.entity.master.UserRemain;
 import com.conan.console.server.exception.ConanException;
 import com.conan.console.server.mapper.master.CostRecordMapper;
 import com.conan.console.server.mapper.master.DetectionAccountMapper;
 import com.conan.console.server.mapper.master.RechargeBillMapper;
 import com.conan.console.server.mapper.master.UserBillMapper;
+import com.conan.console.server.mapper.master.UserRemainMapper;
 import com.conan.console.server.parameter.GetBillDetailParameters;
 import com.conan.console.server.parameter.UserGetBillParameters;
 import com.conan.console.server.utils.ConanApplicationConstants;
@@ -35,6 +39,8 @@ public class BillService {
 	private CostRecordMapper costRecordMapper;
 	@Autowired
 	private DetectionAccountMapper detectionAccountMapper;
+	@Autowired
+	private UserRemainMapper userRemainMapper;
 
 	@Transactional
 	public JSONObject getUserBillPages(UserGetBillParameters userGetBillParameters, String user_info_id) {
@@ -159,6 +165,64 @@ public class BillService {
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
 
+		return resultJsonObject;
+	}
+	
+	@Transactional
+	public JSONObject postRechargeReq(int recharge_type,float recharge_amount,String comment, String capture_id, String user_info_id) {
+		String uuid = UUID.randomUUID().toString();// 生成唯一主键
+		Date date = new Date();
+		UserBill userBill = new UserBill();
+		userBill.setId(uuid);
+		userBill.setCreated_at(date);
+		userBill.setUpdated_at(date);
+		userBill.setBill_type(String.valueOf(recharge_type));
+		userBill.setRemain_gold(recharge_amount);
+		userBill.setBill_status("2");//未审核
+		userBill.setBill_digest("人民币充值: 100元|额外赠送20金币");
+		userBill.setUser_info_id(user_info_id);
+		userBillMapper.insert(userBill);
+		
+		RechargeBill rechargeBill = new RechargeBill();
+		rechargeBill.setId(uuid);
+		rechargeBill.setCreated_at(date);
+		rechargeBill.setUpdated_at(date);
+		rechargeBill.setRecharge_type(String.valueOf(recharge_type));
+		rechargeBill.setPhoto(capture_id);
+		rechargeBill.setComment(comment);
+		rechargeBill.setRmb_amount(recharge_amount);
+		rechargeBill.setGold_amount(recharge_amount);
+		rechargeBill.setGold_coupon(0f);
+		rechargeBill.setGold_total(recharge_amount);
+		rechargeBill.setUser_info_id(user_info_id);
+		rechargeBill.setUser_bill_id(uuid);
+		rechargeBillMapper.insert(rechargeBill);
+		
+		UserRemain userRemain = userRemainMapper.selectByPrimaryKey(user_info_id);// 用户信息 用户权限 用户金额 所使用的ID 均为同一ID
+		if (userRemain == null) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		JSONObject resultJsonObject = new JSONObject();
+		resultJsonObject.put("bill_id", uuid);
+		resultJsonObject.put("created_at", date);
+		resultJsonObject.put("bill_type", recharge_type);
+		resultJsonObject.put("bill_amount", recharge_amount);
+		resultJsonObject.put("bill_remain", userRemain.getGold_amount());
+		resultJsonObject.put("bill_digest", "人民币充值: 100元|额外赠送20金币");
+		resultJsonObject.put("bill_status", 2);
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("recharge_bill_id",uuid );
+		jsonObject.put("created_at", date);
+		jsonObject.put("recharge_type", recharge_type);
+		jsonObject.put("photo", capture_id);
+		jsonObject.put("comment",comment );
+		jsonObject.put("rmb_amount",recharge_amount );
+		jsonObject.put("gold_amount", recharge_amount);
+		jsonObject.put("gold_coupon", 0f);
+		jsonObject.put("gold_total", recharge_amount);
+		resultJsonObject.put("recharge_detail", jsonObject);
 		return resultJsonObject;
 	}
 }
