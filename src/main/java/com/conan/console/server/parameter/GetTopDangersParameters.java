@@ -14,7 +14,7 @@ public class GetTopDangersParameters {
 	private int topNum;
 
 	@NotNull(message = "lastDays不能为空")
-	@Min(value = 0, message = "lastDays最小为0")
+	@Min(value = 1, message = "lastDays最小为1")
 	@Max(value = 3650, message = "lastDays最大为3650")//10年
 	private int lastDays;
 
