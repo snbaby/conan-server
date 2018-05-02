@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.conan.console.server.entity.DetectionAccount;
-import com.conan.console.server.mapper.DetectionAccountMapper;
+import com.conan.console.server.entity.master.DetectionAccount;
+import com.conan.console.server.mapper.master.DetectionAccountMapper;
 import com.conan.console.server.parameter.UserGetScanHistoryParameters;
 import com.conan.console.server.utils.ConanApplicationConstants;
 

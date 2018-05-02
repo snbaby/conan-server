@@ -1,4 +1,4 @@
-package com.conan.console.server.entity;
+package com.conan.console.server.entity.master;
 
 import java.util.Date;
 

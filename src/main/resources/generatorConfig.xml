@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
-	<context id="conan_crawler" defaultModelType="flat">
+	<!-- <context id="tknDb2" defaultModelType="flat">
 		<commentGenerator>
-			<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+			是否去除自动生成的注释 true：是 ： false:否
 			<property name="suppressAllComments" value="false" />
 		</commentGenerator>
 		<jdbcConnection
@@ -11,17 +11,17 @@
 			driverClass="com.mysql.jdbc.Driver" password="Apple1688!@#" userId="root">
 			<property name="remarksReporting" value="true"></property>
 		</jdbcConnection>
-		<javaModelGenerator targetPackage="com.conan.console.server.entity"
+		<javaModelGenerator targetPackage="com.conan.console.server.entity.tknDb2"
 			targetProject="conan-server/src/main/java">
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
-		<sqlMapGenerator targetPackage="com.conan.console.server.mapper"
+		<sqlMapGenerator targetPackage="com.conan.console.server.mapper.tknDb2"
 			targetProject="conan-server/src/main/java">
 		</sqlMapGenerator>
-		<javaClientGenerator targetPackage="com.conan.console.server.mapper"
+		<javaClientGenerator targetPackage="com.conan.console.server.mapper.tknDb2"
 			targetProject="conan-server/src/main/java" type="XMLMAPPER">
 		</javaClientGenerator>
-		<!-- <table schema="tknDb2" tableName="user_auth"
+		<table schema="tknDb2" tableName="user_auth"
 			domainObjectName="UserAuth" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false">
@@ -44,14 +44,14 @@
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false">
 			<property name="useActualColumnNames" value="true" />
-		</table> -->
+		</table>
 		<table schema="tknDb2" tableName="recharge_bill"
 			domainObjectName="RechargeBill" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false">
 			<property name="useActualColumnNames" value="true" />
 		</table>
-		<!-- <table schema="tknDb2" tableName="cost_record"
+		<table schema="tknDb2" tableName="cost_record"
 			domainObjectName="CostRecord" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false">
@@ -62,7 +62,35 @@
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false">
 			<property name="useActualColumnNames" value="true" />
-		</table> -->
+		</table>
+		
+	</context> -->
+	<context id="ptbrain" defaultModelType="flat">
+		<commentGenerator>
+			<!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+			<property name="suppressAllComments" value="false" />
+		</commentGenerator>
+		<jdbcConnection
+			connectionURL="jdbc:mysql://120.79.197.22:3306/ptbrain?useSSL=false"
+			driverClass="com.mysql.jdbc.Driver" password="Apple1688!@#" userId="root">
+			<property name="remarksReporting" value="true"></property>
+		</jdbcConnection>
+		<javaModelGenerator targetPackage="com.conan.console.server.entity.ptbrain"
+			targetProject="conan-server/src/main/java">
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<sqlMapGenerator targetPackage="com.conan.console.server.mapper.ptbrain"
+			targetProject="conan-server/src/main/java">
+		</sqlMapGenerator>
+		<javaClientGenerator targetPackage="com.conan.console.server.mapper.ptbrain"
+			targetProject="conan-server/src/main/java" type="XMLMAPPER">
+		</javaClientGenerator>
+		<table schema="tknDb2" tableName="final_result"
+			domainObjectName="FinalResult" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table>
 		
 	</context>
 </generatorConfiguration>

@@ -1,6 +1,6 @@
-package com.conan.console.server.mapper;
+package com.conan.console.server.mapper.master;
 
-import com.conan.console.server.entity.UserRemain;
+import com.conan.console.server.entity.master.UserRemain;
 
 public interface UserRemainMapper {
     /**

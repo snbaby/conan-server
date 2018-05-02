@@ -1,10 +1,10 @@
-package com.conan.console.server.mapper;
+package com.conan.console.server.mapper.master;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.conan.console.server.entity.DetectionAccount;
+import com.conan.console.server.entity.master.DetectionAccount;
 import com.conan.console.server.parameter.UserGetScanHistoryParameters;
 
 public interface DetectionAccountMapper {
