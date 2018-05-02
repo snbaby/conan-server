@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,29 +42,23 @@ public class DetectionController {
 		}
 		userGetScanHistoryParameters.setScan_date_start(new Date());
 		userGetScanHistoryParameters.setScan_date_end(new Date());
-		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(),"success",
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",
 				detectionService.getDetectionAccountPages(userGetScanHistoryParameters,userInfoId));
-		return new ResponseEntity<>(responseResult,HttpStatus.CREATED);
+		return new ResponseEntity<>(responseResult,HttpStatus.OK);
 	}
 	
-	@PostMapping("get_recent_scan_stat")
-	public ResponseEntity<ResponseSuccessResult> getRecentScanStat(HttpServletRequest request,@Valid UserGetScanHistoryParameters userGetScanHistoryParameters, BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
-					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
-					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
-        }
+	@GetMapping("get_recent_scan_stat")
+	public ResponseEntity<ResponseSuccessResult> getRecentScanStat(HttpServletRequest request) {
 		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
 		if(StringUtils.isBlank(userInfoId)) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
-		userGetScanHistoryParameters.setScan_date_start(new Date());
-		userGetScanHistoryParameters.setScan_date_end(new Date());
-		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(),"success",
-				detectionService.getDetectionAccountPages(userGetScanHistoryParameters,userInfoId));
-		return new ResponseEntity<>(responseResult,HttpStatus.CREATED);
+		
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",
+				detectionService.getRecentScanStat(userInfoId));
+		return new ResponseEntity<>(responseResult,HttpStatus.OK);
 	}
 	
 	
