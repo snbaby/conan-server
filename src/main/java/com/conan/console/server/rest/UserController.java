@@ -58,6 +58,7 @@ public class UserController {
 				resultJsonObject);
 		request.getSession().setAttribute("isLogin","yes");//登录成功
 		request.getSession().setAttribute("user_info_id",resultJsonObject.getString("user_info_id"));
+		request.getSession().setMaxInactiveInterval(30*60);
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 
