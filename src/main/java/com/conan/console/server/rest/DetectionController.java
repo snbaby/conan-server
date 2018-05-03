@@ -2,10 +2,13 @@ package com.conan.console.server.rest;
 
 import java.util.Date;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.conan.console.server.exception.ConanException;
 import com.conan.console.server.parameter.GetTopDangersParameters;
+import com.conan.console.server.parameter.QueryPreCheckParameters;
 import com.conan.console.server.parameter.UserGetScanHistoryParameters;
 import com.conan.console.server.response.ResponseSuccessResult;
 import com.conan.console.server.service.DetectionService;
@@ -82,7 +86,83 @@ public class DetectionController {
 		return new ResponseEntity<>(responseResult,HttpStatus.OK);
 	}
 	
-	
+	/*@PostMapping("scan")
+	public ResponseEntity<ResponseSuccessResult> scan(HttpServletRequest request,@Valid QueryPreCheckParameters queryPreCheckParameters, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+        }
+		
+		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
+		if(StringUtils.isBlank(userInfoId)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		ResponseSuccessResult responseResult = null;
+		if(queryPreCheckParameters.getScan_type() == 1) {
+			if(StringUtils.isBlank(queryPreCheckParameters.getScan_account())){
+				throw new ConanException(ConanExceptionConstants.SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_CODE,
+						ConanExceptionConstants.SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_MESSAGE,
+						ConanExceptionConstants.SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+			}else {
+				responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",
+						detectionService.scan(queryPreCheckParameters.getScan_type(), queryPreCheckParameters.getScan_account(), userInfoId));
+				return new ResponseEntity<>(responseResult,HttpStatus.OK);
+			}
+		}
+		
+		if(queryPreCheckParameters.getScan_type() == 2) {
+			if(queryPreCheckParameters.getScan_file()==null) {
+				throw new ConanException(ConanExceptionConstants.SCAN_FILE_NOT_EXISTS_EXCEPTION_CODE,
+						ConanExceptionConstants.SCAN_FILE_EXISTS_EXCEPTION_MESSAGE,
+						ConanExceptionConstants.SCAN_FILE_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+			}else {
+			 responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",
+						detectionService.scan(queryPreCheckParameters.getScan_type(), queryPreCheckParameters.getScan_file(), userInfoId, response));
+				 return new ResponseEntity<>(responseResult,HttpStatus.OK);
+				
+			}
+		}
+		
+		return new ResponseEntity<>(responseResult,HttpStatus.OK);
+	}*/
+	@PostMapping("scan")
+	public void scan(HttpServletRequest request,HttpServletResponse response,@Valid QueryPreCheckParameters queryPreCheckParameters, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+        }
+		
+		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
+		if(StringUtils.isBlank(userInfoId)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		ResponseSuccessResult responseResult = null;
+		if(queryPreCheckParameters.getScan_type() == 1) {
+			if(StringUtils.isBlank(queryPreCheckParameters.getScan_account())){
+				throw new ConanException(ConanExceptionConstants.SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_CODE,
+						ConanExceptionConstants.SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_MESSAGE,
+						ConanExceptionConstants.SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+			}else {
+			}
+		}
+		
+		if(queryPreCheckParameters.getScan_type() == 2) {
+			if(queryPreCheckParameters.getScan_file()==null) {
+				throw new ConanException(ConanExceptionConstants.SCAN_FILE_NOT_EXISTS_EXCEPTION_CODE,
+						ConanExceptionConstants.SCAN_FILE_EXISTS_EXCEPTION_MESSAGE,
+						ConanExceptionConstants.SCAN_FILE_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+			}else {
+				XSSFWorkbook xwb = detectionService.scan(queryPreCheckParameters.getScan_type(), queryPreCheckParameters.getScan_file(), userInfoId);
+			}
+		}
+		
+	}
 	
 	
 }

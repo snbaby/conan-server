@@ -300,6 +300,18 @@ public class UserService {
 				throw new ConanException(ConanExceptionConstants.SCAN_FILE_EXCEPTION_CODE,
 						ConanExceptionConstants.SCAN_FILE_EXCEPTION_MESSAGE,
 						ConanExceptionConstants.SCAN_FILE_EXCEPTION_HTTP_STATUS);
+			} finally {
+				if(xwb!=null) {
+					try {
+						xwb.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						throw new ConanException(ConanExceptionConstants.SCAN_FILE_EXCEPTION_CODE,
+								ConanExceptionConstants.SCAN_FILE_EXCEPTION_MESSAGE,
+								ConanExceptionConstants.SCAN_FILE_EXCEPTION_HTTP_STATUS);
+					}
+				}
+					
 			}
 		}else {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,

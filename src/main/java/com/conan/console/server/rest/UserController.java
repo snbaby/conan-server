@@ -272,12 +272,18 @@ public class UserController {
 	}
 
 	@PostMapping("query_pre_check")
-	public ResponseEntity<ResponseSuccessResult> queryPreCheck(@Valid QueryPreCheckParameters queryPreCheckParameters, BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> queryPreCheck(HttpServletRequest request,@Valid QueryPreCheckParameters queryPreCheckParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
         }
+		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
+		if(StringUtils.isBlank(userInfoId)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
 		
 		if(queryPreCheckParameters.getScan_type() == 1 && StringUtils.isBlank(queryPreCheckParameters.getScan_account())) {
 			throw new ConanException(ConanExceptionConstants.SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_CODE,
@@ -291,7 +297,7 @@ public class UserController {
 					ConanExceptionConstants.SCAN_FILE_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
 		
-		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",userService.queryPreCheck(queryPreCheckParameters,"1"));
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",userService.queryPreCheck(queryPreCheckParameters,userInfoId));
 		return new ResponseEntity<>(responseResult,HttpStatus.OK);
 	}
 }

@@ -18,6 +18,15 @@
     -->
     nick_hash, result
   </sql>
+  <select id="selectByPrimaryKeyList"  parameterType="java.util.List" resultMap="BaseResultMap">  
+	  select 
+    <include refid="Base_Column_List" />
+    from final_result
+	  where nick_hash in
+	  <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+	  #{item}
+	  </foreach>
+  </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated
