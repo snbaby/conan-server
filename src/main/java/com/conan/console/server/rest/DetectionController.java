@@ -1,5 +1,6 @@
 package com.conan.console.server.rest;
 
+import java.io.IOException;
 import java.util.Date;
 
 import javax.servlet.ServletOutputStream;
@@ -129,7 +130,7 @@ public class DetectionController {
 		return new ResponseEntity<>(responseResult,HttpStatus.OK);
 	}*/
 	@PostMapping("scan")
-	public void scan(HttpServletRequest request,HttpServletResponse response,@Valid QueryPreCheckParameters queryPreCheckParameters, BindingResult bindingResult) {
+	public void scan(HttpServletRequest request,HttpServletResponse response,@Valid QueryPreCheckParameters queryPreCheckParameters, BindingResult bindingResult) throws IOException {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
@@ -159,6 +160,10 @@ public class DetectionController {
 						ConanExceptionConstants.SCAN_FILE_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 			}else {
 				XSSFWorkbook xwb = detectionService.scan(queryPreCheckParameters.getScan_type(), queryPreCheckParameters.getScan_file(), userInfoId);
+				response.setContentType("application/octet-stream");  
+		       response.setHeader("Content-disposition", "attachment;filename=createList.xls");//默认Excel名称  
+		       response.flushBuffer();  
+		       xwb.write(response.getOutputStream()); 
 			}
 		}
 		
