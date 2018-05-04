@@ -20,6 +20,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
 		patterns.add("/api/v2.0/get_validation_code");
 		patterns.add("/api/v2.0/user_login");
 		patterns.add("/api/v2.0/check_validation_code");
+		patterns.add("/api/v2.0/user_reset_passwd");
 		registry.addInterceptor(new TokenInterceptor()).addPathPatterns("/**").excludePathPatterns(patterns);
 		super.addInterceptors(registry);
 	}
