@@ -42,6 +42,7 @@ public class UserService {
 		Date date = new Date();// 生成创建时间
 		UserInfo userInfo = new UserInfo();// 初始化用户信息
 		userInfo.setId(uuid);
+		userInfo.setNick_name("conan");
 		userInfo.setPhone_no(user_phone);
 		userInfo.setCreated_at(date);
 

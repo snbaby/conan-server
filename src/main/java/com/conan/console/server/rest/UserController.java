@@ -236,6 +236,8 @@ public class UserController {
 
 		userService.resetUserPaasword(userResetPasswdParameters.getUser_phone(),
 				userResetPasswdParameters.getNew_passwd());
+		request.getSession().removeAttribute("validation_code");
+		request.getSession().removeAttribute("user_phone");
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success");
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}

@@ -17,7 +17,7 @@ public class CheckValidationCodeParameters {
 	@NotBlank(message = "验证码不能为空")
 	@NotEmpty(message = "验证码不能为空")
 	@Size(min = 6, max = 6, message = "验证码长度为6位")
-	private String validate_code;
+	private String validation_code;
 
 	public String getUser_phone() {
 		return user_phone;
@@ -27,11 +27,13 @@ public class CheckValidationCodeParameters {
 		this.user_phone = user_phone;
 	}
 
-	public String getValidate_code() {
-		return validate_code;
+	public String getValidation_code() {
+		return validation_code;
 	}
 
-	public void setValidate_code(String validate_code) {
-		this.validate_code = validate_code;
+	public void setValidation_code(String validation_code) {
+		this.validation_code = validation_code;
 	}
+
+	
 }

@@ -59,7 +59,7 @@ public class PhoneController {
         }
 		
 		String validationCode = (String) request.getSession().getAttribute("validation_code");
-		if (StringUtils.isBlank(validationCode) || !checkValidationCodeParameters.getValidate_code().equals(validationCode)) {
+		if (StringUtils.isBlank(validationCode) || !checkValidationCodeParameters.getValidation_code().equals(validationCode)) {
 			throw new ConanException(ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_CODE,
 					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
