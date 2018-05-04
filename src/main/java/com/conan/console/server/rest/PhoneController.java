@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.conan.console.server.exception.ConanException;
+import com.conan.console.server.parameter.CheckValidationCodeParameters;
 import com.conan.console.server.parameter.GetValidationCodeParameters;
 import com.conan.console.server.response.ResponseSuccessResult;
 import com.conan.console.server.utils.ConanExceptionConstants;
@@ -46,6 +48,31 @@ public class PhoneController {
 		};
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(),"success");
 		return new ResponseEntity<>(responseResult,HttpStatus.CREATED);
+	}
+	
+	@PostMapping("check_validation_code")
+	public ResponseEntity<ResponseSuccessResult> checkValidationCode(HttpServletRequest request,@RequestBody @Valid CheckValidationCodeParameters checkValidationCodeParameters, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+        }
+		
+		String validationCode = (String) request.getSession().getAttribute("validation_code");
+		if (StringUtils.isBlank(validationCode) || !checkValidationCodeParameters.getValidate_code().equals(validationCode)) {
+			throw new ConanException(ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_CODE,
+					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
+		}
+		String userPhone = (String) request.getSession().getAttribute("user_phone");
+		if (StringUtils.isBlank(userPhone) || !checkValidationCodeParameters.getUser_phone().equals(userPhone)) {
+			throw new ConanException(ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_CODE,
+					ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
+		}
+		
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success");
+		return new ResponseEntity<>(responseResult,HttpStatus.OK);
 	}
 	
 }
