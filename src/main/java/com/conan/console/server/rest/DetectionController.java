@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +35,7 @@ public class DetectionController {
 	private DetectionService detectionService;
 	
 	@PostMapping("user_get_scan_history")
-	public ResponseEntity<ResponseSuccessResult> userGetScanHistory(HttpServletRequest request,@Valid UserGetScanHistoryParameters userGetScanHistoryParameters, BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> userGetScanHistory(HttpServletRequest request,@RequestBody @Valid UserGetScanHistoryParameters userGetScanHistoryParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
@@ -68,7 +69,7 @@ public class DetectionController {
 	}
 	
 	@GetMapping("get_top_dangers")
-	public ResponseEntity<ResponseSuccessResult> getTopDangers(HttpServletRequest request,@Valid GetTopDangersParameters getTopDangersParameters, BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> getTopDangers(HttpServletRequest request,@RequestBody @Valid GetTopDangersParameters getTopDangersParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
@@ -88,7 +89,7 @@ public class DetectionController {
 	}
 	
 	@PostMapping("scan")
-	public ResponseEntity<ResponseSuccessResult> scan(HttpServletRequest request,@Valid QueryPreCheckParameters queryPreCheckParameters, BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> scan(HttpServletRequest request,@RequestBody @Valid QueryPreCheckParameters queryPreCheckParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +28,7 @@ public class PhoneController {
 	private String validateUrl;
 
 	@PostMapping("get_validation_code")
-	public ResponseEntity<ResponseSuccessResult> getValidationCode(HttpServletRequest request,@Valid GetValidationCodeParameters getValidationCodeParameters, BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> getValidationCode(HttpServletRequest request,@RequestBody @Valid GetValidationCodeParameters getValidationCodeParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),

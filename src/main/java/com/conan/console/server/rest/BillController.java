@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +30,7 @@ public class BillController {
 	private BillService billService;
 	
 	@PostMapping("user_get_bill")
-	public ResponseEntity<ResponseSuccessResult> userGetBill(HttpServletRequest request,@Valid UserGetBillParameters userGetBillParameters, BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> userGetBill(HttpServletRequest request,@RequestBody @Valid UserGetBillParameters userGetBillParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
@@ -49,7 +50,7 @@ public class BillController {
 	}
 	
 	@PostMapping("get_bill_detail")
-	public ResponseEntity<ResponseSuccessResult> getBillDetail(HttpServletRequest request,@Valid GetBillDetailParameters getBillDetail, BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> getBillDetail(HttpServletRequest request,@RequestBody @Valid GetBillDetailParameters getBillDetail, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
@@ -67,7 +68,7 @@ public class BillController {
 	}
 	
 	@PostMapping("post_recharge_req")
-	public ResponseEntity<ResponseSuccessResult> postRechargeReq(HttpServletRequest request,@Valid PostRechargeReqParameters postRechargeReqParameters, BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> postRechargeReq(HttpServletRequest request,@RequestBody @Valid PostRechargeReqParameters postRechargeReqParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),

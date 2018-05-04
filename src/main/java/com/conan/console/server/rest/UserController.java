@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,20 +46,21 @@ public class UserController {
 	 */
 	@PostMapping("user_login")
 	@ResponseBody
-	public ResponseEntity<ResponseSuccessResult> userLogin(HttpServletRequest request,@Valid UserLoginParameters userLoginParameters,
-			BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> userLogin(HttpServletRequest request,
+			@RequestBody @Valid UserLoginParameters userLoginParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
 		}
 
-		JSONObject resultJsonObject = userService.getUserInfo(userLoginParameters.getUser_phone(), userLoginParameters.getUser_passwd());
+		JSONObject resultJsonObject = userService.getUserInfo(userLoginParameters.getUser_phone(),
+				userLoginParameters.getUser_passwd());
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success",
 				resultJsonObject);
-		request.getSession().setAttribute("isLogin","yes");//登录成功
-		request.getSession().setAttribute("user_info_id",resultJsonObject.getString("user_info_id"));
-		request.getSession().setMaxInactiveInterval(30*60);
+		request.getSession().setAttribute("isLogin", "yes");// 登录成功
+		request.getSession().setAttribute("user_info_id", resultJsonObject.getString("user_info_id"));
+		request.getSession().setMaxInactiveInterval(30 * 60);
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 
@@ -71,26 +73,26 @@ public class UserController {
 	 */
 	@PostMapping("user_register")
 	@ResponseBody
-	public ResponseEntity<ResponseSuccessResult> userRegister(HttpServletRequest request,@Valid UserRegisterParameters userRegisterParameters,
-			BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> userRegister(HttpServletRequest request,
+			@RequestBody @Valid UserRegisterParameters userRegisterParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
 		}
 		String validationCode = (String) request.getSession().getAttribute("validation_code");
-		if(StringUtils.isBlank(validationCode)||!userRegisterParameters.getValidate_code().equals(validationCode)) {
+		if (StringUtils.isBlank(validationCode) || !userRegisterParameters.getValidate_code().equals(validationCode)) {
 			throw new ConanException(ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_CODE,
 					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
 		}
 		String userPhone = (String) request.getSession().getAttribute("user_phone");
-		if(StringUtils.isBlank(userPhone)||!userRegisterParameters.getUser_phone().equals(userPhone)) {
+		if (StringUtils.isBlank(userPhone) || !userRegisterParameters.getUser_phone().equals(userPhone)) {
 			throw new ConanException(ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_CODE,
 					ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
 		}
-		
+
 		// 用户注册
 		userService.registerUser(userRegisterParameters.getUser_phone(), userRegisterParameters.getUser_passwd());
 		request.getSession().removeAttribute("validation_code");
@@ -110,8 +112,8 @@ public class UserController {
 	@GetMapping("get_user_info")
 	@ResponseBody
 	public ResponseEntity<ResponseSuccessResult> getUserInfo(HttpServletRequest request) {
-		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
-		if(StringUtils.isBlank(userInfoId)) {
+		String userInfoId = (String) request.getSession().getAttribute("user_info_id");
+		if (StringUtils.isBlank(userInfoId)) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
@@ -132,14 +134,14 @@ public class UserController {
 	@PostMapping("user_modify_photo")
 	@ResponseBody
 	public ResponseEntity<ResponseSuccessResult> userModifyPhoto(HttpServletRequest request,
-			@Valid UserModifyPhotoParameters userModifyPhotoParameters, BindingResult bindingResult) {
+			@RequestBody @Valid UserModifyPhotoParameters userModifyPhotoParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
 		}
-		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
-		if(StringUtils.isBlank(userInfoId)) {
+		String userInfoId = (String) request.getSession().getAttribute("user_info_id");
+		if (StringUtils.isBlank(userInfoId)) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
@@ -161,14 +163,14 @@ public class UserController {
 	@PostMapping("user_modify_nick")
 	@ResponseBody
 	public ResponseEntity<ResponseSuccessResult> userModifyNick(HttpServletRequest request,
-			@Valid UserModifyNickParameters userModifyNickParameters, BindingResult bindingResult) {
+			@RequestBody @Valid UserModifyNickParameters userModifyNickParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
 		}
-		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
-		if(StringUtils.isBlank(userInfoId)) {
+		String userInfoId = (String) request.getSession().getAttribute("user_info_id");
+		if (StringUtils.isBlank(userInfoId)) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
@@ -189,21 +191,21 @@ public class UserController {
 	@PostMapping("user_modify_passwd")
 	@ResponseBody
 	public ResponseEntity<ResponseSuccessResult> userModifyPasswd(HttpServletRequest request,
-			@Valid UserModifyPasswdParameters userModifyPasswdParameters, BindingResult bindingResult) {
+			@RequestBody @Valid UserModifyPasswdParameters userModifyPasswdParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
 		}
-		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
-		if(StringUtils.isBlank(userInfoId)) {
+		String userInfoId = (String) request.getSession().getAttribute("user_info_id");
+		if (StringUtils.isBlank(userInfoId)) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
 
-		userService.updateUserPaasword(userInfoId,
-				userModifyPasswdParameters.getOld_passwd(), userModifyPasswdParameters.getNew_passwd());
+		userService.updateUserPaasword(userInfoId, userModifyPasswdParameters.getOld_passwd(),
+				userModifyPasswdParameters.getNew_passwd());
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success");
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
@@ -211,21 +213,22 @@ public class UserController {
 	@PostMapping("user_reset_passwd")
 	@ResponseBody
 	public ResponseEntity<ResponseSuccessResult> userResetPasswd(HttpServletRequest request,
-			@Valid UserResetPasswdParameters userResetPasswdParameters, BindingResult bindingResult) {
+			@RequestBody @Valid UserResetPasswdParameters userResetPasswdParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
 		}
-		
+
 		String validationCode = (String) request.getSession().getAttribute("validation_code");
-		if(StringUtils.isBlank(validationCode)||!userResetPasswdParameters.getValidate_code().equals(validationCode)) {
+		if (StringUtils.isBlank(validationCode)
+				|| !userResetPasswdParameters.getValidate_code().equals(validationCode)) {
 			throw new ConanException(ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_CODE,
 					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
 		}
 		String userPhone = (String) request.getSession().getAttribute("user_phone");
-		if(StringUtils.isBlank(userPhone)||!userResetPasswdParameters.getUser_phone().equals(userPhone)) {
+		if (StringUtils.isBlank(userPhone) || !userResetPasswdParameters.getUser_phone().equals(userPhone)) {
 			throw new ConanException(ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_CODE,
 					ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
@@ -240,29 +243,30 @@ public class UserController {
 	@PostMapping("user_modify_phone")
 	@ResponseBody
 	public ResponseEntity<ResponseSuccessResult> userModifyPhone(HttpServletRequest request,
-			@Valid UserModifyPhoneParameters userModifyPhoneParameters, BindingResult bindingResult) {
+			@RequestBody @Valid UserModifyPhoneParameters userModifyPhoneParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
 		}
-		
+
 		String validationCode = (String) request.getSession().getAttribute("validation_code");
-		if(StringUtils.isBlank(validationCode)||!userModifyPhoneParameters.getValidate_code().equals(validationCode)) {
+		if (StringUtils.isBlank(validationCode)
+				|| !userModifyPhoneParameters.getValidate_code().equals(validationCode)) {
 			throw new ConanException(ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_CODE,
 					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
 		}
-		
+
 		String userPhone = (String) request.getSession().getAttribute("user_phone");
-		if(StringUtils.isBlank(userPhone)||!userModifyPhoneParameters.getNew_phone().equals(userPhone)) {
+		if (StringUtils.isBlank(userPhone) || !userModifyPhoneParameters.getNew_phone().equals(userPhone)) {
 			throw new ConanException(ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_CODE,
 					ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
 		}
 
-		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
-		if(StringUtils.isBlank(userInfoId)) {
+		String userInfoId = (String) request.getSession().getAttribute("user_info_id");
+		if (StringUtils.isBlank(userInfoId)) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
@@ -273,32 +277,35 @@ public class UserController {
 	}
 
 	@PostMapping("query_pre_check")
-	public ResponseEntity<ResponseSuccessResult> queryPreCheck(HttpServletRequest request,@Valid QueryPreCheckParameters queryPreCheckParameters, BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> queryPreCheck(HttpServletRequest request,
+			@RequestBody @Valid QueryPreCheckParameters queryPreCheckParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
-        }
-		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
-		if(StringUtils.isBlank(userInfoId)) {
+		}
+		String userInfoId = (String) request.getSession().getAttribute("user_info_id");
+		if (StringUtils.isBlank(userInfoId)) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
-		
-		if(queryPreCheckParameters.getScan_type() == 1 && StringUtils.isBlank(queryPreCheckParameters.getScan_account())) {
+
+		if (queryPreCheckParameters.getScan_type() == 1
+				&& StringUtils.isBlank(queryPreCheckParameters.getScan_account())) {
 			throw new ConanException(ConanExceptionConstants.SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
-		
-		if(queryPreCheckParameters.getScan_type() == 2 && queryPreCheckParameters.getScan_file()==null) {
+
+		if (queryPreCheckParameters.getScan_type() == 2 && queryPreCheckParameters.getScan_file() == null) {
 			throw new ConanException(ConanExceptionConstants.SCAN_FILE_NOT_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.SCAN_FILE_EXISTS_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.SCAN_FILE_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
-		
-		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",userService.queryPreCheck(queryPreCheckParameters,userInfoId));
-		return new ResponseEntity<>(responseResult,HttpStatus.OK);
+
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success",
+				userService.queryPreCheck(queryPreCheckParameters, userInfoId));
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 }

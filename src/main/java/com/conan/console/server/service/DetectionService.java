@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -31,7 +32,6 @@ import com.conan.console.server.parameter.UserGetScanHistoryParameters;
 import com.conan.console.server.utils.ConanApplicationConstants;
 import com.conan.console.server.utils.ConanExceptionConstants;
 import com.conan.console.server.utils.ConanUtils;
-import com.conan.console.server.utils.MinioUtil;
 
 @Service
 public class DetectionService {
@@ -44,6 +44,9 @@ public class DetectionService {
 
 	@Autowired
 	private FinalResultMapper finalResultMapper;
+	
+	@Autowired
+	private MinioService minioService;
 
 	@Transactional
 	public List<DetectionAccount> getDetectionAccountPages(UserGetScanHistoryParameters userGetScanHistoryParameters,
@@ -140,7 +143,7 @@ public class DetectionService {
 			
 			xwb.write(os);
 			byte[] content = os.toByteArray();
-			System.out.println(MinioUtil.uploadFile(new ByteArrayInputStream(content), ".xlsx").get("url"));
+			System.out.println(minioService.uploadFile(new ByteArrayInputStream(content), ".xlsx", "application/octet-stream"));
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw new ConanException(ConanExceptionConstants.SCAN_FILE_EXCEPTION_CODE,
@@ -162,6 +165,8 @@ public class DetectionService {
 				e.printStackTrace();
 			}
 		}
+		
+		String uuid = UUID.randomUUID().toString();// 生成唯一主键
 		return jsonObject;
 	}
 
