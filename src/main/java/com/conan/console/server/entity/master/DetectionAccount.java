@@ -101,6 +101,8 @@ public class DetectionAccount {
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
     private Float detail_score4;
+    
+    private Float cost;
 
     /**
      *
@@ -398,4 +400,14 @@ public class DetectionAccount {
     public void setUser_info_id(String user_info_id) {
         this.user_info_id = user_info_id == null ? null : user_info_id.trim();
     }
+
+	public Float getCost() {
+		return cost;
+	}
+
+	public void setCost(Float cost) {
+		this.cost = cost;
+	}
+    
+    
 }

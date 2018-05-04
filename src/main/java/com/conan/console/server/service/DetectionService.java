@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +24,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.conan.console.server.entity.master.CostRecord;
 import com.conan.console.server.entity.master.DetectionAccount;
+import com.conan.console.server.entity.master.UserBill;
+import com.conan.console.server.entity.master.UserRemain;
 import com.conan.console.server.entity.slave.FinalResult;
 import com.conan.console.server.exception.ConanException;
 import com.conan.console.server.mapper.master.CostRecordMapper;
 import com.conan.console.server.mapper.master.DetectionAccountMapper;
+import com.conan.console.server.mapper.master.UserBillMapper;
+import com.conan.console.server.mapper.master.UserRemainMapper;
 import com.conan.console.server.mapper.slave.FinalResultMapper;
 import com.conan.console.server.parameter.UserGetScanHistoryParameters;
 import com.conan.console.server.utils.ConanApplicationConstants;
@@ -44,7 +49,13 @@ public class DetectionService {
 
 	@Autowired
 	private FinalResultMapper finalResultMapper;
+
+	@Autowired
+	private UserRemainMapper userRemainMapper;
 	
+	@Autowired
+	private UserBillMapper userBillMapper;
+
 	@Autowired
 	private MinioService minioService;
 
@@ -91,7 +102,37 @@ public class DetectionService {
 
 	@Transactional
 	public JSONObject scan(int scan_type, MultipartFile scan_file, String user_info_id) {
-		JSONObject jsonObject = new JSONObject();
+		UserRemain userRemain = userRemainMapper.selectByPrimaryKey(user_info_id);
+		if (userRemain == null) {
+			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+		}
+		String uuid = UUID.randomUUID().toString();// 生成唯一主键
+		Date date = new Date();
+		UserBill userBill = new UserBill();
+		userBill.setId(uuid);
+		userBill.setCreated_at(date);
+		userBill.setBill_type("2");
+		userBill.setUpdated_at(date);
+		userBill.setUser_info_id(user_info_id);
+		
+		CostRecord costRecord = new CostRecord();
+		costRecord.setId(uuid);
+		costRecord.setCreated_at(date);
+		costRecord.setUpdated_at(date);
+		costRecord.setCost_type("2");
+		costRecord.setUser_info_id(user_info_id);
+		costRecord.setUser_bill_id(uuid);
+		
+		List<DetectionAccount> dectionAccountList = new ArrayList<>();
+		
+		JSONObject resultJsonObject = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		float gold_amount = userRemain.getGold_amount();
+		float gold_coupon = userRemain.getGold_coupon();
+		float bill_amount = 0;
+		String export_link = null;
 		List<String> scanAccountList = new ArrayList<>();
 		XSSFWorkbook xwb = null;
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -126,24 +167,99 @@ public class DetectionService {
 			}
 
 			for (int i = 0; i < xssfSheet.getLastRowNum(); i++) {
-				Cell cell2 = xssfSheet.getRow(i).createCell(2);
-				cell2.setCellType(CellType.STRING);
-				String md5 = xssfSheet.getRow(i).getCell(1).getStringCellValue();// 字符
-				if (finalResultMap.containsKey(md5)) {
-					Short tempShort = finalResultMap.get(md5);
-					if (tempShort < 60) {
-						cell2.setCellValue(-2.0);
+				String dectionAccountId = UUID.randomUUID().toString();// 生成唯一主键
+				Cell cell0 = xssfSheet.getRow(i).getCell(0);
+				Cell cell1 = xssfSheet.getRow(i).getCell(1);
+				String md5 = cell1.getStringCellValue();// 字符
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("scan_account_id", dectionAccountId);
+				jsonObject.put("created_at", date);
+				jsonObject.put("account_name", ConanUtils.getCellValueByCell(cell0));
+				
+				DetectionAccount detectionAccount = new DetectionAccount(); 
+				detectionAccount.setId(dectionAccountId);
+				detectionAccount.setCreated_at(date);
+				detectionAccount.setUpdated_at(date);
+				detectionAccount.setCost_record_id(uuid);
+				detectionAccount.setAccount_name(jsonObject.getString("account_name"));
+				detectionAccount.setUser_info_id(user_info_id);
+				if(gold_amount<=0&&gold_coupon<=0) {
+					cell1.setCellValue("账号余额不足");
+					jsonObject.put("account_score", "账号余额不足");
+					jsonObject.put("detail_score0", "账号余额不足");
+					jsonObject.put("detail_score1", "账号余额不足");
+					jsonObject.put("detail_score2", "账号余额不足");
+					jsonObject.put("detail_score3", "账号余额不足");
+					jsonObject.put("detail_score4", "账号余额不足");
+					jsonObject.put("scan_cost", 0);
+					
+					detectionAccount.setAccount_score(0f);
+					detectionAccount.setDetail_score0(0f);
+					detectionAccount.setDetail_score1(0f);
+					detectionAccount.setDetail_score2(0f);
+					detectionAccount.setDetail_score3(0f);
+					detectionAccount.setDetail_score4(0f);
+					detectionAccount.setCost(0f);
+					
+				}else {
+					if (finalResultMap.containsKey(md5)) {
+						Short tempShort = finalResultMap.get(md5);
+						if (tempShort < 60) {
+							cell1.setCellValue(-1.0);
+							jsonObject.put("account_score", -1.0);
+							detectionAccount.setAccount_score(-1.0f);
+						} else {
+							cell1.setCellValue(tempShort);
+							jsonObject.put("account_score", tempShort);
+							detectionAccount.setAccount_score(tempShort.floatValue());
+						}
+						if(gold_coupon>0) {
+							gold_coupon = gold_coupon - 1;
+						}else {
+							gold_amount = gold_amount -1;
+						}
+						bill_amount++;
+						
+						jsonObject.put("detail_score0", 0);
+						jsonObject.put("detail_score1", 1);
+						jsonObject.put("detail_score2", 2);
+						jsonObject.put("detail_score3", 3);
+						jsonObject.put("detail_score4", 4);
+						jsonObject.put("scan_cost", 1.0);
+						
+						detectionAccount.setDetail_score0(0f);
+						detectionAccount.setDetail_score1(0f);
+						detectionAccount.setDetail_score2(0f);
+						detectionAccount.setDetail_score3(0f);
+						detectionAccount.setDetail_score4(0f);
+						detectionAccount.setCost(1.0f);
+						
 					} else {
-						cell2.setCellValue(tempShort);
+						cell1.setCellValue(-2.0);
+						jsonObject.put("account_score", -2.0);
+						jsonObject.put("detail_score0", 0);
+						jsonObject.put("detail_score1", 0);
+						jsonObject.put("detail_score2", 0);
+						jsonObject.put("detail_score3", 0);
+						jsonObject.put("detail_score4", 0);
+						jsonObject.put("scan_cost", 0);
+						
+						detectionAccount.setAccount_score(-2.0f);
+						detectionAccount.setDetail_score0(0f);
+						detectionAccount.setDetail_score1(0f);
+						detectionAccount.setDetail_score2(0f);
+						detectionAccount.setDetail_score3(0f);
+						detectionAccount.setDetail_score4(0f);
+						detectionAccount.setCost(0.0f);
 					}
-				} else {
-					cell2.setCellValue(-1.0);
 				}
+				jsonArray.add(jsonObject);
+				dectionAccountList.add(detectionAccount);
 			}
 			
 			xwb.write(os);
 			byte[] content = os.toByteArray();
-			System.out.println(minioService.uploadFile(new ByteArrayInputStream(content), ".xlsx", "application/octet-stream"));
+			export_link = minioService.uploadFile(new ByteArrayInputStream(content), ".xlsx", "application/octet-stream");
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw new ConanException(ConanExceptionConstants.SCAN_FILE_EXCEPTION_CODE,
@@ -166,8 +282,30 @@ public class DetectionService {
 			}
 		}
 		
-		String uuid = UUID.randomUUID().toString();// 生成唯一主键
-		return jsonObject;
+		userRemain.setGold_amount(gold_amount);
+		userRemain.setGold_coupon(gold_coupon);
+		userRemain.setUpdated_at(date);
+		userRemainMapper.insertSelective(userRemain);
+		 
+		userBill.setRemain_gold(gold_amount+gold_coupon);
+		userBillMapper.insertSelective(userBill);
+		
+		costRecord.setCost_gold(bill_amount);
+		costRecord.setRemain_gold(gold_amount+gold_coupon);
+		costRecordMapper.insertSelective(costRecord);
+		
+		detectionAccountMapper.insertList(dectionAccountList);
+		
+		resultJsonObject.put("bill_id",uuid);
+		resultJsonObject.put("created_at", date);
+		resultJsonObject.put("bill_type", 2);
+		resultJsonObject.put("bill_amount", bill_amount);
+		resultJsonObject.put("bill_remain", gold_amount+gold_coupon);
+		resultJsonObject.put("bill_digest", "批量号检测|检测记录ID: "+uuid);
+		resultJsonObject.put("cost_type", 2);
+		resultJsonObject.put("scan_accounts", jsonArray);
+		resultJsonObject.put("export_link", export_link);
+		return resultJsonObject;
 	}
 
 	@Transactional

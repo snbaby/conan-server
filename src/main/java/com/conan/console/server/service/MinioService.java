@@ -44,7 +44,7 @@ public class MinioService {
 		String ymd = sdf.format(new Date());
 		String objectName = ymd + "/" + UUID.randomUUID().toString() + (suffix != null ? suffix : "");
 		minioClient.putObject(minio_bucketName, objectName, inputStream, contentType);
-		String url = minioClient.getObjectUrl(minio_bucketName, objectName);
+		String url = minioClient.presignedGetObject(minio_bucketName, objectName);
 		return url;
 	}
 	
