@@ -21,6 +21,7 @@
     <result column="verified_time" jdbcType="DATE" property="verified_time" />
     <result column="success_time" jdbcType="DATE" property="success_time" />
     <result column="user_bill_id" jdbcType="VARCHAR" property="user_bill_id" />
+    <result column="recharge_status" jdbcType="VARCHAR" property="recharge_status" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -29,7 +30,7 @@
       This element was generated on Mon Apr 30 00:35:43 CST 2018.
     -->
     id, created_at, updated_at, recharge_type, photo, comment, rmb_amount, gold_amount, 
-    gold_coupon, gold_total, user_info_id, verified_time, success_time, user_bill_id
+    gold_coupon, gold_total, user_info_id, verified_time, success_time, user_bill_id,recharge_status
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     <!--
@@ -61,12 +62,12 @@
       recharge_type, photo, comment, 
       rmb_amount, gold_amount, gold_coupon, 
       gold_total, user_info_id, verified_time, 
-      success_time, user_bill_id)
+      success_time, user_bill_id,recharge_status)
     values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=DATE}, #{updated_at,jdbcType=DATE}, 
       #{recharge_type,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR}, 
       #{rmb_amount,jdbcType=REAL}, #{gold_amount,jdbcType=REAL}, #{gold_coupon,jdbcType=REAL}, 
       #{gold_total,jdbcType=REAL}, #{user_info_id,jdbcType=VARCHAR}, #{verified_time,jdbcType=DATE}, 
-      #{success_time,jdbcType=DATE}, #{user_bill_id,jdbcType=VARCHAR})
+      #{success_time,jdbcType=DATE}, #{user_bill_id,jdbcType=VARCHAR}), #{recharge_status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.conan.console.server.entity.master.RechargeBill">
     <!--
@@ -118,6 +119,11 @@
       <if test="user_bill_id != null">
         user_bill_id,
       </if>
+      <if test="recharge_status != null">
+        recharge_status,
+      </if>
+      
+      
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -161,6 +167,9 @@
       </if>
       <if test="user_bill_id != null">
         #{user_bill_id,jdbcType=VARCHAR},
+      </if>
+      <if test="recharge_status != null">
+        #{recharge_status,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -211,6 +220,10 @@
       <if test="user_bill_id != null">
         user_bill_id = #{user_bill_id,jdbcType=VARCHAR},
       </if>
+      <if test="recharge_status != null">
+        recharge_status = #{recharge_status,jdbcType=VARCHAR},
+      </if>
+      
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -234,6 +247,7 @@
       verified_time = #{verified_time,jdbcType=DATE},
       success_time = #{success_time,jdbcType=DATE},
       user_bill_id = #{user_bill_id,jdbcType=VARCHAR}
+      recharge_status = #{recharge_status,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

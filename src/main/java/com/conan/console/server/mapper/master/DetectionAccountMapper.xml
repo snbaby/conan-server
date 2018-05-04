@@ -18,8 +18,8 @@
     <result column="detail_score2" jdbcType="REAL" property="detail_score2" />
     <result column="detail_score3" jdbcType="REAL" property="detail_score3" />
     <result column="detail_score4" jdbcType="REAL" property="detail_score4" />
-    <result column="cost" jdbcType="REAL" property="cost" />
     <result column="user_info_id" jdbcType="VARCHAR" property="user_info_id" />
+    <result column="cost" jdbcType="REAL" property="cost" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -28,7 +28,7 @@
       This element was generated on Mon Apr 23 00:59:28 CST 2018.
     -->
     id, created_at, updated_at, cost_record_id, account_name, account_score, detail_score0, 
-    detail_score1, detail_score2, detail_score3, detail_score4, user_info_id
+    detail_score1, detail_score2, detail_score3, detail_score4, user_info_id,cost
   </sql>
   
   <select id="selectByRecordIdAndUserInfoId" resultMap="BaseResultMap">
@@ -139,12 +139,12 @@
     insert into detection_account (id, created_at, updated_at, 
       cost_record_id, account_name, account_score, 
       detail_score0, detail_score1, detail_score2, 
-      detail_score3, detail_score4, user_info_id
+      detail_score3, detail_score4, user_info_id,cost
       )
     values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=DATE}, #{updated_at,jdbcType=DATE}, 
       #{cost_record_id,jdbcType=VARCHAR}, #{account_name,jdbcType=VARCHAR}, #{account_score,jdbcType=REAL}, 
       #{detail_score0,jdbcType=REAL}, #{detail_score1,jdbcType=REAL}, #{detail_score2,jdbcType=REAL}, 
-      #{detail_score3,jdbcType=REAL}, #{detail_score4,jdbcType=REAL}, #{user_info_id,jdbcType=VARCHAR}
+      #{detail_score3,jdbcType=REAL}, #{detail_score4,jdbcType=REAL}, #{user_info_id,jdbcType=VARCHAR}, #{cost,jdbcType=REAL}
       )
   </insert>
   <insert id="insertList" >
@@ -156,18 +156,14 @@
     insert into detection_account (id, created_at, updated_at, 
       cost_record_id, account_name, account_score, 
       detail_score0, detail_score1, detail_score2, 
-      detail_score3, detail_score4, user_info_id
+      detail_score3, detail_score4, user_info_id,cost
       )
-    values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=DATE}, #{updated_at,jdbcType=DATE}, 
-      #{cost_record_id,jdbcType=VARCHAR}, #{account_name,jdbcType=VARCHAR}, #{account_score,jdbcType=REAL}, 
-      #{detail_score0,jdbcType=REAL}, #{detail_score1,jdbcType=REAL}, #{detail_score2,jdbcType=REAL}, 
-      #{detail_score3,jdbcType=REAL}, #{detail_score4,jdbcType=REAL}, #{user_info_id,jdbcType=VARCHAR}
-      )
+    values 
      <foreach collection="recordList" item="record" separator=",">  
             (#{record.id,jdbcType=VARCHAR}, #{record.created_at,jdbcType=DATE}, #{record.updated_at,jdbcType=DATE}, 
       #{record.cost_record_id,jdbcType=VARCHAR}, #{record.account_name,jdbcType=VARCHAR}, #{record.account_score,jdbcType=REAL}, 
       #{record.detail_score0,jdbcType=REAL}, #{record.detail_score1,jdbcType=REAL}, #{record.detail_score2,jdbcType=REAL}, 
-      #{record.detail_score3,jdbcType=REAL}, #{record.detail_score4,jdbcType=REAL}, #{record.user_info_id,jdbcType=VARCHAR}
+      #{record.detail_score3,jdbcType=REAL}, #{record.detail_score4,jdbcType=REAL}, #{record.user_info_id,jdbcType=VARCHAR}, #{record.cost,jdbcType=REAL}
       )
         </foreach>  
   </insert>
@@ -216,6 +212,9 @@
       <if test="user_info_id != null">
         user_info_id,
       </if>
+      <if test="cost != null">
+        cost,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -253,6 +252,9 @@
       </if>
       <if test="user_info_id != null">
         #{user_info_id,jdbcType=VARCHAR},
+      </if>
+      <if test="cost != null">
+        #{cost,jdbcType=REAL},
       </if>
     </trim>
   </insert>
@@ -297,6 +299,9 @@
       <if test="user_info_id != null">
         user_info_id = #{user_info_id,jdbcType=VARCHAR},
       </if>
+      <if test="cost != null">
+        cost = #{cost,jdbcType=REAL},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -317,7 +322,8 @@
       detail_score2 = #{detail_score2,jdbcType=REAL},
       detail_score3 = #{detail_score3,jdbcType=REAL},
       detail_score4 = #{detail_score4,jdbcType=REAL},
-      user_info_id = #{user_info_id,jdbcType=VARCHAR}
+      user_info_id = #{user_info_id,jdbcType=VARCHAR},
+      cost = #{cost,jdbcType=REAL}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

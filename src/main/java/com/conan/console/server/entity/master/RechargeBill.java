@@ -137,6 +137,9 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 30 00:35:43 CST 2018
      */
+    
+    private String recharge_status;
+    
     public String getId() {
         return id;
     }
@@ -464,4 +467,13 @@ public class RechargeBill {
     public void setUser_bill_id(String user_bill_id) {
         this.user_bill_id = user_bill_id == null ? null : user_bill_id.trim();
     }
+
+	public String getRecharge_status() {
+		return recharge_status;
+	}
+
+	public void setRecharge_status(String recharge_status) {
+		this.recharge_status = recharge_status == null ? null : recharge_status.trim();
+	}
+    
 }

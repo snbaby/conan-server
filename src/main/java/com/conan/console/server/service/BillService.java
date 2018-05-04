@@ -170,16 +170,22 @@ public class BillService {
 	
 	@Transactional
 	public JSONObject postRechargeReq(int recharge_type,float recharge_amount,String comment, String capture_id, String user_info_id) {
+		UserRemain userRemain = userRemainMapper.selectByPrimaryKey(user_info_id);// 用户信息 用户权限 用户金额 所使用的ID 均为同一ID
+		if (userRemain == null) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
 		String uuid = UUID.randomUUID().toString();// 生成唯一主键
 		Date date = new Date();
 		UserBill userBill = new UserBill();
 		userBill.setId(uuid);
 		userBill.setCreated_at(date);
 		userBill.setUpdated_at(date);
-		userBill.setBill_type(String.valueOf(recharge_type));
-		userBill.setRemain_gold(recharge_amount);
+		userBill.setBill_type("1");
+		userBill.setRemain_gold(userRemain.getGold_amount()+userRemain.getGold_coupon());
 		userBill.setBill_status("2");//未审核
-		userBill.setBill_digest("人民币充值: 100元|额外赠送20金币");
+		userBill.setBill_digest("");
 		userBill.setUser_info_id(user_info_id);
 		userBillMapper.insert(userBill);
 		
@@ -196,14 +202,10 @@ public class BillService {
 		rechargeBill.setGold_total(recharge_amount);
 		rechargeBill.setUser_info_id(user_info_id);
 		rechargeBill.setUser_bill_id(uuid);
+		rechargeBill.setRecharge_status("2");
 		rechargeBillMapper.insert(rechargeBill);
 		
-		UserRemain userRemain = userRemainMapper.selectByPrimaryKey(user_info_id);// 用户信息 用户权限 用户金额 所使用的ID 均为同一ID
-		if (userRemain == null) {
-			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
-					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
-					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
-		}
+		
 		JSONObject resultJsonObject = new JSONObject();
 		resultJsonObject.put("bill_id", uuid);
 		resultJsonObject.put("created_at", date);
@@ -215,6 +217,8 @@ public class BillService {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("recharge_bill_id",uuid );
 		jsonObject.put("created_at", date);
+		jsonObject.put("verified_at", "");
+		jsonObject.put("success_at", "");
 		jsonObject.put("recharge_type", recharge_type);
 		jsonObject.put("photo", capture_id);
 		jsonObject.put("comment",comment );
@@ -222,7 +226,9 @@ public class BillService {
 		jsonObject.put("gold_amount", recharge_amount);
 		jsonObject.put("gold_coupon", 0f);
 		jsonObject.put("gold_total", recharge_amount);
+		jsonObject.put("recharge_status", 2);
 		resultJsonObject.put("recharge_detail", jsonObject);
 		return resultJsonObject;
 	}
 }
+
