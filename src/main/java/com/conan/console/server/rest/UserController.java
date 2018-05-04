@@ -81,10 +81,10 @@ public class UserController {
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
 		}
 		String validationCode = (String) request.getSession().getAttribute("validation_code");
-		if (StringUtils.isBlank(validationCode) || !userRegisterParameters.getValidate_code().equals(validationCode)) {
-			throw new ConanException(ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_CODE,
-					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
-					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
+		if (StringUtils.isBlank(validationCode) || !userRegisterParameters.getValidation_code().equals(validationCode)) {
+			throw new ConanException(ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_CODE,
+					ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
 		}
 		String userPhone = (String) request.getSession().getAttribute("user_phone");
 		if (StringUtils.isBlank(userPhone) || !userRegisterParameters.getUser_phone().equals(userPhone)) {
@@ -222,10 +222,10 @@ public class UserController {
 
 		String validationCode = (String) request.getSession().getAttribute("validation_code");
 		if (StringUtils.isBlank(validationCode)
-				|| !userResetPasswdParameters.getValidate_code().equals(validationCode)) {
-			throw new ConanException(ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_CODE,
-					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
-					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
+				|| !userResetPasswdParameters.getValidation_code().equals(validationCode)) {
+			throw new ConanException(ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_CODE,
+					ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
 		}
 		String userPhone = (String) request.getSession().getAttribute("user_phone");
 		if (StringUtils.isBlank(userPhone) || !userResetPasswdParameters.getUser_phone().equals(userPhone)) {
@@ -254,10 +254,10 @@ public class UserController {
 
 		String validationCode = (String) request.getSession().getAttribute("validation_code");
 		if (StringUtils.isBlank(validationCode)
-				|| !userModifyPhoneParameters.getValidate_code().equals(validationCode)) {
-			throw new ConanException(ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_CODE,
-					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
-					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
+				|| !userModifyPhoneParameters.getValidation_code().equals(validationCode)) {
+			throw new ConanException(ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_CODE,
+					ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
 		}
 
 		String userPhone = (String) request.getSession().getAttribute("user_phone");

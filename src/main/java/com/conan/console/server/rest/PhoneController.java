@@ -60,9 +60,9 @@ public class PhoneController {
 		
 		String validationCode = (String) request.getSession().getAttribute("validation_code");
 		if (StringUtils.isBlank(validationCode) || !checkValidationCodeParameters.getValidation_code().equals(validationCode)) {
-			throw new ConanException(ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_CODE,
-					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
-					ConanExceptionConstants.VALIDATE_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
+			throw new ConanException(ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_CODE,
+					ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
 		}
 		String userPhone = (String) request.getSession().getAttribute("user_phone");
 		if (StringUtils.isBlank(userPhone) || !checkValidationCodeParameters.getUser_phone().equals(userPhone)) {
