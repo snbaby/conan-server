@@ -166,31 +166,50 @@ public class DetectionService {
 					jsonObject.put("account_score", -1.0f);
 					
 					detectionAccount.setAccount_score(-1.0f);
+					
+					
+					costRecord.setCost_gold(1f);
+					
+					detectionAccount.setDetail_score0(0f);
+					detectionAccount.setDetail_score1(0f);
+					detectionAccount.setDetail_score2(0f);
+					detectionAccount.setDetail_score3(0f);
+					detectionAccount.setDetail_score4(0f);
+					detectionAccount.setCost(1.0f);
+					
+					jsonObject.put("detail_score0", 0);
+					jsonObject.put("detail_score1", 1);
+					jsonObject.put("detail_score2", 2);
+					jsonObject.put("detail_score3", 3);
+					jsonObject.put("detail_score4", 4);
+					jsonObject.put("scan_cost", 1.0);
 				} else {
 					jsonObject.put("account_score", finalResult.getResult().floatValue());
 					
 					detectionAccount.setAccount_score(finalResult.getResult().floatValue());
+					
+					costRecord.setCost_gold(1f);
+					
+					detectionAccount.setDetail_score0(0f);
+					detectionAccount.setDetail_score1(0f);
+					detectionAccount.setDetail_score2(0f);
+					detectionAccount.setDetail_score3(0f);
+					detectionAccount.setDetail_score4(0f);
+					detectionAccount.setCost(1.0f);
+					
+					jsonObject.put("detail_score0", 0);
+					jsonObject.put("detail_score1", finalResult.getResult().floatValue()*0.1);
+					jsonObject.put("detail_score2", finalResult.getResult().floatValue()*0.2);
+					jsonObject.put("detail_score3", finalResult.getResult().floatValue()*0.3);
+					jsonObject.put("detail_score4", finalResult.getResult().floatValue()*0.4);
+					jsonObject.put("scan_cost", 1.0);
 				}
 				if(gold_coupon>0) {
 					gold_coupon = gold_coupon - 1;
 				}else {
 					gold_amount = gold_amount -1;
 				}
-				costRecord.setCost_gold(1f);
 				
-				detectionAccount.setDetail_score0(0f);
-				detectionAccount.setDetail_score1(0f);
-				detectionAccount.setDetail_score2(0f);
-				detectionAccount.setDetail_score3(0f);
-				detectionAccount.setDetail_score4(0f);
-				detectionAccount.setCost(1.0f);
-				
-				jsonObject.put("detail_score0", 0);
-				jsonObject.put("detail_score1", 1);
-				jsonObject.put("detail_score2", 2);
-				jsonObject.put("detail_score3", 3);
-				jsonObject.put("detail_score4", 4);
-				jsonObject.put("scan_cost", 1.0);
 			}
 		}else {
 			costRecord.setCost_gold(0f);
@@ -350,10 +369,38 @@ public class DetectionService {
 							cell1.setCellValue(-1.0);
 							jsonObject.put("account_score", -1.0);
 							detectionAccount.setAccount_score(-1.0f);
+							
+							jsonObject.put("detail_score0", 0);
+							jsonObject.put("detail_score1", 0);
+							jsonObject.put("detail_score2", 0);
+							jsonObject.put("detail_score3", 0);
+							jsonObject.put("detail_score4", 0);
+							jsonObject.put("scan_cost", 1.0);
+							
+							detectionAccount.setDetail_score0(0f);
+							detectionAccount.setDetail_score1(0f);
+							detectionAccount.setDetail_score2(0f);
+							detectionAccount.setDetail_score3(0f);
+							detectionAccount.setDetail_score4(0f);
+							detectionAccount.setCost(1.0f);
 						} else {
 							cell1.setCellValue(tempShort);
 							jsonObject.put("account_score", tempShort);
 							detectionAccount.setAccount_score(tempShort.floatValue());
+							
+							jsonObject.put("detail_score0", 0);
+							jsonObject.put("detail_score1", tempShort.floatValue()*0.1);
+							jsonObject.put("detail_score2", tempShort.floatValue()*0.2);
+							jsonObject.put("detail_score3", tempShort.floatValue()*0.3);
+							jsonObject.put("detail_score4", tempShort.floatValue()*0.4);
+							jsonObject.put("scan_cost", 1.0);
+							
+							detectionAccount.setDetail_score0(0f);
+							detectionAccount.setDetail_score1(tempShort.floatValue()*0.1f);
+							detectionAccount.setDetail_score2(tempShort.floatValue()*0.2f);
+							detectionAccount.setDetail_score3(tempShort.floatValue()*0.3f);
+							detectionAccount.setDetail_score4(tempShort.floatValue()*0.4f);
+							detectionAccount.setCost(1.0f);
 						}
 						if(gold_coupon>0) {
 							gold_coupon = gold_coupon - 1;
@@ -362,19 +409,7 @@ public class DetectionService {
 						}
 						bill_amount++;
 						
-						jsonObject.put("detail_score0", 0);
-						jsonObject.put("detail_score1", 1);
-						jsonObject.put("detail_score2", 2);
-						jsonObject.put("detail_score3", 3);
-						jsonObject.put("detail_score4", 4);
-						jsonObject.put("scan_cost", 1.0);
 						
-						detectionAccount.setDetail_score0(0f);
-						detectionAccount.setDetail_score1(0f);
-						detectionAccount.setDetail_score2(0f);
-						detectionAccount.setDetail_score3(0f);
-						detectionAccount.setDetail_score4(0f);
-						detectionAccount.setCost(1.0f);
 						
 					} else {
 						cell1.setCellValue(-2.0);
