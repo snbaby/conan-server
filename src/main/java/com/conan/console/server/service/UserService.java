@@ -246,6 +246,7 @@ public class UserService {
 		}
 		userInfo.setPhone_no(new_phone);
 		userInfo.setUpdated_at(new Date());
+		userInfoMapper.updateByPrimaryKey(userInfo);
 	}
 	
 	@Transactional

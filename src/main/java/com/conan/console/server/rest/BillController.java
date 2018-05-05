@@ -42,8 +42,8 @@ public class BillController {
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
-		userGetBillParameters.setBill_date_start(new Date());
-		userGetBillParameters.setBill_date_end(new Date());
+		userGetBillParameters.setBill_date_start(userGetBillParameters.getBill_date_start());
+		userGetBillParameters.setBill_date_end(userGetBillParameters.getBill_date_end());
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",
 				billService.getUserBillPages(userGetBillParameters,userInfoId));
 		return new ResponseEntity<>(responseResult,HttpStatus.OK);
