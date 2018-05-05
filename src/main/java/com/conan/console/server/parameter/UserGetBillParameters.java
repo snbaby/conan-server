@@ -13,8 +13,8 @@ public class UserGetBillParameters {
 	private int current_page;
 
 	@NotNull(message = "bill_status不能为空")
-	@Min(value = 1, message = "scan_status最小为1")
-	@Max(value = 3, message = "scan_status最大为3")
+	@Min(value = 1, message = "bill_status最小为1")
+	@Max(value = 3, message = "bill_status最大为3")
 	private int bill_status;
 
 	@Min(value = 1, message = "bill_type最小为1")
