@@ -249,6 +249,24 @@ public class UserService {
 	}
 	
 	@Transactional
+	public void checkPasswd(String user_info_id,String user_passwd) {
+		UserAuth userAuth = userAuthMapper.selectByPrimaryKey(user_info_id);// 用户信息 用户权限 用户金额 所使用的ID 均为同一ID
+		if (userAuth == null) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		
+		if(!user_passwd.equals(userAuth.getHashed_passwd())) {
+			throw new ConanException(ConanExceptionConstants.USER_PASSWD_VALIDATED_EXCEPTION_CODE,
+					ConanExceptionConstants.USER_PASSWD_VALIDATED_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.USER_PASSWD_VALIDATED_EXCEPTION_HTTP_STATUS);
+		}
+	}
+	
+	
+	
+	@Transactional
 	public JSONObject queryPreCheck(int scan_type,String scan_file,String user_info_id) {
 		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_info_id);
 		if (userInfo == null) {
