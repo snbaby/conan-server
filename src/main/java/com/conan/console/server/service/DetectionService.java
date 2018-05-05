@@ -154,12 +154,12 @@ public class DetectionService {
 				detectionAccount.setDetail_score4(0f);
 				detectionAccount.setCost(0f);
 				
-				jsonObject.put("account_score", "账号余额不足");
-				jsonObject.put("detail_score0", "账号余额不足");
-				jsonObject.put("detail_score1", "账号余额不足");
-				jsonObject.put("detail_score2", "账号余额不足");
-				jsonObject.put("detail_score3", "账号余额不足");
-				jsonObject.put("detail_score4", "账号余额不足");
+				jsonObject.put("account_score", -2.0);
+				jsonObject.put("detail_score0", 0);
+				jsonObject.put("detail_score1", 0);
+				jsonObject.put("detail_score2", 0);
+				jsonObject.put("detail_score3", 0);
+				jsonObject.put("detail_score4", 0);
 				jsonObject.put("scan_cost", 0);
 			}else {
 				if (finalResult.getResult() < 60) {
@@ -203,12 +203,12 @@ public class DetectionService {
 			detectionAccount.setDetail_score4(0f);
 			detectionAccount.setCost(0f);
 			
-			jsonObject.put("account_score", -2.0);
-			jsonObject.put("detail_score0", 0);
-			jsonObject.put("detail_score1", 0);
-			jsonObject.put("detail_score2", 0);
-			jsonObject.put("detail_score3", 0);
-			jsonObject.put("detail_score4", 0);
+			jsonObject.put("account_score", "账号余额不足");
+			jsonObject.put("detail_score0", "账号余额不足");
+			jsonObject.put("detail_score1", "账号余额不足");
+			jsonObject.put("detail_score2", "账号余额不足");
+			jsonObject.put("detail_score3", "账号余额不足");
+			jsonObject.put("detail_score4", "账号余额不足");
 			jsonObject.put("scan_cost", 0);
 		}
 		
