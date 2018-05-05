@@ -290,7 +290,7 @@ public class UserController {
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
-		userService.updateUserPhone(userModifyPhoneParameters.getUser_id(), userModifyPhoneParameters.getNew_phone());
+		userService.updateUserPhone(userInfoId, userModifyPhoneParameters.getNew_phone());
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success");
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
