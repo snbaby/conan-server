@@ -203,9 +203,26 @@ public class UserController {
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
+		
+		String validationCode = (String) request.getSession().getAttribute("validation_code");
+		if (StringUtils.isBlank(validationCode)
+				|| !userModifyPasswdParameters.getValidation_code().equals(validationCode)) {
+			throw new ConanException(ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_CODE,
+					ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.VALIDATION_CODE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
+		}
+		String userPhone = (String) request.getSession().getAttribute("user_phone");
+		if (StringUtils.isBlank(userPhone) || !userModifyPasswdParameters.getUser_phone().equals(userPhone)) {
+			throw new ConanException(ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_CODE,
+					ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.USER_PHONE_NOT_MATCHED_EXCEPTION_HTTP_STATUS);
+		}
+		
 
 		userService.updateUserPaasword(userInfoId, userModifyPasswdParameters.getOld_passwd(),
 				userModifyPasswdParameters.getNew_passwd());
+		request.getSession().removeAttribute("validation_code");
+		request.getSession().removeAttribute("user_phone");
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success");
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +110,11 @@ public class UserService {
 		userRemainJsonObject.put("scan_cnt", scan_cnt);
 		userRemainJsonObject.remove("id");
 		userRemainJsonObject.remove("user_info_id");
-
+		
+		if(StringUtils.isNotBlank( userInfo.getUser_photo())) {
+			userInfo.setUser_photo(minioService.presignedGetObject(userInfo.getUser_photo()));
+		}
+		
 		userInfoJsonObject = (JSONObject) JSON.toJSON(userInfo);
 		userInfoJsonObject.put("user_info_id", userInfo.getId());
 		userInfoJsonObject.put("user_remain_info", userRemainJsonObject);
@@ -145,6 +150,9 @@ public class UserService {
 		userRemainJsonObject.remove("id");
 		userRemainJsonObject.remove("user_info_id");
 
+		if(StringUtils.isNotBlank( userInfo.getUser_photo())) {
+			userInfo.setUser_photo(minioService.presignedGetObject(userInfo.getUser_photo()));
+		}
 		userInfoJsonObject = (JSONObject) JSON.toJSON(userInfo);
 		userInfoJsonObject.put("user_info_id", userInfo.getId());
 		userInfoJsonObject.put("user_remain_info", userRemainJsonObject);

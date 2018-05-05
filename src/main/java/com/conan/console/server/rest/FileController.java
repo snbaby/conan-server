@@ -44,6 +44,7 @@ public class FileController {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("file_key", objectName);
 		jsonObject.put("file_type", type);
+		jsonObject.put("file_url", minioService.presignedGetObject(objectName));
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",
 				jsonObject);
 		return new ResponseEntity<>(responseResult,HttpStatus.OK);
