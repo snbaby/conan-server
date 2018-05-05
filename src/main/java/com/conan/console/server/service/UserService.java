@@ -35,6 +35,9 @@ public class UserService {
 
 	@Autowired
 	UserRemainMapper userRemainMapper;
+	
+	@Autowired
+	MinioService minioService;
 
 	@Transactional
 	public void registerUser(String user_phone, String user_passwd) {
@@ -238,7 +241,7 @@ public class UserService {
 	}
 	
 	@Transactional
-	public JSONObject queryPreCheck(QueryPreCheckParameters queryPreCheckParameters,String user_info_id) {
+	public JSONObject queryPreCheck(int scan_type,String scan_file,String user_info_id) {
 		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_info_id);
 		if (userInfo == null) {
 			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
@@ -254,7 +257,7 @@ public class UserService {
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
 		
-		if(queryPreCheckParameters.getScan_type() == 1) {
+		if(scan_type == 1) {
 			if(userRemain.getGold_amount()>=1) {
 				resultJsonObject.put("scan_cnt", 1);
 				resultJsonObject.put("scan_total", 1);
@@ -268,10 +271,10 @@ public class UserService {
 				resultJsonObject.put("cost_total", 1);
 				resultJsonObject.put("scan_remain", userRemain.getGold_amount());
 			}
-		}else if(queryPreCheckParameters.getScan_type() == 2){
+		}else if(scan_type == 2){
 			XSSFWorkbook xwb = null;
 			try {
-				xwb = new XSSFWorkbook(queryPreCheckParameters.getScan_file().getInputStream());
+				xwb = new XSSFWorkbook(minioService.downloadFile(scan_file));
 				XSSFSheet xssfSheet = xwb.getSheetAt(0);
 				int scanAccountNo = xssfSheet.getLastRowNum()-1;
 				if(userRemain.getGold_amount() >= scanAccountNo) {

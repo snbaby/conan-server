@@ -307,7 +307,7 @@ public class UserController {
 		}
 
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success",
-				userService.queryPreCheck(queryPreCheckParameters, userInfoId));
+				userService.queryPreCheck(queryPreCheckParameters.getScan_type(),queryPreCheckParameters.getScan_file(), userInfoId));
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 }

@@ -93,15 +93,157 @@ public class DetectionService {
 	}
 
 	@Transactional
-	public JSONObject scan(int scan_type, String scan_account, String user_info_id) {
+	public JSONObject scanSingnalAccount(int scan_type, String scan_account, String user_info_id) {
+		UserRemain userRemain = userRemainMapper.selectByPrimaryKey(user_info_id);
+		if (userRemain == null) {
+			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+		}
+		float gold_amount = userRemain.getGold_amount();
+		float gold_coupon = userRemain.getGold_coupon();
+		JSONObject resultJsonObject = new JSONObject();
 		JSONObject jsonObject = new JSONObject();
-		FinalResult finalResult = finalResultMapper.selectByPrimaryKey(scan_account);
-		jsonObject.put("result", finalResult);
-		return jsonObject;
+		JSONArray jsonArray = new JSONArray();
+		String md5 = null;
+		if (scan_account.length() == 1) {
+			md5 = scan_account;
+		} else {
+			md5 = ConanUtils.MD5(scan_account.charAt(0) + "***" + scan_account.charAt(scan_account.length() - 1));
+		}
+		
+		FinalResult finalResult = finalResultMapper.selectByPrimaryKey(md5);
+		
+		String uuid = UUID.randomUUID().toString();// 生成唯一主键
+		Date date = new Date();
+		UserBill userBill = new UserBill();
+		userBill.setId(uuid);
+		userBill.setCreated_at(date);
+		userBill.setBill_type("2");
+		userBill.setUpdated_at(date);
+		userBill.setUser_info_id(user_info_id);
+		
+		CostRecord costRecord = new CostRecord();
+		costRecord.setId(uuid);
+		costRecord.setCreated_at(date);
+		costRecord.setUpdated_at(date);
+		costRecord.setCost_type("2");
+		costRecord.setUser_info_id(user_info_id);
+		costRecord.setUser_bill_id(uuid);
+		
+		DetectionAccount detectionAccount = new DetectionAccount(); 
+		detectionAccount.setId(uuid);
+		detectionAccount.setCreated_at(date);
+		detectionAccount.setUpdated_at(date);
+		detectionAccount.setCost_record_id(uuid);
+		detectionAccount.setAccount_name(scan_account);
+		detectionAccount.setUser_info_id(user_info_id);
+		
+		jsonObject.put("scan_account_id", uuid);
+		jsonObject.put("created_at", date);
+		jsonObject.put("account_name", scan_account);
+		if(gold_coupon>=0||gold_amount>=0) {
+			if(finalResult == null) {
+				costRecord.setCost_gold(0f);
+				
+				detectionAccount.setAccount_score(0f);
+				detectionAccount.setDetail_score0(0f);
+				detectionAccount.setDetail_score1(0f);
+				detectionAccount.setDetail_score2(0f);
+				detectionAccount.setDetail_score3(0f);
+				detectionAccount.setDetail_score4(0f);
+				detectionAccount.setCost(0f);
+				
+				jsonObject.put("account_score", "账号余额不足");
+				jsonObject.put("detail_score0", "账号余额不足");
+				jsonObject.put("detail_score1", "账号余额不足");
+				jsonObject.put("detail_score2", "账号余额不足");
+				jsonObject.put("detail_score3", "账号余额不足");
+				jsonObject.put("detail_score4", "账号余额不足");
+				jsonObject.put("scan_cost", 0);
+			}else {
+				if (finalResult.getResult() < 60) {
+					jsonObject.put("account_score", -1.0f);
+					
+					detectionAccount.setAccount_score(-1.0f);
+				} else {
+					jsonObject.put("account_score", finalResult.getResult().floatValue());
+					
+					detectionAccount.setAccount_score(finalResult.getResult().floatValue());
+				}
+				if(gold_coupon>0) {
+					gold_coupon = gold_coupon - 1;
+				}else {
+					gold_amount = gold_amount -1;
+				}
+				costRecord.setCost_gold(1f);
+				
+				detectionAccount.setDetail_score0(0f);
+				detectionAccount.setDetail_score1(0f);
+				detectionAccount.setDetail_score2(0f);
+				detectionAccount.setDetail_score3(0f);
+				detectionAccount.setDetail_score4(0f);
+				detectionAccount.setCost(1.0f);
+				
+				jsonObject.put("detail_score0", 0);
+				jsonObject.put("detail_score1", 1);
+				jsonObject.put("detail_score2", 2);
+				jsonObject.put("detail_score3", 3);
+				jsonObject.put("detail_score4", 4);
+				jsonObject.put("scan_cost", 1.0);
+			}
+		}else {
+			costRecord.setCost_gold(0f);
+			
+			detectionAccount.setAccount_score(-2.0f);
+			detectionAccount.setDetail_score0(0f);
+			detectionAccount.setDetail_score1(0f);
+			detectionAccount.setDetail_score2(0f);
+			detectionAccount.setDetail_score3(0f);
+			detectionAccount.setDetail_score4(0f);
+			detectionAccount.setCost(0f);
+			
+			jsonObject.put("account_score", -2.0);
+			jsonObject.put("detail_score0", 0);
+			jsonObject.put("detail_score1", 0);
+			jsonObject.put("detail_score2", 0);
+			jsonObject.put("detail_score3", 0);
+			jsonObject.put("detail_score4", 0);
+			jsonObject.put("scan_cost", 0);
+		}
+		
+		jsonArray.add(jsonObject);
+		
+		
+		userRemain.setGold_amount(gold_amount);
+		userRemain.setGold_coupon(gold_coupon);
+		userRemain.setUpdated_at(date);
+		userRemainMapper.updateByPrimaryKey(userRemain);
+		
+		userBill.setRemain_gold(gold_amount+gold_coupon);
+		userBillMapper.insertSelective(userBill);
+			
+		
+		costRecord.setRemain_gold(gold_amount+gold_coupon);
+		costRecordMapper.insertSelective(costRecord);
+		
+		detectionAccountMapper.insert(detectionAccount);
+		
+		resultJsonObject.put("bill_id",uuid);
+		resultJsonObject.put("created_at", date);
+		resultJsonObject.put("bill_type", 2);
+		resultJsonObject.put("bill_amount", 1);
+		resultJsonObject.put("bill_status", 2);
+		resultJsonObject.put("bill_remain", gold_amount+gold_coupon);
+		resultJsonObject.put("bill_digest", "单账号号检测|检测记录ID: "+uuid);
+		resultJsonObject.put("cost_type", 1);
+		resultJsonObject.put("scan_accounts", jsonArray);
+		
+		return resultJsonObject;
 	}
 
 	@Transactional
-	public JSONObject scan(int scan_type, MultipartFile scan_file, String user_info_id) {
+	public JSONObject scanMultiAccount(int scan_type, String scan_file, String user_info_id) {
 		UserRemain userRemain = userRemainMapper.selectByPrimaryKey(user_info_id);
 		if (userRemain == null) {
 			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
@@ -137,7 +279,7 @@ public class DetectionService {
 		XSSFWorkbook xwb = null;
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		try {
-			xwb = new XSSFWorkbook(scan_file.getInputStream());
+			xwb = new XSSFWorkbook(minioService.downloadFile(scan_file));
 			XSSFSheet xssfSheet = xwb.getSheetAt(0);
 			for (int i = 0; i < xssfSheet.getLastRowNum(); i++) {
 				String scanAccountStr = null;
@@ -259,7 +401,8 @@ public class DetectionService {
 			
 			xwb.write(os);
 			byte[] content = os.toByteArray();
-			export_link = minioService.uploadFile(new ByteArrayInputStream(content), ".xlsx", "application/octet-stream");
+			minioService.uploadFile(new ByteArrayInputStream(content), scan_file, "application/octet-stream");
+			export_link = minioService.presignedGetObject(scan_file);
 		} catch (Exception e) {
 			// TODO: handle exception
 			throw new ConanException(ConanExceptionConstants.SCAN_FILE_EXCEPTION_CODE,
@@ -285,7 +428,7 @@ public class DetectionService {
 		userRemain.setGold_amount(gold_amount);
 		userRemain.setGold_coupon(gold_coupon);
 		userRemain.setUpdated_at(date);
-		userRemainMapper.insertSelective(userRemain);
+		userRemainMapper.updateByPrimaryKey(userRemain);
 		 
 		userBill.setRemain_gold(gold_amount+gold_coupon);
 		userBillMapper.insertSelective(userBill);
@@ -294,7 +437,10 @@ public class DetectionService {
 		costRecord.setRemain_gold(gold_amount+gold_coupon);
 		costRecordMapper.insertSelective(costRecord);
 		
-		detectionAccountMapper.insertList(dectionAccountList);
+		for(DetectionAccount detectionAccount: dectionAccountList) {
+			detectionAccountMapper.insertSelective(detectionAccount);
+		}
+		//detectionAccountMapper.insertList(dectionAccountList);
 		
 		resultJsonObject.put("bill_id",uuid);
 		resultJsonObject.put("created_at", date);
@@ -303,6 +449,7 @@ public class DetectionService {
 		resultJsonObject.put("bill_remain", gold_amount+gold_coupon);
 		resultJsonObject.put("bill_digest", "批量号检测|检测记录ID: "+uuid);
 		resultJsonObject.put("cost_type", 2);
+		resultJsonObject.put("bill_status", 2);
 		resultJsonObject.put("scan_accounts", jsonArray);
 		resultJsonObject.put("export_link", export_link);
 		return resultJsonObject;

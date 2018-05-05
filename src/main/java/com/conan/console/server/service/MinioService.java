@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,10 +22,8 @@ import io.minio.errors.InternalException;
 import io.minio.errors.InvalidArgumentException;
 import io.minio.errors.InvalidBucketNameException;
 import io.minio.errors.InvalidEndpointException;
-import io.minio.errors.InvalidExpiresRangeException;
 import io.minio.errors.InvalidPortException;
 import io.minio.errors.NoResponseException;
-import io.minio.errors.RegionConflictException;
 
 /**
  * @author Administrator Paul Wang
@@ -52,15 +47,43 @@ public class MinioService {
 	@Value("${minio.backet-name}")
 	private String minio_bucketName;
 
-	public String uploadFile(InputStream inputStream, String objectName, String contentType) {
+	public void uploadFile(InputStream inputStream, String objectName, String contentType) {
 		MinioClient minioClient;
-		String url = "";
 		try {
-			minioClient = new MinioClient(minio_endpoint, minio_accessKey, minio_secretKey );
-			if(!minioClient.bucketExists(minio_bucketName)) {
+			minioClient = new MinioClient(minio_endpoint, minio_accessKey, minio_secretKey);
+			if (!minioClient.bucketExists(minio_bucketName)) {
 				minioClient.makeBucket(minio_bucketName);
 			}
 			minioClient.putObject(minio_bucketName, objectName, inputStream, contentType);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+
+	}
+	
+	public String presignedGetObject(String objectName) {
+		MinioClient minioClient;
+		String url = "";
+		try {
+			minioClient = new MinioClient(minio_endpoint, minio_accessKey, minio_secretKey);
+			url = minioClient.presignedGetObject(minio_bucketName, objectName);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		return url;
+	}
+	
+	public String getObjectUrl(String objectName) {
+		MinioClient minioClient;
+		String url = "";
+		try {
+			minioClient = new MinioClient(minio_endpoint, minio_accessKey, minio_secretKey);
 			url = minioClient.getObjectUrl(minio_bucketName, objectName);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -68,8 +91,22 @@ public class MinioService {
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
-		
 		return url;
 	}
-	
+
+	public InputStream downloadFile(String objectName) {
+		MinioClient minioClient = null;
+		try {
+			minioClient = new MinioClient(minio_endpoint, minio_accessKey, minio_secretKey);
+			return minioClient.getObject(minio_bucketName, objectName);
+		} catch (InvalidEndpointException | InvalidPortException | InvalidKeyException | InvalidBucketNameException
+				| NoSuchAlgorithmException | InsufficientDataException | NoResponseException | ErrorResponseException
+				| InternalException | InvalidArgumentException | IOException | XmlPullParserException e) {
+			// TODO Auto-generated catch block
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+	}
+
 }

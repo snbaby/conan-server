@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,9 +39,8 @@ public class FileController {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		String ymd = sdf.format(new Date());
-		
 		String objectName = userInfoId+"/"+ymd+"/"+upload_file.getOriginalFilename();
-		System.out.println(minioService.uploadFile(upload_file.getInputStream(), objectName, type));
+		minioService.uploadFile(upload_file.getInputStream(), objectName, type);
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("file_key", objectName);
 		jsonObject.put("file_type", type);

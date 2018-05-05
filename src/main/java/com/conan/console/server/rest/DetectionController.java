@@ -110,7 +110,7 @@ public class DetectionController {
 						ConanExceptionConstants.SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 			}else {
 				responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",
-						detectionService.scan(queryPreCheckParameters.getScan_type(), queryPreCheckParameters.getScan_account(), userInfoId));
+						detectionService.scanSingnalAccount(queryPreCheckParameters.getScan_type(), queryPreCheckParameters.getScan_account(), userInfoId));
 				return new ResponseEntity<>(responseResult,HttpStatus.OK);
 			}
 		}
@@ -122,7 +122,7 @@ public class DetectionController {
 						ConanExceptionConstants.SCAN_FILE_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 			}else {
 			 responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",
-						detectionService.scan(queryPreCheckParameters.getScan_type(), queryPreCheckParameters.getScan_file(), userInfoId));
+						detectionService.scanMultiAccount(queryPreCheckParameters.getScan_type(), queryPreCheckParameters.getScan_file(), userInfoId));
 				 return new ResponseEntity<>(responseResult,HttpStatus.OK);
 				
 			}

@@ -5,8 +5,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class QueryPreCheckParameters {
 	@NotNull(message = "scan_type不能为空")
 	@Min(value = 1, message = "scan_type最小为1")
@@ -17,7 +15,8 @@ public class QueryPreCheckParameters {
 	@Size(max = 255, message = "scan_account长度最大长度为255")
 	private String scan_account;
 	
-	private MultipartFile scan_file;
+	@Size(max = 255, message = "scan_file长度最大长度为255")
+	private String scan_file;
 
 	public int getScan_type() {
 		return scan_type;
@@ -35,11 +34,13 @@ public class QueryPreCheckParameters {
 		this.scan_account = scan_account;
 	}
 
-	public MultipartFile getScan_file() {
+	public String getScan_file() {
 		return scan_file;
 	}
 
-	public void setScan_file(MultipartFile scan_file) {
+	public void setScan_file(String scan_file) {
 		this.scan_file = scan_file;
 	}
+
+	
 }
