@@ -8,9 +8,7 @@ import javax.validation.constraints.Size;
 
 public class GetBillDetailParameters {
 	
-	@NotNull(message = "current_page不能为空")
-	@Min(value = 1, message = "current_page最小为1")
-	private int current_page;
+	private Integer current_page;
 	
 	@NotNull(message="账单ID不能为空")
 	@NotBlank(message="账单ID不能为空")

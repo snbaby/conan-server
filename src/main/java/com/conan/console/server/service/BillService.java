@@ -98,7 +98,7 @@ public class BillService {
 	public JSONObject getBillDetail(GetBillDetailParameters getBillDetailParameters, String user_info_id) {
 		JSONObject resultJsonObject = new JSONObject();
 		UserBill userBill = userBillMapper.selectByPrimaryKey(getBillDetailParameters.getBill_id());
-		if (userBill == null || userBill.getUser_info_id().equals(user_info_id)) {
+		if (userBill == null || !userBill.getUser_info_id().equals(user_info_id)) {
 			throw new ConanException(ConanExceptionConstants.BILL_NOT_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.BILL_NOT_EXISTS_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.BILL_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
@@ -139,12 +139,24 @@ public class BillService {
 						ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 						ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 			}
+			
 			resultJsonObject.put("bill_amount", costRecord.getCost_gold());
 			resultJsonObject.put("cost_type", costRecord.getCost_type());
 			JSONArray jsonArray = new JSONArray();
 			List<DetectionAccount> detectionAccountList = detectionAccountMapper.selectByRecordIdAndUserInfoId(
 					costRecord.getId(), user_info_id, getBillDetailParameters.getCurrent_page(),
 					ConanApplicationConstants.INIT_PAGE_SIZE);
+			List<DetectionAccount> detectionAccountListAll = detectionAccountMapper.selectByRecordIdAndUserInfoIdAll(
+					costRecord.getId(), user_info_id);
+			PageInfo pageInfo = new PageInfo();
+			pageInfo.setPageNo(getBillDetailParameters.getCurrent_page());
+			pageInfo.setPageSize(ConanApplicationConstants.INIT_PAGE_SIZE);
+			if(detectionAccountListAll == null) {
+				pageInfo.setTotal(0);	
+			}else {
+				pageInfo.setTotal(detectionAccountListAll.size());
+			}
+			resultJsonObject.put("page_info", pageInfo);
 			for (DetectionAccount detectionAccount : detectionAccountList) {
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("scan_account_id", detectionAccount.getId());
@@ -159,7 +171,7 @@ public class BillService {
 				jsonObject.put("scan_cost", detectionAccount.getAccount_score() < 0 ? 0 : 1);
 				jsonArray.add(jsonObject);
 			}
-
+			resultJsonObject.put("scan_accounts", jsonArray);
 		} else {// 异常
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,

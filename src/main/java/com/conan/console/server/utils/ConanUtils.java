@@ -2,9 +2,11 @@ package com.conan.console.server.utils;
 
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
@@ -72,5 +74,28 @@ public class ConanUtils {
 			break;
 		}
 		return cellValue;
+	}
+
+	public static List<Float> randomList5(String str, float score) {
+		DecimalFormat decimalFormat = new DecimalFormat(".00");
+		String strMd5 = MD5(str);
+		int i0 = Integer.parseInt(Integer.toHexString(strMd5.charAt(0)));
+		int i1 = Integer.parseInt(Integer.toHexString(strMd5.charAt(1)));
+		int i2 = Integer.parseInt(Integer.toHexString(strMd5.charAt(2)));
+		int i3 = Integer.parseInt(Integer.toHexString(strMd5.charAt(3)));
+		int i4 = Integer.parseInt(Integer.toHexString(strMd5.charAt(4)));
+		int total = i0 + i1 + i2 + i3 + i4;
+		List<Float> resultList = new ArrayList<>();
+		float f0 = Float.valueOf(decimalFormat.format(score * i0 / total));
+		float f1 = Float.valueOf(decimalFormat.format(score * i1 / total));
+		float f2 = Float.valueOf(decimalFormat.format(score * i2 / total));
+		float f3 = Float.valueOf(decimalFormat.format(score * i3 / total));
+		float f4 = score - f0 - f1 - f2 - f3;
+		resultList.add(f0);
+		resultList.add(f1);
+		resultList.add(f2);
+		resultList.add(f3);
+		resultList.add(f4);
+		return resultList;
 	}
 }

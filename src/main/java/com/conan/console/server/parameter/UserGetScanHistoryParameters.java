@@ -20,9 +20,9 @@ public class UserGetScanHistoryParameters {
 	@Size(max = 255, message = "scan_account最大长度为255")
 	private String scan_account;
 	
-	private Date scan_date_start;
+	private String scan_date_start;
 
-	private Date scan_date_end;
+	private String scan_date_end;
 
 
 	public int getPageNo() {
@@ -49,19 +49,20 @@ public class UserGetScanHistoryParameters {
 		this.scan_account = scan_account;
 	}
 
-	public Date getScan_date_start() {
+	public String getScan_date_start() {
 		return scan_date_start;
 	}
 
-	public void setScan_date_start(Date scan_date_start) {
+	public void setScan_date_start(String scan_date_start) {
 		this.scan_date_start = scan_date_start;
 	}
 
-	public Date getScan_date_end() {
+	public String getScan_date_end() {
 		return scan_date_end;
 	}
 
-	public void setScan_date_end(Date scan_date_end) {
+	public void setScan_date_end(String scan_date_end) {
 		this.scan_date_end = scan_date_end;
 	}
+
 }

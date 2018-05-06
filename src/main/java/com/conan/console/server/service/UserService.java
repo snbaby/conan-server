@@ -285,7 +285,7 @@ public class UserService {
 		}
 		
 		if(scan_type == 1) {
-			if(userRemain.getGold_amount()>=1) {
+			if(userRemain.getGold_amount()+userRemain.getGold_coupon()>=1) {
 				resultJsonObject.put("scan_cnt", 1);
 				resultJsonObject.put("scan_total", 1);
 				resultJsonObject.put("cost_will", 1);
@@ -303,15 +303,15 @@ public class UserService {
 			try {
 				xwb = new XSSFWorkbook(minioService.downloadFile(scan_file));
 				XSSFSheet xssfSheet = xwb.getSheetAt(0);
-				int scanAccountNo = xssfSheet.getLastRowNum()-1;
-				if(userRemain.getGold_amount() >= scanAccountNo) {
+				int scanAccountNo = xssfSheet.getLastRowNum();
+				if(userRemain.getGold_amount()+userRemain.getGold_coupon() >= scanAccountNo) {
 					resultJsonObject.put("scan_cnt", scanAccountNo);
 					resultJsonObject.put("scan_total", scanAccountNo);
 					resultJsonObject.put("cost_will", scanAccountNo);
 					resultJsonObject.put("cost_total", scanAccountNo);
 					resultJsonObject.put("scan_remain", userRemain.getGold_amount()-scanAccountNo);
 				}else {
-					if(userRemain.getGold_amount()>=1) {
+					if(userRemain.getGold_amount()+userRemain.getGold_coupon()>=1) {
 						resultJsonObject.put("scan_cnt",  Math.floor(userRemain.getGold_amount()));
 						resultJsonObject.put("scan_total", scanAccountNo);
 						resultJsonObject.put("cost_will", Math.floor(userRemain.getGold_amount()));

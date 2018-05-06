@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.conan.console.server.exception.ConanException;
@@ -47,8 +48,6 @@ public class DetectionController {
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
-		userGetScanHistoryParameters.setScan_date_start(userGetScanHistoryParameters.getScan_date_start());
-		userGetScanHistoryParameters.setScan_date_end(userGetScanHistoryParameters.getScan_date_end());
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",
 				detectionService.getDetectionAccountPages(userGetScanHistoryParameters,userInfoId));
 		return new ResponseEntity<>(responseResult,HttpStatus.OK);
@@ -69,13 +68,7 @@ public class DetectionController {
 	}
 	
 	@GetMapping("get_top_dangers")
-	public ResponseEntity<ResponseSuccessResult> getTopDangers(HttpServletRequest request,@RequestBody @Valid GetTopDangersParameters getTopDangersParameters, BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
-					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
-					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
-        }
-		
+	public ResponseEntity<ResponseSuccessResult> getTopDangers(HttpServletRequest request,@RequestParam(defaultValue = "10") Integer topNum,  @RequestParam(defaultValue = "0") Integer lastDays) {
 		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
 		if(StringUtils.isBlank(userInfoId)) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
@@ -84,7 +77,7 @@ public class DetectionController {
 		}
 		
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",
-				detectionService.getRecentScanStat(userInfoId));
+				detectionService.getTopDangers(topNum, lastDays, userInfoId));
 		return new ResponseEntity<>(responseResult,HttpStatus.OK);
 	}
 	
@@ -116,7 +109,7 @@ public class DetectionController {
 		}
 		
 		if(queryPreCheckParameters.getScan_type() == 2) {
-			if(queryPreCheckParameters.getScan_file()==null) {
+			if(StringUtils.isBlank(queryPreCheckParameters.getScan_file())) {
 				throw new ConanException(ConanExceptionConstants.SCAN_FILE_NOT_EXISTS_EXCEPTION_CODE,
 						ConanExceptionConstants.SCAN_FILE_EXISTS_EXCEPTION_MESSAGE,
 						ConanExceptionConstants.SCAN_FILE_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
