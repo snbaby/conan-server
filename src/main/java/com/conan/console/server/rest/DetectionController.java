@@ -47,8 +47,8 @@ public class DetectionController {
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
-		userGetScanHistoryParameters.setScan_date_start(new Date());
-		userGetScanHistoryParameters.setScan_date_end(new Date());
+		userGetScanHistoryParameters.setScan_date_start(userGetScanHistoryParameters.getScan_date_start());
+		userGetScanHistoryParameters.setScan_date_end(userGetScanHistoryParameters.getScan_date_end());
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",
 				detectionService.getDetectionAccountPages(userGetScanHistoryParameters,userInfoId));
 		return new ResponseEntity<>(responseResult,HttpStatus.OK);

@@ -12,6 +12,10 @@ public interface DetectionAccountMapper {
 	List<DetectionAccount> selectByUserGetScanHistoryParameters(
 			@Param("userGetScanHistoryParameters") UserGetScanHistoryParameters userGetScanHistoryParameters,
 			@Param("user_info_id") String user_info_id, @Param("pageSize") int pageSize);
+	
+	List<DetectionAccount> selectByUserGetScanHistoryAllParameters(
+			@Param("userGetScanHistoryParameters") UserGetScanHistoryParameters userGetScanHistoryParameters,
+			@Param("user_info_id") String user_info_id);
 
 	List<DetectionAccount> selectByRecordIdAndUserInfoId(@Param("costRecordId") String costRecordId,
 			@Param("user_info_id") String user_info_id, @Param("pageNo") int pageNo, @Param("pageSize") int pageSize);

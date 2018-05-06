@@ -8,9 +8,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class UserGetScanHistoryParameters {
-	@NotNull(message = "current_page不能为空")
-	@Min(value = 1, message = "current_page最小为1")
-	private int current_page;
+	@NotNull(message = "pageNo不能为空")
+	@Min(value = 1, message = "pageNo最小为1")
+	private int pageNo;
 
 	@NotNull(message = "scan_status不能为空")
 	@Min(value = 1, message = "scan_status最小为1")
@@ -24,12 +24,13 @@ public class UserGetScanHistoryParameters {
 
 	private Date scan_date_end;
 
-	public int getCurrent_page() {
-		return current_page;
+
+	public int getPageNo() {
+		return pageNo;
 	}
 
-	public void setCurrent_page(int current_page) {
-		this.current_page = current_page;
+	public void setPageNo(int pageNo) {
+		this.pageNo = pageNo;
 	}
 
 	public int getScan_status() {

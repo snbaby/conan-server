@@ -45,7 +45,7 @@
       This element was generated on Mon Apr 23 00:59:28 CST 2018.
     -->
     select 
-    IFNULL(MAX(id),0)
+    IFNULL(count(id),0)
     from user_bill
     where user_info_id = #{user_info_id}
     <if test="userGetBillParameters.bill_type != null">
