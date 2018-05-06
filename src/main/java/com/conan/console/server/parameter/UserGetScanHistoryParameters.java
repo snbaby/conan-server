@@ -13,7 +13,7 @@ public class UserGetScanHistoryParameters {
 	private int pageNo;
 
 	@NotNull(message = "scan_status不能为空")
-	@Min(value = 1, message = "scan_status最小为1")
+	@Min(value = 0, message = "scan_status最小为0")
 	@Max(value = 4, message = "scan_status最大为4")
 	private int scan_status;
 

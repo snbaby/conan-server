@@ -3,16 +3,20 @@ package com.conan.console.server.service;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,15 +70,15 @@ public class DetectionService {
 		JSONArray recordsJsonArray = new JSONArray();
 		List<DetectionAccount> detectionAccountResult = detectionAccountMapper.selectByUserGetScanHistoryParameters(
 				userGetScanHistoryParameters, user_info_id, ConanApplicationConstants.INIT_PAGE_SIZE);
-		List<DetectionAccount> detectionAccountAllResult = detectionAccountMapper.selectByUserGetScanHistoryAllParameters(
-				userGetScanHistoryParameters, user_info_id);
+		List<DetectionAccount> detectionAccountAllResult = detectionAccountMapper
+				.selectByUserGetScanHistoryAllParameters(userGetScanHistoryParameters, user_info_id);
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setPageNo(userGetScanHistoryParameters.getPageNo());
 		pageInfo.setPageSize(ConanApplicationConstants.INIT_PAGE_SIZE);
 		pageInfo.setTotal(detectionAccountAllResult.size());
 		resultJsonObject.put("page_info", pageInfo);
-		
-		for(DetectionAccount detectionAccount:detectionAccountResult) {
+
+		for (DetectionAccount detectionAccount : detectionAccountResult) {
 			JSONObject tempObject = new JSONObject();
 			tempObject.put("detection_account_id", detectionAccount.getId());
 			tempObject.put("created_at", detectionAccount.getCreated_at());
@@ -88,11 +92,67 @@ public class DetectionService {
 			recordsJsonArray.add(tempObject);
 		}
 		resultJsonObject.put("records", recordsJsonArray);
-		
-		
-		
-		
-		return null;
+
+		XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+		XSSFSheet xssfSheet = xssfWorkbook.createSheet("conan");
+		XSSFRow XSSFRow0 = xssfSheet.createRow(0);
+		XSSFCell XSSFCell0_0 = XSSFRow0.createCell(0);
+		XSSFCell0_0.setCellValue("检测日期");
+		XSSFCell XSSFCell0_1 = XSSFRow0.createCell(1);
+		XSSFCell0_1.setCellValue("账号名");
+		XSSFCell XSSFCell0_2 = XSSFRow0.createCell(2);
+		XSSFCell0_2.setCellValue("危险状态");
+		XSSFCell XSSFCell0_3 = XSSFRow0.createCell(3);
+		XSSFCell0_3.setCellValue("历史危险分值");
+
+		for (int i = 1; i <= detectionAccountAllResult.size(); i++) {
+			XSSFRow XSSFRow = xssfSheet.createRow(i);
+			XSSFCell XSSFCelli_0 = XSSFRow.createCell(0);
+			XSSFCelli_0.setCellValue(detectionAccountAllResult.get(i - 1).getCreated_at());
+			XSSFCell XSSFCelli_1 = XSSFRow.createCell(1);
+			XSSFCelli_1.setCellValue(detectionAccountAllResult.get(i - 1).getAccount_name());
+			Float score = detectionAccountAllResult.get(i - 1).getAccount_score();
+			String scoreMessage = "";
+			if (score >= 80) {
+				scoreMessage = "账号危险";
+			} else if (score < 80 && score >= 60) {
+				scoreMessage = "账号可疑";
+			} else if (score == -1.0f) {
+				scoreMessage = "账号未匹配";
+			} else {
+				scoreMessage = "账号不存在";
+			}
+			XSSFCell XSSFCelli_2 = XSSFRow.createCell(2);
+			XSSFCelli_2.setCellValue(scoreMessage);
+			XSSFCell XSSFCelli_3 = XSSFRow.createCell(3);
+			XSSFCelli_3.setCellValue(score);
+		}
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		try {
+			xssfWorkbook.write(os);
+			byte[] content = os.toByteArray();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+			String ymd = sdf.format(new Date());
+			String objectName = user_info_id + "/" + ymd + "/" + UUID.randomUUID().toString() + ".xlsx";
+			minioService.uploadFile(new ByteArrayInputStream(content), objectName, "application/octet-stream");
+			resultJsonObject.put("export_link", minioService.presignedGetObject(objectName));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				if (xssfWorkbook != null) {
+					xssfWorkbook.close();
+				}
+				os.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return resultJsonObject;
+
 	}
 
 	@Transactional

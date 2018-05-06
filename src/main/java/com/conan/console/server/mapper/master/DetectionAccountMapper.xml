@@ -84,12 +84,13 @@
     <if test="userGetScanHistoryParameters.scan_account != null">
         and account_name = #{userGetScanHistoryParameters.scan_account}
     </if>
-    <if test="userGetScanHistoryParameters.scan_status != null">
+    <if test="userGetScanHistoryParameters.scan_status != 0">
     	<if test="userGetScanHistoryParameters.scan_status == 1">
         	and account_score <![CDATA[ >= ]]> 80
     	</if>
     	<if test="userGetScanHistoryParameters.scan_status == 2">
         	and account_score <![CDATA[ < ]]> 80
+        	and account_score <![CDATA[ >= ]]> 60
     	</if>
     	<if test="userGetScanHistoryParameters.scan_status == 3">
         	and account_name = -1
