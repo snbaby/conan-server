@@ -48,7 +48,7 @@
     IFNULL(count(id),0)
     from user_bill
     where user_info_id = #{user_info_id}
-    <if test="userGetBillParameters.bill_type != null">
+    <if test="userGetBillParameters.bill_type != 0">
         and bill_type = #{userGetBillParameters.bill_type}
     </if>
     <if test="userGetBillParameters.bill_date_start != null">

@@ -16,9 +16,9 @@ public class UserGetBillParameters {
 	@Max(value = 2, message = "bill_type最大为2")
 	private int bill_type;
 	
-	private Date bill_date_start;
+	private String bill_date_start;
 
-	private Date bill_date_end;
+	private String bill_date_end;
 
 	public int getPageNo() {
 		return pageNo;
@@ -36,21 +36,20 @@ public class UserGetBillParameters {
 		this.bill_type = bill_type;
 	}
 
-	public Date getBill_date_start() {
+	public String getBill_date_start() {
 		return bill_date_start;
 	}
 
-	public void setBill_date_start(Date bill_date_start) {
+	public void setBill_date_start(String bill_date_start) {
 		this.bill_date_start = bill_date_start;
 	}
 
-	public Date getBill_date_end() {
+	public String getBill_date_end() {
 		return bill_date_end;
 	}
 
-	public void setBill_date_end(Date bill_date_end) {
+	public void setBill_date_end(String bill_date_end) {
 		this.bill_date_end = bill_date_end;
 	}
 
-	
 }
