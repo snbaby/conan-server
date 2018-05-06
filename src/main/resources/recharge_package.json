@@ -1,0 +1,13 @@
+{
+	"package_num": 2,
+	"packages": [
+		{
+			"package_amount": 100,
+			"package_copon": 20
+		},
+		{
+			"package_amount": 200,
+			"package_copon": 50
+		}
+	]
+}

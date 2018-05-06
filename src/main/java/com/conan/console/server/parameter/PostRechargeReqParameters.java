@@ -16,7 +16,7 @@ public class PostRechargeReqParameters {
 	@Max(value = 2, message = "recharge_type最大为2")
 	private int recharge_type;
 
-	@NotNull(message = "scan_status不能为空")
+	@NotNull(message = "recharge_amount不能为空")
 	@DecimalMin(value = "1.0", message = "recharge_amount最小为1.0")
 	private float recharge_amount;
 
@@ -26,7 +26,6 @@ public class PostRechargeReqParameters {
 	@NotNull(message = "capture_id不能为空")
 	@NotBlank(message = "capture_id不能为空")
 	@NotEmpty(message = "capture_id不能为空")
-	@URL(message="capture_id应该为一个URL地址")
 	@Size(max = 255, message = "capture_id最大长度为255")
 	private String capture_id;
 

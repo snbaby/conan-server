@@ -41,6 +41,8 @@ public class BillService {
 	private DetectionAccountMapper detectionAccountMapper;
 	@Autowired
 	private UserRemainMapper userRemainMapper;
+	@Autowired
+	private JsonService jsonService;
 
 	@Transactional
 	public JSONObject getUserBillPages(UserGetBillParameters userGetBillParameters, String user_info_id) {
@@ -49,7 +51,7 @@ public class BillService {
 				ConanApplicationConstants.INIT_PAGE_SIZE);
 		int total = userBillMapper.selectByUserGetBillParametersTotal(userGetBillParameters, user_info_id);
 		PageInfo pageInfo = new PageInfo();
-		pageInfo.setPageNo(userGetBillParameters.getCurrent_page());
+		pageInfo.setPageNo(userGetBillParameters.getPageNo());
 		pageInfo.setTotal(total);
 		pageInfo.setPageSize(ConanApplicationConstants.INIT_PAGE_SIZE);
 
@@ -63,7 +65,6 @@ public class BillService {
 			userBillJsonObject.put("bill_type", userBill.getBill_type());
 			userBillJsonObject.put("bill_remain", userBill.getRemain_gold());
 			userBillJsonObject.put("bill_digest", userBill.getBill_digest());
-			userBillJsonObject.put("bill_status", userBill.getBill_digest());
 			if (StringUtils.isNotBlank(userBill.getBill_type()) && userBill.getBill_type().equals("1")) {// 充值
 				RechargeBill rechargeBill = rechargeBillMapper.selectByPrimaryKey(userBill.getId());// BILL账单 recharge账单
 																									// cost账单使用的ID均为同一个ID
@@ -72,7 +73,7 @@ public class BillService {
 							ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 							ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 				}
-				userBillJsonObject.put("bill_amount", rechargeBill.getGold_amount());
+				userBillJsonObject.put("bill_amount", rechargeBill.getGold_total());
 			} else if (StringUtils.isNotBlank(userBill.getBill_type()) && userBill.getBill_type().equals("2")) {// 支出
 				CostRecord costRecord = costRecordMapper.selectByPrimaryKey(userBill.getId());// BILL账单 recharge账单
 																								// cost账单使用的ID均为同一个ID
@@ -107,7 +108,7 @@ public class BillService {
 		resultJsonObject.put("bill_type", userBill.getBill_type());
 		resultJsonObject.put("bill_remain", userBill.getRemain_gold());
 		resultJsonObject.put("bill_digest", userBill.getBill_digest());
-		resultJsonObject.put("bill_status", userBill.getBill_status());
+//		resultJsonObject.put("bill_status", userBill.getBill_status());
 		if (StringUtils.isNotBlank(userBill.getBill_type()) && userBill.getBill_type().equals("1")) {// 充值
 			// BILL账单 recharge账单 cost账单使用的ID均为同一个ID
 			RechargeBill rechargeBill = rechargeBillMapper.selectByPrimaryKey(userBill.getId());
@@ -184,7 +185,6 @@ public class BillService {
 		userBill.setUpdated_at(date);
 		userBill.setBill_type("1");
 		userBill.setRemain_gold(userRemain.getGold_amount()+userRemain.getGold_coupon());
-		userBill.setBill_status("2");//未审核
 		userBill.setBill_digest("");
 		userBill.setUser_info_id(user_info_id);
 		userBillMapper.insert(userBill);
@@ -199,21 +199,30 @@ public class BillService {
 		rechargeBill.setRmb_amount(recharge_amount);
 		rechargeBill.setGold_amount(recharge_amount);
 		rechargeBill.setGold_coupon(0f);
-		rechargeBill.setGold_total(recharge_amount);
+		
+		JSONObject rechargePackageJsonObject= jsonService.getrRechargePackage();
+		JSONArray packagesJsonArray = rechargePackageJsonObject.getJSONArray("packages");
+		for(int i=0;i<packagesJsonArray.size();i++) {
+			if(packagesJsonArray.getJSONObject(i).getIntValue("package_amount") == recharge_amount) {
+				rechargeBill.setGold_coupon(packagesJsonArray.getJSONObject(i).getIntValue("package_copon")*1f);
+				break;
+			}
+		}
+		rechargeBill.setGold_total(recharge_amount+rechargeBill.getGold_coupon());
 		rechargeBill.setUser_info_id(user_info_id);
 		rechargeBill.setUser_bill_id(uuid);
-		rechargeBill.setRecharge_status("2");
-		rechargeBillMapper.insert(rechargeBill);
+		rechargeBill.setRecharge_status("2");//未审核
+		rechargeBillMapper.insertSelective(rechargeBill);
 		
 		
 		JSONObject resultJsonObject = new JSONObject();
 		resultJsonObject.put("bill_id", uuid);
 		resultJsonObject.put("created_at", date);
-		resultJsonObject.put("bill_type", recharge_type);
-		resultJsonObject.put("bill_amount", recharge_amount);
-		resultJsonObject.put("bill_remain", userRemain.getGold_amount());
-		resultJsonObject.put("bill_digest", "人民币充值: 100元|额外赠送20金币");
-		resultJsonObject.put("bill_status", 2);
+		resultJsonObject.put("bill_type", 1);
+		resultJsonObject.put("bill_amount", rechargeBill.getGold_total());
+		resultJsonObject.put("bill_remain", userRemain.getGold_amount()+userRemain.getGold_coupon());
+		resultJsonObject.put("bill_digest", "");
+		
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("recharge_bill_id",uuid );
 		jsonObject.put("created_at", date);
@@ -224,8 +233,8 @@ public class BillService {
 		jsonObject.put("comment",comment );
 		jsonObject.put("rmb_amount",recharge_amount );
 		jsonObject.put("gold_amount", recharge_amount);
-		jsonObject.put("gold_coupon", 0f);
-		jsonObject.put("gold_total", recharge_amount);
+		jsonObject.put("gold_coupon", rechargeBill.getGold_coupon());
+		jsonObject.put("gold_total", rechargeBill.getGold_total());
 		jsonObject.put("recharge_status", 2);
 		resultJsonObject.put("recharge_detail", jsonObject);
 		return resultJsonObject;
