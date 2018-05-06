@@ -8,8 +8,8 @@
       This element was generated on Mon Apr 23 00:59:28 CST 2018.
     -->
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="created_at" jdbcType="DATE" property="created_at" />
-    <result column="updated_at" jdbcType="DATE" property="updated_at" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="created_at" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updated_at" />
     <result column="cost_type" jdbcType="VARCHAR" property="cost_type" />
     <result column="user_info_id" jdbcType="VARCHAR" property="user_info_id" />
     <result column="cost_gold" jdbcType="REAL" property="cost_gold" />
@@ -66,7 +66,7 @@
     insert into cost_record (id, created_at, updated_at, 
       cost_type, user_info_id, cost_gold, 
       remain_gold, user_bill_id)
-    values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=DATE}, #{updated_at,jdbcType=DATE}, 
+    values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=TIMESTAMP}, #{updated_at,jdbcType=TIMESTAMP}, 
       #{cost_type,jdbcType=VARCHAR}, #{user_info_id,jdbcType=VARCHAR}, #{cost_gold,jdbcType=REAL}, 
       #{remain_gold,jdbcType=REAL}, #{user_bill_id,jdbcType=VARCHAR})
   </insert>
@@ -108,10 +108,10 @@
         #{id,jdbcType=VARCHAR},
       </if>
       <if test="created_at != null">
-        #{created_at,jdbcType=DATE},
+        #{created_at,jdbcType=TIMESTAMP},
       </if>
       <if test="updated_at != null">
-        #{updated_at,jdbcType=DATE},
+        #{updated_at,jdbcType=TIMESTAMP},
       </if>
       <if test="cost_type != null">
         #{cost_type,jdbcType=VARCHAR},
@@ -139,10 +139,10 @@
     update cost_record
     <set>
       <if test="created_at != null">
-        created_at = #{created_at,jdbcType=DATE},
+        created_at = #{created_at,jdbcType=TIMESTAMP},
       </if>
       <if test="updated_at != null">
-        updated_at = #{updated_at,jdbcType=DATE},
+        updated_at = #{updated_at,jdbcType=TIMESTAMP},
       </if>
       <if test="cost_type != null">
         cost_type = #{cost_type,jdbcType=VARCHAR},
@@ -169,8 +169,8 @@
       This element was generated on Mon Apr 23 00:59:28 CST 2018.
     -->
     update cost_record
-    set created_at = #{created_at,jdbcType=DATE},
-      updated_at = #{updated_at,jdbcType=DATE},
+    set created_at = #{created_at,jdbcType=TIMESTAMP},
+      updated_at = #{updated_at,jdbcType=TIMESTAMP},
       cost_type = #{cost_type,jdbcType=VARCHAR},
       user_info_id = #{user_info_id,jdbcType=VARCHAR},
       cost_gold = #{cost_gold,jdbcType=REAL},

@@ -198,7 +198,7 @@ public class DetectionService {
 		}
 		jsonObject.put("totalScanNo", detectionAccountList.size());
 		jsonObject.put("dangerScanNo", dangerScanNo);
-		jsonObject.put("dangerPercent", dangerScanNo / detectionAccountList.size());
+		jsonObject.put("dangerPercent", dangerScanNo*100f / detectionAccountList.size());
 		jsonObject.put("recentScanTime", costRecord.getCreated_at());
 		return jsonObject;
 	}
@@ -595,7 +595,7 @@ public class DetectionService {
 			jsonObject.put("scan_cost",detectionAccount.getCost());
 			jsonArray.add(jsonObject);
 			detectionAccountInsertList.add(dectionAccountList.get(i));
-			if(detectionAccountInsertList.size()==100||i==dectionAccountList.size()) {
+			if(detectionAccountInsertList.size()==500||i==dectionAccountList.size()) {
 				detectionAccountMapper.insertList(detectionAccountInsertList);
 				detectionAccountInsertList.clear();
 			}

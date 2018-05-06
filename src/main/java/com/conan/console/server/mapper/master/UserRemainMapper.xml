@@ -11,8 +11,8 @@
     <result column="gold_amount" jdbcType="REAL" property="gold_amount" />
     <result column="gold_coupon" jdbcType="REAL" property="gold_coupon" />
     <result column="user_info_id" jdbcType="VARCHAR" property="user_info_id" />
-    <result column="created_at" jdbcType="DATE" property="created_at" />
-    <result column="updated_at" jdbcType="DATE" property="updated_at" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="created_at" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updated_at" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -52,7 +52,7 @@
       user_info_id, created_at, updated_at
       )
     values (#{id,jdbcType=VARCHAR}, #{gold_amount,jdbcType=REAL}, #{gold_coupon,jdbcType=REAL}, 
-      #{user_info_id,jdbcType=VARCHAR}, #{created_at,jdbcType=DATE}, #{updated_at,jdbcType=DATE}
+      #{user_info_id,jdbcType=VARCHAR}, #{created_at,jdbcType=TIMESTAMP}, #{updated_at,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.conan.console.server.entity.master.UserRemain">
@@ -96,10 +96,10 @@
         #{user_info_id,jdbcType=VARCHAR},
       </if>
       <if test="created_at != null">
-        #{created_at,jdbcType=DATE},
+        #{created_at,jdbcType=TIMESTAMP},
       </if>
       <if test="updated_at != null">
-        #{updated_at,jdbcType=DATE},
+        #{updated_at,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -121,10 +121,10 @@
         user_info_id = #{user_info_id,jdbcType=VARCHAR},
       </if>
       <if test="created_at != null">
-        created_at = #{created_at,jdbcType=DATE},
+        created_at = #{created_at,jdbcType=TIMESTAMP},
       </if>
       <if test="updated_at != null">
-        updated_at = #{updated_at,jdbcType=DATE},
+        updated_at = #{updated_at,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -139,8 +139,8 @@
     set gold_amount = #{gold_amount,jdbcType=REAL},
       gold_coupon = #{gold_coupon,jdbcType=REAL},
       user_info_id = #{user_info_id,jdbcType=VARCHAR},
-      created_at = #{created_at,jdbcType=DATE},
-      updated_at = #{updated_at,jdbcType=DATE}
+      created_at = #{created_at,jdbcType=TIMESTAMP},
+      updated_at = #{updated_at,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

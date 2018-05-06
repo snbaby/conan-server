@@ -8,11 +8,11 @@
       This element was generated on Mon Apr 23 00:59:28 CST 2018.
     -->
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="created_at" jdbcType="DATE" property="created_at" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="created_at" />
     <result column="bill_type" jdbcType="VARCHAR" property="bill_type" />
     <result column="remain_gold" jdbcType="REAL" property="remain_gold" />
     <result column="bill_digest" jdbcType="VARCHAR" property="bill_digest" />
-    <result column="updated_at" jdbcType="DATE" property="updated_at" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updated_at" />
     <result column="user_info_id" jdbcType="VARCHAR" property="user_info_id" />
   </resultMap>
   <select id="selectByUserGetBillParameters" resultMap="BaseResultMap">
@@ -95,9 +95,9 @@
     insert into user_bill (id, created_at, bill_type, 
       remain_gold, bill_digest, 
       updated_at, user_info_id)
-    values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=DATE}, #{bill_type,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=TIMESTAMP}, #{bill_type,jdbcType=VARCHAR}, 
       #{remain_gold,jdbcType=REAL}, #{bill_digest,jdbcType=VARCHAR},
-      #{updated_at,jdbcType=DATE}, #{user_info_id,jdbcType=VARCHAR})
+      #{updated_at,jdbcType=TIMESTAMP}, #{user_info_id,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.conan.console.server.entity.master.UserBill">
     <!--
@@ -134,7 +134,7 @@
         #{id,jdbcType=VARCHAR},
       </if>
       <if test="created_at != null">
-        #{created_at,jdbcType=DATE},
+        #{created_at,jdbcType=TIMESTAMP},
       </if>
       <if test="bill_type != null">
         #{bill_type,jdbcType=VARCHAR},
@@ -146,7 +146,7 @@
         #{bill_digest,jdbcType=VARCHAR},
       </if>
       <if test="updated_at != null">
-        #{updated_at,jdbcType=DATE},
+        #{updated_at,jdbcType=TIMESTAMP},
       </if>
       <if test="user_info_id != null">
         #{user_info_id,jdbcType=VARCHAR},
@@ -162,7 +162,7 @@
     update user_bill
     <set>
       <if test="created_at != null">
-        created_at = #{created_at,jdbcType=DATE},
+        created_at = #{created_at,jdbcType=TIMESTAMP},
       </if>
       <if test="bill_type != null">
         bill_type = #{bill_type,jdbcType=VARCHAR},
@@ -174,7 +174,7 @@
         bill_digest = #{bill_digest,jdbcType=VARCHAR},
       </if>
       <if test="updated_at != null">
-        updated_at = #{updated_at,jdbcType=DATE},
+        updated_at = #{updated_at,jdbcType=TIMESTAMP},
       </if>
       <if test="user_info_id != null">
         user_info_id = #{user_info_id,jdbcType=VARCHAR},
@@ -189,11 +189,11 @@
       This element was generated on Mon Apr 23 00:59:28 CST 2018.
     -->
     update user_bill
-    set created_at = #{created_at,jdbcType=DATE},
+    set created_at = #{created_at,jdbcType=TIMESTAMP},
       bill_type = #{bill_type,jdbcType=VARCHAR},
       remain_gold = #{remain_gold,jdbcType=REAL},
       bill_digest = #{bill_digest,jdbcType=VARCHAR},
-      updated_at = #{updated_at,jdbcType=DATE},
+      updated_at = #{updated_at,jdbcType=TIMESTAMP},
       user_info_id = #{user_info_id,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>

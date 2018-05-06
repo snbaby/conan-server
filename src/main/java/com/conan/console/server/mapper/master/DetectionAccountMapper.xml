@@ -8,8 +8,8 @@
       This element was generated on Mon Apr 23 00:59:28 CST 2018.
     -->
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="created_at" jdbcType="DATE" property="created_at" />
-    <result column="updated_at" jdbcType="DATE" property="updated_at" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="created_at" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updated_at" />
     <result column="cost_record_id" jdbcType="VARCHAR" property="cost_record_id" />
     <result column="account_name" jdbcType="VARCHAR" property="account_name" />
     <result column="account_score" jdbcType="REAL" property="account_score" />
@@ -191,7 +191,7 @@
       detail_score0, detail_score1, detail_score2, 
       detail_score3, detail_score4, user_info_id,cost
       )
-    values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=DATE}, #{updated_at,jdbcType=DATE}, 
+    values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=TIMESTAMP}, #{updated_at,jdbcType=TIMESTAMP}, 
       #{cost_record_id,jdbcType=VARCHAR}, #{account_name,jdbcType=VARCHAR}, #{account_score,jdbcType=REAL}, 
       #{detail_score0,jdbcType=REAL}, #{detail_score1,jdbcType=REAL}, #{detail_score2,jdbcType=REAL}, 
       #{detail_score3,jdbcType=REAL}, #{detail_score4,jdbcType=REAL}, #{user_info_id,jdbcType=VARCHAR}, #{cost,jdbcType=REAL}
@@ -210,7 +210,7 @@
       )
     values 
      <foreach collection="recordList" item="record" separator=",">  
-            (#{record.id,jdbcType=VARCHAR}, #{record.created_at,jdbcType=DATE}, #{record.updated_at,jdbcType=DATE}, 
+            (#{record.id,jdbcType=VARCHAR}, #{record.created_at,jdbcType=TIMESTAMP}, #{record.updated_at,jdbcType=TIMESTAMP}, 
       #{record.cost_record_id,jdbcType=VARCHAR}, #{record.account_name,jdbcType=VARCHAR}, #{record.account_score,jdbcType=REAL}, 
       #{record.detail_score0,jdbcType=REAL}, #{record.detail_score1,jdbcType=REAL}, #{record.detail_score2,jdbcType=REAL}, 
       #{record.detail_score3,jdbcType=REAL}, #{record.detail_score4,jdbcType=REAL}, #{record.user_info_id,jdbcType=VARCHAR}, #{record.cost,jdbcType=REAL}
@@ -271,10 +271,10 @@
         #{id,jdbcType=VARCHAR},
       </if>
       <if test="created_at != null">
-        #{created_at,jdbcType=DATE},
+        #{created_at,jdbcType=TIMESTAMP},
       </if>
       <if test="updated_at != null">
-        #{updated_at,jdbcType=DATE},
+        #{updated_at,jdbcType=TIMESTAMP},
       </if>
       <if test="cost_record_id != null">
         #{cost_record_id,jdbcType=VARCHAR},
@@ -317,10 +317,10 @@
     update detection_account
     <set>
       <if test="created_at != null">
-        created_at = #{created_at,jdbcType=DATE},
+        created_at = #{created_at,jdbcType=TIMESTAMP},
       </if>
       <if test="updated_at != null">
-        updated_at = #{updated_at,jdbcType=DATE},
+        updated_at = #{updated_at,jdbcType=TIMESTAMP},
       </if>
       <if test="cost_record_id != null">
         cost_record_id = #{cost_record_id,jdbcType=VARCHAR},
@@ -362,8 +362,8 @@
       This element was generated on Mon Apr 23 00:59:28 CST 2018.
     -->
     update detection_account
-    set created_at = #{created_at,jdbcType=DATE},
-      updated_at = #{updated_at,jdbcType=DATE},
+    set created_at = #{created_at,jdbcType=TIMESTAMP},
+      updated_at = #{updated_at,jdbcType=TIMESTAMP},
       cost_record_id = #{cost_record_id,jdbcType=VARCHAR},
       account_name = #{account_name,jdbcType=VARCHAR},
       account_score = #{account_score,jdbcType=REAL},
