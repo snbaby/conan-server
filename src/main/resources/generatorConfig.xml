@@ -62,8 +62,14 @@
 			enableSelectByExample="false" selectByExampleQueryId="false">
 			<property name="useActualColumnNames" value="true" />
 		</table> -->
-		<table schema="tknDb2" tableName="query_recharge"
+		<!-- <table schema="tknDb2" tableName="query_recharge"
 			domainObjectName="QueryRecharge" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table> -->
+		<table schema="tknDb2" tableName="query_cost"
+			domainObjectName="QueryCost" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false">
 			<property name="useActualColumnNames" value="true" />

@@ -10,17 +10,20 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.conan.console.server.entity.PageInfo;
+import com.conan.console.server.entity.master.QueryCost;
 import com.conan.console.server.entity.master.QueryRecharge;
 import com.conan.console.server.entity.master.RechargeBill;
 import com.conan.console.server.entity.master.UserBill;
 import com.conan.console.server.entity.master.UserInfo;
 import com.conan.console.server.entity.master.UserRemain;
 import com.conan.console.server.exception.ConanException;
+import com.conan.console.server.mapper.master.QueryCostMapper;
 import com.conan.console.server.mapper.master.QueryRechargeMapper;
 import com.conan.console.server.mapper.master.RechargeBillMapper;
 import com.conan.console.server.mapper.master.UserBillMapper;
 import com.conan.console.server.mapper.master.UserInfoMapper;
 import com.conan.console.server.mapper.master.UserRemainMapper;
+import com.conan.console.server.parameter.QueryCostListParameters;
 import com.conan.console.server.parameter.QueryRechargeListParameters;
 import com.conan.console.server.parameter.QueryUserListParameters;
 import com.conan.console.server.utils.ConanApplicationConstants;
@@ -45,6 +48,9 @@ public class ManageService {
 	
 	@Autowired
 	private QueryRechargeMapper queryRechargeMapper;
+	
+	@Autowired
+	private QueryCostMapper queryCostMapper;
 	
 	@Transactional
 	public void handleRechargeReq(String recharge_id,String action,String reason) {
@@ -150,6 +156,23 @@ public class ManageService {
 		resultJsonObject.put("recharges", queryRechargeList);
 		return resultJsonObject;
 	}
+	
+	@Transactional
+	public JSONObject queryCostList(QueryCostListParameters queryCostListParameters) {
+		JSONObject resultJsonObject = new JSONObject();
+		List<QueryCost> queryCostList = queryCostMapper.selectByQueryCostListParameters(queryCostListParameters, ConanApplicationConstants.INIT_PAGE_SIZE);
+		int total = queryCostMapper.selectByQueryCostListParametersTotal(queryCostListParameters);
+		
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(queryCostListParameters.getPageNo());
+		pageInfo.setTotal(total);
+		pageInfo.setPageSize(ConanApplicationConstants.INIT_PAGE_SIZE);
+		
+		resultJsonObject.put("page_info", pageInfo);
+		resultJsonObject.put("costs", queryCostList);
+		return resultJsonObject;
+	}
+	
 	
 	
 	

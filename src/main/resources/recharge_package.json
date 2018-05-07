@@ -2,12 +2,28 @@
 	"package_num": 2,
 	"packages": [
 		{
-			"package_amount": 100,
-			"package_copon": 20
+			"package_amount": 1000,
+			"package_copon": 188
 		},
 		{
-			"package_amount": 200,
-			"package_copon": 50
+			"package_amount": 3000,
+			"package_copon": 388
+		},
+		{
+			"package_amount": 5000,
+			"package_copon": 888
+		},
+		{
+			"package_amount": 10000,
+			"package_copon": 1888
+		},
+		{
+			"package_amount": 30000,
+			"package_copon": 6888
+		},
+		{
+			"package_amount": 50000,
+			"package_copon": 16888
 		}
 	]
 }
