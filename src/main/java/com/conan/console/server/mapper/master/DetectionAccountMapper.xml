@@ -79,7 +79,7 @@
     <include refid="Base_Column_List" />
     from detection_account
     where user_info_id = #{user_info_id}
-    and created_at = #{lastDate}
+    and created_at >= #{lastDate}
     order by account_score desc
     limit ${topNum}
   </select>
