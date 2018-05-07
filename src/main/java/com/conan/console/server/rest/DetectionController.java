@@ -68,7 +68,7 @@ public class DetectionController {
 	}
 	
 	@GetMapping("get_top_dangers")
-	public ResponseEntity<ResponseSuccessResult> getTopDangers(HttpServletRequest request,@RequestParam(defaultValue = "10") Integer topNum,  @RequestParam(defaultValue = "0") Integer lastDays) {
+	public ResponseEntity<ResponseSuccessResult> getTopDangers(HttpServletRequest request,@RequestParam(defaultValue = "10") Integer topNum,  @RequestParam(defaultValue = "3650") Integer lastDays) {
 		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
 		if(StringUtils.isBlank(userInfoId)) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,

@@ -26,7 +26,7 @@ public interface DetectionAccountMapper {
 	List<DetectionAccount> selectTopDangersByUserInfoId(@Param("user_info_id") String user_info_id, @Param("topNum")int topNum,
 			@Param("lastDate")Date lastDate);
 
-	List<DetectionAccount> selectByRecordId(@Param("recordId") String recordId);
+	List<DetectionAccount> selectByUserInfoId(@Param("user_info_id") String user_info_id);
 	
 	int insertList(@Param("recordList")List<DetectionAccount> recordList);
 

@@ -184,7 +184,7 @@ public class DetectionService {
 		if (costRecord == null) {
 			return jsonObject;
 		}
-		List<DetectionAccount> detectionAccountList = detectionAccountMapper.selectByRecordId(costRecord.getId());
+		List<DetectionAccount> detectionAccountList = detectionAccountMapper.selectByUserInfoId(user_info_id);
 		if (detectionAccountList == null || detectionAccountList.isEmpty()) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
