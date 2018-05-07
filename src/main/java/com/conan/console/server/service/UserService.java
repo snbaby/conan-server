@@ -1,6 +1,7 @@
 package com.conan.console.server.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.UUID;
 
@@ -36,7 +37,7 @@ public class UserService {
 
 	@Autowired
 	UserRemainMapper userRemainMapper;
-	
+
 	@Autowired
 	MinioService minioService;
 
@@ -110,11 +111,11 @@ public class UserService {
 		userRemainJsonObject.put("scan_cnt", scan_cnt);
 		userRemainJsonObject.remove("id");
 		userRemainJsonObject.remove("user_info_id");
-		
-		if(StringUtils.isNotBlank( userInfo.getUser_photo())) {
+
+		if (StringUtils.isNotBlank(userInfo.getUser_photo())) {
 			userInfo.setUser_photo(minioService.presignedGetObject(userInfo.getUser_photo()));
 		}
-		
+
 		userInfoJsonObject = (JSONObject) JSON.toJSON(userInfo);
 		userInfoJsonObject.put("user_info_id", userInfo.getId());
 		userInfoJsonObject.put("user_remain_info", userRemainJsonObject);
@@ -124,7 +125,7 @@ public class UserService {
 
 		return resultJsonObject;
 	}
-	
+
 	@Transactional
 	public JSONObject getUserInfo(String user_id) {
 		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_id);
@@ -150,7 +151,7 @@ public class UserService {
 		userRemainJsonObject.remove("id");
 		userRemainJsonObject.remove("user_info_id");
 
-		if(StringUtils.isNotBlank( userInfo.getUser_photo())) {
+		if (StringUtils.isNotBlank(userInfo.getUser_photo())) {
 			userInfo.setUser_photo(minioService.presignedGetObject(userInfo.getUser_photo()));
 		}
 		userInfoJsonObject = (JSONObject) JSON.toJSON(userInfo);
@@ -162,9 +163,9 @@ public class UserService {
 
 		return resultJsonObject;
 	}
-	
+
 	@Transactional
-	public void updateUserPhoto(String user_id,String photo_url) {
+	public void updateUserPhoto(String user_id, String photo_url) {
 		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_id);
 		if (userInfo == null) {
 			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
@@ -175,56 +176,57 @@ public class UserService {
 		userInfo.setUpdated_at(new Date());
 		userInfoMapper.updateByPrimaryKeySelective(userInfo);
 	}
-	
+
 	@Transactional
-	public void updateUserNick(String user_id,String nick_name) {
+	public void updateUserNick(String user_id, String nick_name) {
 		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_id);
 		if (userInfo == null) {
 			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
-		userInfo.setNick_name(nick_name);;
+		userInfo.setNick_name(nick_name);
+		;
 		userInfo.setUpdated_at(new Date());
 		userInfoMapper.updateByPrimaryKeySelective(userInfo);
 	}
-	
+
 	@Transactional
-	public void updateUserPaasword(String user_id,String old_passwd,String new_passwd) {
+	public void updateUserPaasword(String user_id, String old_passwd, String new_passwd) {
 		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_id);
 		if (userInfo == null) {
 			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
-		
+
 		UserAuth userAuth = userAuthMapper.selectByPrimaryKey(userInfo.getId());// 用户信息 用户权限 用户金额 所使用的ID 均为同一ID
 		if (userAuth == null) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
-		
-		if(!old_passwd.equals(userAuth.getHashed_passwd())) {
+
+		if (!old_passwd.equals(userAuth.getHashed_passwd())) {
 			throw new ConanException(ConanExceptionConstants.USER_PASSWD_VALIDATED_EXCEPTION_CODE,
 					ConanExceptionConstants.USER_PASSWD_VALIDATED_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.USER_PASSWD_VALIDATED_EXCEPTION_HTTP_STATUS);
 		}
-		
+
 		userAuth.setHashed_passwd(new_passwd);
 		userAuth.setUpdated_at(new Date());
 		userAuthMapper.updateByPrimaryKeySelective(userAuth);
 	}
-	
+
 	@Transactional
-	public void resetUserPaasword(String user_phone,String new_passwd) {
+	public void resetUserPaasword(String user_phone, String new_passwd) {
 		UserInfo userInfo = userInfoMapper.selectByPhoneNo(user_phone);
 		if (userInfo == null) {
 			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
-		
+
 		UserAuth userAuth = userAuthMapper.selectByPrimaryKey(userInfo.getId());// 用户信息 用户权限 用户金额 所使用的ID 均为同一ID
 		if (userAuth == null) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
@@ -235,9 +237,9 @@ public class UserService {
 		userAuth.setUpdated_at(new Date());
 		userAuthMapper.updateByPrimaryKeySelective(userAuth);
 	}
-	
+
 	@Transactional
-	public void updateUserPhone(String user_id,String new_phone) {
+	public void updateUserPhone(String user_id, String new_phone) {
 		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_id);
 		if (userInfo == null) {
 			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
@@ -248,34 +250,32 @@ public class UserService {
 		userInfo.setUpdated_at(new Date());
 		userInfoMapper.updateByPrimaryKey(userInfo);
 	}
-	
+
 	@Transactional
-	public void checkPasswd(String user_info_id,String user_passwd) {
+	public void checkPasswd(String user_info_id, String user_passwd) {
 		UserAuth userAuth = userAuthMapper.selectByPrimaryKey(user_info_id);// 用户信息 用户权限 用户金额 所使用的ID 均为同一ID
 		if (userAuth == null) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
-		
-		if(!user_passwd.equals(userAuth.getHashed_passwd())) {
+
+		if (!user_passwd.equals(userAuth.getHashed_passwd())) {
 			throw new ConanException(ConanExceptionConstants.USER_PASSWD_VALIDATED_EXCEPTION_CODE,
 					ConanExceptionConstants.USER_PASSWD_VALIDATED_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.USER_PASSWD_VALIDATED_EXCEPTION_HTTP_STATUS);
 		}
 	}
-	
-	
-	
+
 	@Transactional
-	public JSONObject queryPreCheck(int scan_type,String scan_file,String user_info_id) {
+	public JSONObject queryPreCheck(int scan_type, String scan_file, String user_info_id) {
 		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_info_id);
 		if (userInfo == null) {
 			throw new ConanException(ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
-		
+
 		JSONObject resultJsonObject = new JSONObject();
 		UserRemain userRemain = userRemainMapper.selectByPrimaryKey(user_info_id);// 用户信息 用户权限 用户金额 所使用的ID 均为同一ID
 		if (userRemain == null) {
@@ -283,42 +283,45 @@ public class UserService {
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
-		
-		if(scan_type == 1) {
-			if(userRemain.getGold_amount()+userRemain.getGold_coupon()>=1) {
+
+		if (scan_type == 1) {
+			if (userRemain.getGold_amount() + userRemain.getGold_coupon() >= 1) {
 				resultJsonObject.put("scan_cnt", 1);
 				resultJsonObject.put("scan_total", 1);
 				resultJsonObject.put("cost_will", 1);
 				resultJsonObject.put("cost_total", 1);
-				resultJsonObject.put("scan_remain", userRemain.getGold_amount()-1);
-			}else {
+				resultJsonObject.put("scan_remain", userRemain.getGold_amount() - 1);
+			} else {
 				resultJsonObject.put("scan_cnt", 0);
 				resultJsonObject.put("scan_total", 1);
-				resultJsonObject.put("cost_will",0);
+				resultJsonObject.put("cost_will", 0);
 				resultJsonObject.put("cost_total", 1);
 				resultJsonObject.put("scan_remain", userRemain.getGold_amount());
 			}
-		}else if(scan_type == 2){
+		} else if (scan_type == 2) {
 			XSSFWorkbook xwb = null;
+			InputStream inputStream = null;
 			try {
-				xwb = new XSSFWorkbook(minioService.downloadFile(scan_file));
+				inputStream = minioService.downloadFile(scan_file);
+				xwb = new XSSFWorkbook(inputStream);
 				XSSFSheet xssfSheet = xwb.getSheetAt(0);
 				int scanAccountNo = xssfSheet.getLastRowNum();
-				if(userRemain.getGold_amount()+userRemain.getGold_coupon() >= scanAccountNo) {
+				if (userRemain.getGold_amount() + userRemain.getGold_coupon() >= scanAccountNo) {
 					resultJsonObject.put("scan_cnt", scanAccountNo);
 					resultJsonObject.put("scan_total", scanAccountNo);
 					resultJsonObject.put("cost_will", scanAccountNo);
 					resultJsonObject.put("cost_total", scanAccountNo);
-					resultJsonObject.put("scan_remain", userRemain.getGold_amount()-scanAccountNo);
-				}else {
-					if(userRemain.getGold_amount()+userRemain.getGold_coupon()>=1) {
-						resultJsonObject.put("scan_cnt",  Math.floor(userRemain.getGold_amount()));
+					resultJsonObject.put("scan_remain", userRemain.getGold_amount() - scanAccountNo);
+				} else {
+					if (userRemain.getGold_amount() + userRemain.getGold_coupon() >= 1) {
+						resultJsonObject.put("scan_cnt", Math.floor(userRemain.getGold_amount()));
 						resultJsonObject.put("scan_total", scanAccountNo);
 						resultJsonObject.put("cost_will", Math.floor(userRemain.getGold_amount()));
 						resultJsonObject.put("cost_total", Math.floor(userRemain.getGold_amount()));
-						resultJsonObject.put("scan_remain", userRemain.getGold_amount() - Math.floor(userRemain.getGold_amount()));	
-					}else {
-						resultJsonObject.put("scan_cnt",  0);
+						resultJsonObject.put("scan_remain",
+								userRemain.getGold_amount() - Math.floor(userRemain.getGold_amount()));
+					} else {
+						resultJsonObject.put("scan_cnt", 0);
 						resultJsonObject.put("scan_total", scanAccountNo);
 						resultJsonObject.put("cost_will", 0);
 						resultJsonObject.put("cost_total", 0);
@@ -332,7 +335,7 @@ public class UserService {
 						ConanExceptionConstants.SCAN_FILE_EXCEPTION_MESSAGE,
 						ConanExceptionConstants.SCAN_FILE_EXCEPTION_HTTP_STATUS);
 			} finally {
-				if(xwb!=null) {
+				if (xwb != null) {
 					try {
 						xwb.close();
 					} catch (IOException e) {
@@ -341,16 +344,26 @@ public class UserService {
 								ConanExceptionConstants.SCAN_FILE_EXCEPTION_MESSAGE,
 								ConanExceptionConstants.SCAN_FILE_EXCEPTION_HTTP_STATUS);
 					}
+
+					if (inputStream != null) {
+						try {
+							inputStream.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							throw new ConanException(ConanExceptionConstants.SCAN_FILE_EXCEPTION_CODE,
+									ConanExceptionConstants.SCAN_FILE_EXCEPTION_MESSAGE,
+									ConanExceptionConstants.SCAN_FILE_EXCEPTION_HTTP_STATUS);
+						}
+					}
 				}
-					
+
 			}
-		}else {
+		} else {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
-		
-		
+
 		return resultJsonObject;
 	}
 }

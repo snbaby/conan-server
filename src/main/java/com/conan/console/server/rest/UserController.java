@@ -365,4 +365,6 @@ public class UserController {
 				userService.queryPreCheck(queryPreCheckParameters.getScan_type(),queryPreCheckParameters.getScan_file(), userInfoId));
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
+	
+//	admin_login
 }

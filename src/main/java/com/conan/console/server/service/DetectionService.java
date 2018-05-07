@@ -363,7 +363,12 @@ public class DetectionService {
 				String scanAccountStr = null;
 				scanAccountStr = ConanUtils.getCellValueByCell(xssfSheet.getRow(i).getCell(0));
 				if (StringUtils.isBlank(scanAccountStr)) {
-					continue;
+					Cell celli_0 =  xssfSheet.getRow(i).createCell(0);
+					celli_0.setCellType(CellType.STRING);
+					celli_0.setCellValue("");
+					Cell celli_1 =  xssfSheet.getRow(i).createCell(1);
+					celli_1.setCellType(CellType.STRING);
+					celli_1.setCellValue(ConanUtils.MD5(""));
 				} else {
 					String tempString = scanAccountStr.trim();
 					System.out.println(tempString);
@@ -397,7 +402,7 @@ public class DetectionService {
 				Cell cell5 = xssfSheet.getRow(i).createCell(5);
 				Cell cell6 = xssfSheet.getRow(i).createCell(6);
 				Cell cell7 = xssfSheet.getRow(i).createCell(7);
-				String md5 = cell1.getStringCellValue();// 字符
+				String md5 = ConanUtils.getCellValueByCell(cell1);// 字符
 				// 账号记录
 				DetectionAccount detectionAccount = new DetectionAccount();
 				detectionAccount.setId(dectionAccountId);
@@ -511,6 +516,7 @@ public class DetectionService {
 			export_link = minioService.presignedGetObject(scan_file);
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			throw new ConanException(ConanExceptionConstants.SCAN_FILE_EXCEPTION_CODE,
 					ConanExceptionConstants.SCAN_FILE_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.SCAN_FILE_EXCEPTION_HTTP_STATUS);
