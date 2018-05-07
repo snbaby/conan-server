@@ -1,0 +1,13 @@
+{
+	"user_num": 2,
+	"users": [
+		{
+			"user_name": "admin",
+			"user_passwd": "guo@dong"
+		},
+		{
+			"user_name": "guo@dong",
+			"user_passwd": "admin"
+		}
+	]
+}

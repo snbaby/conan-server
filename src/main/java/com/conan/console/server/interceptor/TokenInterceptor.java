@@ -37,9 +37,10 @@ public class TokenInterceptor implements HandlerInterceptor {
 			return true;
 		}else {//session简单检测
 			// 获取session里的登录状态值
-			String str = (String) request.getSession().getAttribute("isLogin");
+			String userStr = (String) request.getSession().getAttribute("isLogin");
+			String adminStr = (String) request.getSession().getAttribute("isAdminLogin");
 			// 如果登录状态不为空则返回true，返回true则会执行相应controller的方法
-			if (str != null) {
+			if (userStr != null || adminStr != null) {
 				return true;
 			} else {
 				throw new ConanException(ConanExceptionConstants.USER_NOT_LOGIN_EXCEPTION_CODE,

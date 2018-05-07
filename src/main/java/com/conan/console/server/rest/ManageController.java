@@ -13,13 +13,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.conan.console.server.exception.ConanException;
+import com.conan.console.server.parameter.AdminLoginParameters;
 import com.conan.console.server.parameter.HandleRechargeReqParameters;
 import com.conan.console.server.parameter.QueryCostDetailParameters;
 import com.conan.console.server.parameter.QueryCostListParameters;
 import com.conan.console.server.parameter.QueryRechargeListParameters;
 import com.conan.console.server.parameter.QueryUserListParameters;
 import com.conan.console.server.response.ResponseSuccessResult;
+import com.conan.console.server.service.JsonService;
 import com.conan.console.server.service.ManageService;
 import com.conan.console.server.utils.ConanExceptionConstants;
 
@@ -30,6 +34,9 @@ public class ManageController {
 	@Autowired
 	private ManageService manageService;
 	
+	@Autowired
+	private JsonService jsonService;
+	
 	@PostMapping("handleRechargeReq")
 	public ResponseEntity<ResponseSuccessResult> handleRechargeReq(HttpServletRequest request,@RequestBody @Valid HandleRechargeReqParameters handleRechargeReqParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -37,8 +44,8 @@ public class ManageController {
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
         }
-		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
-		if(StringUtils.isBlank(userInfoId)) {
+		String isAdminLogin  = (String) request.getSession().getAttribute("isAdminLogin");
+		if(StringUtils.isBlank(isAdminLogin)) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
@@ -61,8 +68,8 @@ public class ManageController {
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
         }
-		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
-		if(StringUtils.isBlank(userInfoId)) {
+		String isAdminLogin  = (String) request.getSession().getAttribute("isAdminLogin");
+		if(StringUtils.isBlank(isAdminLogin)) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
@@ -79,8 +86,8 @@ public class ManageController {
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
         }
-		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
-		if(StringUtils.isBlank(userInfoId)) {
+		String isAdminLogin  = (String) request.getSession().getAttribute("isAdminLogin");
+		if(StringUtils.isBlank(isAdminLogin)) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
@@ -97,8 +104,8 @@ public class ManageController {
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
         }
-		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
-		if(StringUtils.isBlank(userInfoId)) {
+		String isAdminLogin  = (String) request.getSession().getAttribute("isAdminLogin");
+		if(StringUtils.isBlank(isAdminLogin)) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
@@ -115,14 +122,42 @@ public class ManageController {
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
         }
-		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
-		if(StringUtils.isBlank(userInfoId)) {
+		String isAdminLogin  = (String) request.getSession().getAttribute("isAdminLogin");
+		if(StringUtils.isBlank(isAdminLogin)) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
 		
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",manageService.queryCostDetail(queryCostDetailParameters.getCost_id(),queryCostDetailParameters.getPageNo() ));
+		return new ResponseEntity<>(responseResult,HttpStatus.OK);
+	}
+	
+	@PostMapping("admin_login")
+	public ResponseEntity<ResponseSuccessResult> adminLogin(HttpServletRequest request,@RequestBody @Valid AdminLoginParameters adminLoginParameters, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+        }
+		
+		JSONObject adminLoginJson = jsonService.getAdminLogin();
+		JSONArray adminJsonArray = adminLoginJson.getJSONArray("users");
+		boolean isAdminExist = false;
+		for(int i=0;i<adminJsonArray.size();i++) {
+			if(adminJsonArray.getJSONObject(i).getString("user_name").equals(adminLoginParameters.getUser_name())&&adminJsonArray.getJSONObject(i).getString("user_passwd").equals(adminLoginParameters.getUser_passwd())) {
+				isAdminExist = true;
+				request.getSession().setAttribute("isAdminLogin", "yes");
+			}
+		}
+		
+		if(!isAdminExist) {
+			throw new ConanException(ConanExceptionConstants.USER_LOGIN_EXCEPTION_CODE,
+					ConanExceptionConstants.USER_LOGIN_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.USER_LOGIN_EXCEPTION_HTTP_STATUS);
+		}
+		
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success");
 		return new ResponseEntity<>(responseResult,HttpStatus.OK);
 	}
 	

@@ -588,7 +588,7 @@ public class DetectionService {
 		List<DetectionAccount> detectionAccountInsertList = new ArrayList<>();
 		for (int i=0;i<dectionAccountList.size();i++) {
 			DetectionAccount detectionAccount = dectionAccountList.get(i);
-			JSONObject jsonObject = new JSONObject();
+			/*JSONObject jsonObject = new JSONObject();
 			jsonObject.put("scan_account_id", detectionAccount.getId());
 			jsonObject.put("created_at", new Date());
 			jsonObject.put("account_name", detectionAccount.getAccount_name());
@@ -599,7 +599,7 @@ public class DetectionService {
 			jsonObject.put("detail_score3",detectionAccount.getDetail_score3());
 			jsonObject.put("detail_score4",detectionAccount.getDetail_score4());
 			jsonObject.put("scan_cost",detectionAccount.getCost());
-			jsonArray.add(jsonObject);
+			jsonArray.add(jsonObject);*/
 			detectionAccountInsertList.add(dectionAccountList.get(i));
 			if(detectionAccountInsertList.size()==500||i==dectionAccountList.size()) {
 				detectionAccountMapper.insertList(detectionAccountInsertList);
