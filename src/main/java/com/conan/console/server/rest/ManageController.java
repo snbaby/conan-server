@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.conan.console.server.exception.ConanException;
 import com.conan.console.server.parameter.HandleRechargeReqParameters;
+import com.conan.console.server.parameter.QueryRechargeListParameters;
 import com.conan.console.server.parameter.QueryUserListParameters;
 import com.conan.console.server.response.ResponseSuccessResult;
 import com.conan.console.server.service.ManageService;
@@ -66,6 +67,24 @@ public class ManageController {
 		}
 		
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",manageService.queryUserList(queryUserListParameters));
+		return new ResponseEntity<>(responseResult,HttpStatus.OK);
+	}
+	
+	@PostMapping("queryRechargeList")
+	public ResponseEntity<ResponseSuccessResult> queryRechargeList(HttpServletRequest request,@RequestBody @Valid QueryRechargeListParameters queryRechargeListParameters, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+        }
+		String userInfoId  = (String) request.getSession().getAttribute("user_info_id");
+		if(StringUtils.isBlank(userInfoId)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",manageService.queryRechargeList(queryRechargeListParameters));
 		return new ResponseEntity<>(responseResult,HttpStatus.OK);
 	}
 	
