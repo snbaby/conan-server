@@ -16,12 +16,14 @@ import com.conan.console.server.entity.master.CostRecord;
 import com.conan.console.server.entity.master.DetectionAccount;
 import com.conan.console.server.entity.master.RechargeBill;
 import com.conan.console.server.entity.master.UserBill;
+import com.conan.console.server.entity.master.UserInfo;
 import com.conan.console.server.entity.master.UserRemain;
 import com.conan.console.server.exception.ConanException;
 import com.conan.console.server.mapper.master.CostRecordMapper;
 import com.conan.console.server.mapper.master.DetectionAccountMapper;
 import com.conan.console.server.mapper.master.RechargeBillMapper;
 import com.conan.console.server.mapper.master.UserBillMapper;
+import com.conan.console.server.mapper.master.UserInfoMapper;
 import com.conan.console.server.mapper.master.UserRemainMapper;
 import com.conan.console.server.parameter.GetBillDetailParameters;
 import com.conan.console.server.parameter.UserGetBillParameters;
@@ -43,7 +45,11 @@ public class BillService {
 	private UserRemainMapper userRemainMapper;
 	@Autowired
 	private JsonService jsonService;
-
+	@Autowired
+	private UserInfoMapper userInfoMapper;
+	@Autowired
+	private MinioService minioService;
+	
 	@Transactional
 	public JSONObject getUserBillPages(UserGetBillParameters userGetBillParameters, String user_info_id) {
 		JSONObject resultJsonObject = new JSONObject();
@@ -91,6 +97,49 @@ public class BillService {
 			jsonArray.add(userBillJsonObject);
 		}
 		resultJsonObject.put("bills", jsonArray);
+		return resultJsonObject;
+	}
+	
+	@Transactional
+	public JSONObject queryUserRecharges(int recharge_status,int pageNo,String user_info_id) {
+		JSONObject resultJsonObject = new JSONObject();
+		List<RechargeBill> rechargeBillList = rechargeBillMapper.selectByUserIdAndRechargeStatus(recharge_status, user_info_id, pageNo, ConanApplicationConstants.INIT_PAGE_SIZE);
+		int total = rechargeBillMapper.selectByUserIdAndRechargeStatusTotal(recharge_status, user_info_id);
+		
+		UserInfo userInfo = userInfoMapper.selectByPrimaryKey(user_info_id);// BILL账单 recharge账单
+		// cost账单使用的ID均为同一个ID
+		if (userInfo == null) {
+		throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+		ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+		ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(pageNo);
+		pageInfo.setTotal(total);
+		pageInfo.setPageSize(ConanApplicationConstants.INIT_PAGE_SIZE);
+		resultJsonObject.put("page_info", pageInfo);
+		JSONArray jsonArray  = new JSONArray(); 
+		for(RechargeBill rechargeBill:rechargeBillList) {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("id", rechargeBill.getId());
+			jsonObject.put("created_at", rechargeBill.getCreated_at());
+			jsonObject.put("updated_at", rechargeBill.getUpdated_at());
+			
+			jsonObject.put("photo", minioService.presignedGetObject(rechargeBill.getPhoto()));
+			jsonObject.put("comment", rechargeBill.getComment());
+			jsonObject.put("rmb_amount", rechargeBill.getRmb_amount());
+			jsonObject.put("gold_amount", rechargeBill.getGold_amount());
+			jsonObject.put("gold_coupon", rechargeBill.getGold_coupon());
+			jsonObject.put("gold_total", rechargeBill.getGold_total());
+			jsonObject.put("recharge_status", rechargeBill.getRecharge_status());
+			jsonObject.put("user_info_id", rechargeBill.getUser_info_id());
+			jsonObject.put("phone_no", userInfo.getPhone_no());
+			jsonObject.put("verified_time", rechargeBill.getVerified_time());
+			jsonObject.put("success_time", rechargeBill.getSuccess_time());
+			jsonObject.put("reason", rechargeBill.getReason());
+			jsonArray.add(jsonObject);
+		}
+		resultJsonObject.put("recharges", jsonArray);
 		return resultJsonObject;
 	}
 
@@ -197,7 +246,7 @@ public class BillService {
 		userBill.setUpdated_at(date);
 		userBill.setBill_type("1");
 		userBill.setRemain_gold(userRemain.getGold_amount()+userRemain.getGold_coupon());
-		userBill.setBill_digest("");
+		userBill.setBill_digest("人民币充值: "+recharge_amount+"元");
 		userBill.setUser_info_id(user_info_id);
 		userBillMapper.insert(userBill);
 		
@@ -217,6 +266,7 @@ public class BillService {
 		for(int i=0;i<packagesJsonArray.size();i++) {
 			if(packagesJsonArray.getJSONObject(i).getIntValue("package_amount") == recharge_amount) {
 				rechargeBill.setGold_coupon(packagesJsonArray.getJSONObject(i).getIntValue("package_copon")*1f);
+				userBill.setBill_digest("人民币充值: "+recharge_amount+"元|额外赠送"+packagesJsonArray.getJSONObject(i).getIntValue("package_copon")+"金币");
 				break;
 			}
 		}
@@ -225,6 +275,8 @@ public class BillService {
 		rechargeBill.setUser_bill_id(uuid);
 		rechargeBill.setRecharge_status("2");//未审核
 		rechargeBillMapper.insertSelective(rechargeBill);
+		
+		userBillMapper.insert(userBill);
 		
 		
 		JSONObject resultJsonObject = new JSONObject();

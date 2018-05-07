@@ -59,5 +59,8 @@ public class ConanExceptionConstants {
 	public static final String USER_NOT_LOGIN_EXCEPTION_CODE = "USER_NOT_LOGIN_EXCEPTION";
 	public static final String USER_NOT_LOGIN_EXCEPTION_MESSAGE = "用户未登录";
 	public static final HttpStatus USER_NOT_LOGIN_EXCEPTION_HTTP_STATUS = HttpStatus.UNAUTHORIZED;
-	
+	// action传入值错误
+	public static final String ACTION_PARAMETER_EXCEPTION_CODE = "ACTION_PARAMTER_EXCEPTION";
+	public static final String ACTION_PARAMETER_EXCEPTION_MESSAGE = "action传入值错误";
+	public static final HttpStatus ACTION_PARAMETER_EXCEPTION_HTTP_STATUS = HttpStatus.BAD_REQUEST;
 }

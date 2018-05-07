@@ -140,6 +140,8 @@ public class RechargeBill {
     
     private String recharge_status;
     
+    private String reason;
+    
     public String getId() {
         return id;
     }
@@ -475,5 +477,15 @@ public class RechargeBill {
 	public void setRecharge_status(String recharge_status) {
 		this.recharge_status = recharge_status == null ? null : recharge_status.trim();
 	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason  = reason == null ? null : reason.trim();
+	}
+	
+	
     
 }

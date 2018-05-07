@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.conan.console.server.exception.ConanException;
 import com.conan.console.server.parameter.GetBillDetailParameters;
 import com.conan.console.server.parameter.PostRechargeReqParameters;
+import com.conan.console.server.parameter.QueryUserRechargesParameters;
 import com.conan.console.server.parameter.UserGetBillParameters;
 import com.conan.console.server.response.ResponseSuccessResult;
 import com.conan.console.server.service.BillService;
@@ -106,4 +105,24 @@ public class BillController {
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 	
+	@PostMapping("queryUserRecharges")
+	public ResponseEntity<ResponseSuccessResult> queryUserRecharges(HttpServletRequest request,
+			@RequestBody @Valid QueryUserRechargesParameters queryUserRechargesParameters, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+		}
+		String userInfoId = (String) request.getSession().getAttribute("user_info_id");
+		if (StringUtils.isBlank(userInfoId)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(), "success",
+				billService.queryUserRecharges(queryUserRechargesParameters.getBill_type(), queryUserRechargesParameters.getPageNo(), userInfoId));
+		return new ResponseEntity<>(responseResult, HttpStatus.CREATED);
+	}
+	
+
 }
