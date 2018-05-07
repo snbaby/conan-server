@@ -27,7 +27,12 @@ public class QueryUserListParameters {
 	private String login_start_date;
 	
 	private String login_end_date;
+	
+	@NotNull(message = "pageNo不能为空")
+	@Min(value = 1, message = "pageNo最小为1")
+	private Integer pageNo;
 
+	
 	public String getUser_id() {
 		return user_id;
 	}
@@ -91,4 +96,13 @@ public class QueryUserListParameters {
 	public void setLogin_end_date(String login_end_date) {
 		this.login_end_date = login_end_date;
 	}
+
+	public Integer getPageNo() {
+		return pageNo;
+	}
+
+	public void setPageNo(Integer pageNo) {
+		this.pageNo = pageNo;
+	}
+	
 }

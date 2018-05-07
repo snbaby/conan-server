@@ -1,12 +1,9 @@
 package com.conan.console.server.service;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -30,6 +27,7 @@ public class JsonService {
 				sb.append(s);
 			}
 			br.close();
+			System.out.println(sb);
 			return JSONObject.parseObject(sb.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -38,6 +36,14 @@ public class JsonService {
 			if (br != null) {
 				try {
 					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if(stream != null) {
+				try {
+					stream.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

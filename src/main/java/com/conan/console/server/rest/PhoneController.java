@@ -44,6 +44,7 @@ public class PhoneController {
 		jsonObject.put("validation_code", result + "");
 		if(ConanHttpClientUtils.httpPostWithJson(jsonObject, validateUrl)) {
 			request.getSession().setAttribute("validation_code",result+"");
+			System.out.println(result);
 			request.getSession().setAttribute("user_phone",getValidationCodeParameters.getUser_phone());
 		};
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(),"success");

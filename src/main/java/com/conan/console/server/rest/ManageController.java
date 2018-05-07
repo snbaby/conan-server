@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.conan.console.server.exception.ConanException;
 import com.conan.console.server.parameter.HandleRechargeReqParameters;
+import com.conan.console.server.parameter.QueryUserListParameters;
 import com.conan.console.server.response.ResponseSuccessResult;
 import com.conan.console.server.service.ManageService;
 import com.conan.console.server.utils.ConanExceptionConstants;
@@ -51,7 +52,7 @@ public class ManageController {
 	}
 	
 	@PostMapping("queryUserList")
-	public ResponseEntity<ResponseSuccessResult> queryUserList(HttpServletRequest request,@RequestBody @Valid HandleRechargeReqParameters handleRechargeReqParameters, BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> queryUserList(HttpServletRequest request,@RequestBody @Valid QueryUserListParameters queryUserListParameters, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
@@ -64,13 +65,7 @@ public class ManageController {
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
 		
-		if(handleRechargeReqParameters.getAction().equals("agree")&&handleRechargeReqParameters.getAction().equals("no")) {
-			throw new ConanException(ConanExceptionConstants.ACTION_PARAMETER_EXCEPTION_CODE,
-					ConanExceptionConstants.ACTION_PARAMETER_EXCEPTION_MESSAGE,
-					ConanExceptionConstants.ACTION_PARAMETER_EXCEPTION_HTTP_STATUS);
-		}
-		manageService.handleRechargeReq(handleRechargeReqParameters.getRecharge_id(), handleRechargeReqParameters.getAction(), handleRechargeReqParameters.getReason());
-		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success");
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",manageService.queryUserList(queryUserListParameters));
 		return new ResponseEntity<>(responseResult,HttpStatus.OK);
 	}
 	

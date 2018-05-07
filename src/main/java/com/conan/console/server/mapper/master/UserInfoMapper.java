@@ -1,6 +1,13 @@
 package com.conan.console.server.mapper.master;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.conan.console.server.entity.master.UserBill;
 import com.conan.console.server.entity.master.UserInfo;
+import com.conan.console.server.parameter.QueryUserListParameters;
+import com.conan.console.server.parameter.UserGetBillParameters;
 
 public interface UserInfoMapper {
 	
@@ -53,5 +60,10 @@ public interface UserInfoMapper {
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
     int updateByPrimaryKey(UserInfo record);
+    
+    List<UserInfo> selectByQueryUserListParameters(
+			@Param("queryUserListParameters") QueryUserListParameters queryUserListParameters, @Param("pageSize") int pageSize);
+
+	int selectByQueryUserListParametersTotal(@Param("queryUserListParameters") QueryUserListParameters queryUserListParameters);
     
 }
