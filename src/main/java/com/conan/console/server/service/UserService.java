@@ -84,6 +84,8 @@ public class UserService {
 					ConanExceptionConstants.USER_LOGIN_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.USER_LOGIN_EXCEPTION_HTTP_STATUS);
 		}
+		userInfo.setLast_login_at(new Date());
+		userInfoMapper.updateByPrimaryKey(userInfo);
 		UserAuth userAuth = userAuthMapper.selectByPrimaryKey(userInfo.getId());// 用户信息 用户权限 用户金额 所使用的ID 均为同一ID
 		if (userAuth == null) {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,

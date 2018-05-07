@@ -31,6 +31,7 @@ import com.conan.console.server.parameter.QueryRechargeListParameters;
 import com.conan.console.server.parameter.QueryUserListParameters;
 import com.conan.console.server.utils.ConanApplicationConstants;
 import com.conan.console.server.utils.ConanExceptionConstants;
+import com.conan.console.server.utils.ConanUtils;
 
 @Service
 public class ManageService {
@@ -194,4 +195,26 @@ public class ManageService {
 		resultJsonObject.put("accounts", detectionAccountList);
 		return resultJsonObject;
 	}
+	@Transactional
+	public JSONObject getStats() {
+		Date td = ConanUtils.getStartTime();
+		int new_recharge_cnt =rechargeBillMapper.selectNewRechargeCntTotal();
+		int today_register_cnt = userInfoMapper.selectTdRegisterCntTotal(td);
+		int today_login_cnt = userInfoMapper.selectTdLoginCntTotal(td);
+		int total_registered_cnt = userInfoMapper.selectTtRegisteredCntTotal();
+		int today_recharge_agree_cnt =rechargeBillMapper.selectTdRechargeAgreeCntTotal(td);
+		int today_recharge_agree_amount = rechargeBillMapper.selectTdRechargeAgreeAmountTotal(td);
+		int total_recharge_agree_amount = rechargeBillMapper.selectTtRechargeAgreeAmountTotal();
+		JSONObject resultJsonObject = new JSONObject();
+		resultJsonObject.put("new_recharge_cnt", new_recharge_cnt);
+		resultJsonObject.put("today_register_cnt", today_register_cnt);
+		resultJsonObject.put("today_login_cnt", today_login_cnt);
+		resultJsonObject.put("total_registered_cnt", total_registered_cnt);
+		resultJsonObject.put("today_recharge_agree_cnt", today_recharge_agree_cnt);
+		resultJsonObject.put("today_recharge_agree_amount", today_recharge_agree_amount);
+		resultJsonObject.put("total_recharge_agree_amount", total_recharge_agree_amount);
+		return resultJsonObject;
+	}
+	
+	
 }

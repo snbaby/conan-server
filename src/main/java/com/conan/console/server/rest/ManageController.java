@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -158,6 +159,20 @@ public class ManageController {
 		}
 		
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success");
+		return new ResponseEntity<>(responseResult,HttpStatus.OK);
+	}
+	
+	@GetMapping("get_stats")
+	public ResponseEntity<ResponseSuccessResult> getStats(HttpServletRequest request) {
+		String isAdminLogin  = (String) request.getSession().getAttribute("isAdminLogin");
+		if(StringUtils.isBlank(isAdminLogin)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		
+		
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(),"success",manageService.getStats());
 		return new ResponseEntity<>(responseResult,HttpStatus.OK);
 	}
 	

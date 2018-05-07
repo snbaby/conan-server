@@ -24,6 +24,15 @@ public class ConanUtils {
 		calendar.set(Calendar.MILLISECOND, 0);
 		return calendar.getTime();
 	}
+	
+	public static Date getStartTime() {  
+        Calendar todayStart = Calendar.getInstance();  
+        todayStart.set(Calendar.HOUR_OF_DAY, 0);  
+        todayStart.set(Calendar.MINUTE, 0);  
+        todayStart.set(Calendar.SECOND, 0);  
+        todayStart.set(Calendar.MILLISECOND, 0);  
+        return todayStart.getTime();  
+    } 
 
 	public static String MD5(String s) {
 		try {
