@@ -6,7 +6,7 @@ public class ConanApplicationConstants {
 	//金币信息 初始化为0
 	public static final Float INIT_GOLD_COUPON = 0f;
 	//金币信息 初始化为0
-	public static final int INIT_PAGE_SIZE = 10;
+	public static final int INIT_PAGE_SIZE = 20;
 	//账号余额不足 提示
 	public static final String NO_BALANCE_MESSAGE = "账号余额不足";
 	//账号余额不足 Code

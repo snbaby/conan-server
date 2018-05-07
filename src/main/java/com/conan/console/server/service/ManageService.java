@@ -6,10 +6,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.conan.console.server.entity.PageInfo;
+import com.conan.console.server.entity.master.DetectionAccount;
 import com.conan.console.server.entity.master.QueryCost;
 import com.conan.console.server.entity.master.QueryRecharge;
 import com.conan.console.server.entity.master.RechargeBill;
@@ -17,6 +19,7 @@ import com.conan.console.server.entity.master.UserBill;
 import com.conan.console.server.entity.master.UserInfo;
 import com.conan.console.server.entity.master.UserRemain;
 import com.conan.console.server.exception.ConanException;
+import com.conan.console.server.mapper.master.DetectionAccountMapper;
 import com.conan.console.server.mapper.master.QueryCostMapper;
 import com.conan.console.server.mapper.master.QueryRechargeMapper;
 import com.conan.console.server.mapper.master.RechargeBillMapper;
@@ -51,6 +54,9 @@ public class ManageService {
 	
 	@Autowired
 	private QueryCostMapper queryCostMapper;
+	
+	@Autowired
+	private DetectionAccountMapper detectionAccountMapper;
 	
 	@Transactional
 	public void handleRechargeReq(String recharge_id,String action,String reason) {
@@ -173,7 +179,19 @@ public class ManageService {
 		return resultJsonObject;
 	}
 	
-	
-	
-	
+	@Transactional
+	public JSONObject queryCostDetail(String cost_id,int pageNo) {
+		JSONObject resultJsonObject = new JSONObject();
+		List<DetectionAccount> detectionAccountList = detectionAccountMapper.selectByRecordId(cost_id, pageNo, ConanApplicationConstants.INIT_PAGE_SIZE);
+		int total = detectionAccountMapper.selectByRecordIdTotal(cost_id);
+		
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(pageNo);
+		pageInfo.setTotal(total);
+		pageInfo.setPageSize(ConanApplicationConstants.INIT_PAGE_SIZE);
+		
+		resultJsonObject.put("page_info", pageInfo);
+		resultJsonObject.put("accounts", detectionAccountList);
+		return resultJsonObject;
+	}
 }
