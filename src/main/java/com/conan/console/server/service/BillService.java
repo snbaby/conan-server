@@ -248,7 +248,6 @@ public class BillService {
 		userBill.setRemain_gold(userRemain.getGold_amount()+userRemain.getGold_coupon());
 		userBill.setBill_digest("人民币充值: "+recharge_amount+"元");
 		userBill.setUser_info_id(user_info_id);
-		userBillMapper.insert(userBill);
 		
 		RechargeBill rechargeBill = new RechargeBill();
 		rechargeBill.setId(uuid);

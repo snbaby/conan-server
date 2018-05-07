@@ -20,7 +20,7 @@ import com.conan.console.server.service.ManageService;
 import com.conan.console.server.utils.ConanExceptionConstants;
 
 @RestController
-@RequestMapping(value = "api/v2.0")
+@RequestMapping(value = "admin/api/v2.0")
 public class ManageController {
 	
 	@Autowired

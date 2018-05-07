@@ -33,6 +33,10 @@ public class ManageService {
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}else if(rechargeBill.getRecharge_status().equals("1")) {
+			throw new ConanException(ConanExceptionConstants.BILL_EXAMINE_EXCEPTION_CODE,
+					ConanExceptionConstants.BILL_EXAMINE_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.BILL_EXAMINE_EXCEPTION_HTTP_STATUS);
 		}
 		
 		UserRemain userRemain = userRemainMapper.selectByPrimaryKey(rechargeBill.getUser_info_id());//user_info_id 就是UserRemain id

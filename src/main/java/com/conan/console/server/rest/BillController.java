@@ -120,7 +120,7 @@ public class BillController {
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.CREATED.value(), "success",
-				billService.queryUserRecharges(queryUserRechargesParameters.getBill_type(), queryUserRechargesParameters.getPageNo(), userInfoId));
+				billService.queryUserRecharges(queryUserRechargesParameters.getRecharge_status(), queryUserRechargesParameters.getPageNo(), userInfoId));
 		return new ResponseEntity<>(responseResult, HttpStatus.CREATED);
 	}
 	

@@ -10,10 +10,10 @@ public class QueryUserRechargesParameters {
 	@Min(value = 1, message = "pageNo最小为1")
 	private int pageNo;
 
-	@NotNull(message = "bill_type不能为空")
-	@Min(value = 1, message = "bill_type最小为1")
-	@Max(value = 4, message = "bill_type最小为4")
-	private int bill_type;
+	@NotNull(message = "recharge_status不能为空")
+	@Min(value = 1, message = "recharge_status最小为1")
+	@Max(value = 4, message = "recharge_status最小为4")
+	private int recharge_status;
 
 	public int getPageNo() {
 		return pageNo;
@@ -23,13 +23,14 @@ public class QueryUserRechargesParameters {
 		this.pageNo = pageNo;
 	}
 
-	public int getBill_type() {
-		return bill_type;
+	public int getRecharge_status() {
+		return recharge_status;
 	}
 
-	public void setBill_type(int bill_type) {
-		this.bill_type = bill_type;
+	public void setRecharge_status(int recharge_status) {
+		this.recharge_status = recharge_status;
 	}
+
 
 	
 }
