@@ -10,11 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.conan.console.server.entity.PageInfo;
+import com.conan.console.server.entity.master.QueryRecharge;
 import com.conan.console.server.entity.master.RechargeBill;
 import com.conan.console.server.entity.master.UserBill;
 import com.conan.console.server.entity.master.UserInfo;
 import com.conan.console.server.entity.master.UserRemain;
 import com.conan.console.server.exception.ConanException;
+import com.conan.console.server.mapper.master.QueryRechargeMapper;
 import com.conan.console.server.mapper.master.RechargeBillMapper;
 import com.conan.console.server.mapper.master.UserBillMapper;
 import com.conan.console.server.mapper.master.UserInfoMapper;
@@ -40,6 +42,9 @@ public class ManageService {
 	
 	@Autowired
 	private MinioService minioService;
+	
+	@Autowired
+	private QueryRechargeMapper queryRechargeMapper;
 	
 	@Transactional
 	public void handleRechargeReq(String recharge_id,String action,String reason) {
@@ -129,28 +134,20 @@ public class ManageService {
 	@Transactional
 	public JSONObject queryRechargeList(QueryRechargeListParameters queryRechargeListParameters) {
 		JSONObject resultJsonObject = new JSONObject();
-		/*List<UserInfo> userInfoList = userInfoMapper.selectByQueryUserListParameters(queryUserListParameters, ConanApplicationConstants.INIT_PAGE_SIZE);
-		int total = userInfoMapper.selectByQueryUserListParametersTotal(queryUserListParameters);
+		List<QueryRecharge> queryRechargeList = queryRechargeMapper.selectByQueryRechargeListParameters(queryRechargeListParameters, ConanApplicationConstants.INIT_PAGE_SIZE);
+		int total = queryRechargeMapper.selectByQueryRechargeListParametersTotal(queryRechargeListParameters);
+		
 		PageInfo pageInfo = new PageInfo();
-		pageInfo.setPageNo(queryUserListParameters.getPageNo());
+		pageInfo.setPageNo(queryRechargeListParameters.getPageNo());
 		pageInfo.setTotal(total);
 		pageInfo.setPageSize(ConanApplicationConstants.INIT_PAGE_SIZE);
 		
-		resultJsonObject.put("page_info", pageInfo);
-		JSONArray jsonArray = new JSONArray();
-		for(UserInfo userInfo: userInfoList) {
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("id", userInfo.getId());
-			jsonObject.put("created_at", userInfo.getCreated_at());
-			jsonObject.put("updated_at", userInfo.getUpdated_at());
-			jsonObject.put("last_login_at", userInfo.getLast_login_at());
-			jsonObject.put("nick_name", userInfo.getNick_name());
-			jsonObject.put("phone_no", userInfo.getPhone_no());
-			jsonObject.put("activate", userInfo.getActivate());
-			jsonObject.put("user_photo", minioService.presignedGetObject(userInfo.getUser_photo()));
-			jsonArray.add(jsonObject);
+		for(QueryRecharge queryRecharge:queryRechargeList) {
+			queryRecharge.setPhoto(minioService.presignedGetObject(queryRecharge.getPhoto()));
 		}
-		resultJsonObject.put("users", jsonArray);*/
+		
+		resultJsonObject.put("page_info", pageInfo);
+		resultJsonObject.put("recharges", queryRechargeList);
 		return resultJsonObject;
 	}
 	

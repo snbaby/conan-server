@@ -49,6 +49,7 @@
        <when test="recharge_status ==4 ">and recharge_status in (2,3)</when>   
     </choose>
   </select>
+  
   <select id="selectByUserIdAndRechargeStatus" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated
