@@ -10,9 +10,6 @@ import com.conan.console.server.parameter.UserGetBillParameters;
 public interface UserBillMapper {
 	List<UserBill> selectByUserGetBillParameters(
 			@Param("userGetBillParameters") UserGetBillParameters userGetBillParameters,
-			@Param("user_info_id") String user_info_id, @Param("pageSize") int pageSize);
-
-	int selectByUserGetBillParametersTotal(@Param("userGetBillParameters") UserGetBillParameters userGetBillParameters,
 			@Param("user_info_id") String user_info_id);
 
 	/**
