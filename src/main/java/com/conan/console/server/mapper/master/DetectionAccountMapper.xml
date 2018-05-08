@@ -149,7 +149,7 @@
     from detection_account
     where user_info_id = #{user_info_id}
     <if test="userGetScanHistoryParameters.scan_account != null">
-        and account_name = #{userGetScanHistoryParameters.scan_account}
+        and account_name like "%"#{userGetScanHistoryParameters.scan_account}"%"
     </if>
     <if test="userGetScanHistoryParameters.scan_status != 0">
     	<if test="userGetScanHistoryParameters.scan_status == 1">
@@ -185,7 +185,7 @@
     from detection_account
     where user_info_id = #{user_info_id}
     <if test="userGetScanHistoryParameters.scan_account != null">
-        and account_name = #{userGetScanHistoryParameters.scan_account}
+        and account_name like "%"#{userGetScanHistoryParameters.scan_account}"%"
     </if>
     <if test="userGetScanHistoryParameters.scan_status != 0">
     	<if test="userGetScanHistoryParameters.scan_status == 1">
@@ -220,7 +220,7 @@
     from detection_account
     where user_info_id = #{user_info_id}
     <if test="userGetScanHistoryParameters.scan_account != null">
-        and account_name = #{userGetScanHistoryParameters.scan_account}
+        and account_name like "%"#{userGetScanHistoryParameters.scan_account}"%"
     </if>
     <if test="userGetScanHistoryParameters.scan_status != 0">
     	<if test="userGetScanHistoryParameters.scan_status == 1">
