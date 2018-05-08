@@ -184,21 +184,13 @@ public class DetectionService {
 		if (costRecord == null) {
 			return jsonObject;
 		}
-		List<DetectionAccount> detectionAccountList = detectionAccountMapper.selectByUserInfoId(user_info_id);
-		if (detectionAccountList == null || detectionAccountList.isEmpty()) {
-			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
-					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
-					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
-		}
-		int dangerScanNo = 0;// 危险账号个数
-		for (DetectionAccount detectionAccount : detectionAccountList) {
-			if (detectionAccount.getAccount_score() >= 80 && detectionAccount.getAccount_score() < 100) {// 80--100危险账号
-				dangerScanNo++;
-			}
-		}
-		jsonObject.put("totalScanNo", detectionAccountList.size());
+		
+		int totalScanNo = detectionAccountMapper.selectByUserInfoIdTotal(user_info_id);//总检测数量
+		int dangerScanNo = detectionAccountMapper.selectDangerByUserInfoIdTotal(user_info_id);//总检测数量
+		
+		jsonObject.put("totalScanNo", totalScanNo);
 		jsonObject.put("dangerScanNo", dangerScanNo);
-		jsonObject.put("dangerPercent", dangerScanNo*100f / detectionAccountList.size());
+		jsonObject.put("dangerPercent", dangerScanNo*100f / totalScanNo);
 		jsonObject.put("recentScanTime", costRecord.getCreated_at());
 		return jsonObject;
 	}
