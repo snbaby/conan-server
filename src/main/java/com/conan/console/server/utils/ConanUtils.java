@@ -100,6 +100,91 @@ public class ConanUtils {
 		float f2 = Float.valueOf(decimalFormat.format(score * i2 / total));
 		float f3 = Float.valueOf(decimalFormat.format(score * i3 / total));
 		float f4 = score - f0 - f1 - f2 - f3;
+		
+		float temp = 0.0f;
+		if(f0>10.0f) {
+			temp = f0-10.0f;
+			f0 = 10.0f;
+		}else {
+			temp = 0.0f;
+		}
+		f1 = temp+f1;
+		if(f1>20.0f) {
+			temp = f1-20.0f;
+			f1 = 20.0f;
+		}else {
+			temp = 0.0f;
+		}
+		f2 = temp+f2;
+		if(f2>30.0f) {
+			temp = f2-30.0f;
+			f2 = 30.0f;
+		}else {
+			temp = 0.0f;
+		}
+		
+		f3 = temp+f3;
+		if(f3>25.0f) {
+			temp = f3-25.0f;
+			f3 = 25.0f;
+		}else {
+			temp = 0.0f;
+		}
+		
+		f4 = temp+f4;
+		if(f4>15.0f) {
+			temp = f4-15.0f;
+			f4 = 15.0f;
+		}else {
+			temp = 0.0f;
+		}
+		
+		if(temp>0.0f) {
+			f0 = f0 + temp;
+			if(f0>10.0f) {
+				temp = f0-10.0f;
+				f0 = 10.0f;
+			}else {
+				temp = 0.0f;
+			}
+		}
+		if(temp>0.0f) {	
+			f1 = temp+f1;
+			if(f1>20.0f) {
+				temp = f1-20.0f;
+				f1 = 20.0f;
+			}else {
+				temp = 0.0f;
+			}
+		}
+		if(temp>0.0f) {
+			f2 = temp+f2;
+			if(f2>30.0f) {
+				temp = f2-30.0f;
+				f2 = 30.0f;
+			}else {
+				temp = 0.0f;
+			}
+		}
+		if(temp>0.0f) {
+			f3 = temp+f3;
+			if(f3>25.0f) {
+				temp = f3-25.0f;
+				f3 = 25.0f;
+			}else {
+				temp = 0.0f;
+			}
+		}
+		if(temp>0.0f) {
+			f4 = temp+f4;
+			if(f4>15.0f) {
+				temp = f4-15.0f;
+				f4 = 15.0f;
+			}else {
+				temp = 0.0f;
+			}
+		}
+		
 		resultList.add(f0);
 		resultList.add(f1);
 		resultList.add(f2);
