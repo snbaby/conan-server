@@ -46,6 +46,7 @@
        <when test="recharge_status ==1 ">and recharge_status = 1</when>
        <when test="recharge_status ==2 ">and recharge_status = 2</when>  
        <when test="recharge_status ==3 ">and recharge_status = 3</when>    
+       <when test="recharge_status ==4 ">and recharge_status in (2,3)</when>   
     </choose>
   </select>
   
@@ -110,6 +111,7 @@
        <when test="recharge_status ==1 ">and recharge_status = 1</when>
        <when test="recharge_status ==2 ">and recharge_status = 2</when>  
        <when test="recharge_status ==3 ">and recharge_status = 3</when>    
+       <when test="recharge_status ==4 ">and recharge_status in (2,3)</when>   
     </choose>
     limit ${(pageNo-1)*pageSize},${pageNo*pageSize}
   </select>

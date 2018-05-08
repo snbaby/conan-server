@@ -6,8 +6,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.xssf.streaming.SXSSFSheet;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -23,6 +22,7 @@ import com.conan.console.server.exception.ConanException;
 import com.conan.console.server.mapper.master.UserAuthMapper;
 import com.conan.console.server.mapper.master.UserInfoMapper;
 import com.conan.console.server.mapper.master.UserRemainMapper;
+import com.conan.console.server.parameter.QueryPreCheckParameters;
 import com.conan.console.server.utils.ConanApplicationConstants;
 import com.conan.console.server.utils.ConanExceptionConstants;
 
@@ -301,14 +301,12 @@ public class UserService {
 				resultJsonObject.put("scan_remain", userRemain.getGold_amount());
 			}
 		} else if (scan_type == 2) {
-			SXSSFWorkbook xwb = null;
-			XSSFWorkbook workbook = null;
+			XSSFWorkbook xwb = null;
 			InputStream inputStream = null;
 			try {
 				inputStream = minioService.downloadFile(scan_file);
-				workbook = new XSSFWorkbook(inputStream);
-				xwb = new SXSSFWorkbook(workbook, 10000);
-				SXSSFSheet xssfSheet = xwb.getSheetAt(0);
+				xwb = new XSSFWorkbook(inputStream);
+				XSSFSheet xssfSheet = xwb.getSheetAt(0);
 				int scanAccountNo = xssfSheet.getLastRowNum();
 				if (userRemain.getGold_amount() + userRemain.getGold_coupon() >= scanAccountNo) {
 					resultJsonObject.put("scan_cnt", scanAccountNo);
@@ -332,7 +330,7 @@ public class UserService {
 						resultJsonObject.put("scan_remain", userRemain.getGold_amount());
 					}
 				}
-				
+				xwb.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				throw new ConanException(ConanExceptionConstants.SCAN_FILE_EXCEPTION_CODE,
@@ -342,7 +340,6 @@ public class UserService {
 				if (xwb != null) {
 					try {
 						xwb.close();
-						xwb.dispose();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						throw new ConanException(ConanExceptionConstants.SCAN_FILE_EXCEPTION_CODE,
@@ -350,28 +347,15 @@ public class UserService {
 								ConanExceptionConstants.SCAN_FILE_EXCEPTION_HTTP_STATUS);
 					}
 
-				}
-				
-				if (workbook != null) {
-					try {
-						workbook.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						throw new ConanException(ConanExceptionConstants.SCAN_FILE_EXCEPTION_CODE,
-								ConanExceptionConstants.SCAN_FILE_EXCEPTION_MESSAGE,
-								ConanExceptionConstants.SCAN_FILE_EXCEPTION_HTTP_STATUS);
-					}
-
-				}
-				
-				if (inputStream != null) {
-					try {
-						inputStream.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						throw new ConanException(ConanExceptionConstants.SCAN_FILE_EXCEPTION_CODE,
-								ConanExceptionConstants.SCAN_FILE_EXCEPTION_MESSAGE,
-								ConanExceptionConstants.SCAN_FILE_EXCEPTION_HTTP_STATUS);
+					if (inputStream != null) {
+						try {
+							inputStream.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							throw new ConanException(ConanExceptionConstants.SCAN_FILE_EXCEPTION_CODE,
+									ConanExceptionConstants.SCAN_FILE_EXCEPTION_MESSAGE,
+									ConanExceptionConstants.SCAN_FILE_EXCEPTION_HTTP_STATUS);
+						}
 					}
 				}
 
