@@ -21,9 +21,6 @@ public class HandleRechargeReqParameters {
 	@Size(max = 5, message = "action长度最大长度为5")
 	private String action;
 	
-	@NotNull(message="reason不能为空")
-	@NotBlank(message="reason不能为空")
-	@NotEmpty(message="reason不能为空")
 	@Size(max = 255, message = "reason长度最大长度为5")
 	private String reason;
 

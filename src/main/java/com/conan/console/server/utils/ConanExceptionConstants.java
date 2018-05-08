@@ -67,4 +67,8 @@ public class ConanExceptionConstants {
 	public static final String BILL_EXAMINE_EXCEPTION_CODE = "BILL_EXAMINE_EXCEPTION";
 	public static final String BILL_EXAMINE_EXCEPTION_MESSAGE = "bill 账单已审核";
 	public static final HttpStatus BILL_EXAMINE_EXCEPTION_HTTP_STATUS = HttpStatus.CONFLICT;
+	// action传入值错误
+	public static final String REASON_PARAMETER_EXCEPTION_CODE = "REASON_PARAMTER_EXCEPTION";
+	public static final String REASON_PARAMETER_EXCEPTION_MESSAGE = "reason传入值错误";
+	public static final HttpStatus REASON_PARAMETER_EXCEPTION_HTTP_STATUS = HttpStatus.BAD_REQUEST;
 }

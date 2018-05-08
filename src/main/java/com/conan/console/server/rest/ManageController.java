@@ -52,7 +52,15 @@ public class ManageController {
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
 		
-		if(handleRechargeReqParameters.getAction().equals("agree")&&handleRechargeReqParameters.getAction().equals("no")) {
+		if(handleRechargeReqParameters.getAction().equals("agree")) {
+			handleRechargeReqParameters.setReason("");
+		}else if(handleRechargeReqParameters.getAction().equals("no")){
+			if(StringUtils.isBlank(handleRechargeReqParameters.getReason())) {
+				throw new ConanException(ConanExceptionConstants.REASON_PARAMETER_EXCEPTION_CODE,
+						ConanExceptionConstants.REASON_PARAMETER_EXCEPTION_MESSAGE,
+						ConanExceptionConstants.REASON_PARAMETER_EXCEPTION_HTTP_STATUS);
+			}
+		}else {
 			throw new ConanException(ConanExceptionConstants.ACTION_PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.ACTION_PARAMETER_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.ACTION_PARAMETER_EXCEPTION_HTTP_STATUS);
