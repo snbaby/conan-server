@@ -311,7 +311,7 @@
       <if test="recharge_status != null">
         recharge_status = #{recharge_status,jdbcType=VARCHAR},
       </if>
-      <if test="recharge_status != null">
+      <if test="reason != null">
         reason = #{reason,jdbcType=VARCHAR},
       </if>
     </set>

@@ -483,7 +483,7 @@ public class RechargeBill {
 	}
 
 	public void setReason(String reason) {
-		this.reason = reason  = reason == null ? null : reason.trim();
+		this.reason = reason == null ? null : reason.trim();
 	}
 	
 	

@@ -601,7 +601,7 @@ public class DetectionService {
 			jsonObject.put("scan_cost",detectionAccount.getCost());
 			jsonArray.add(jsonObject);*/
 			detectionAccountInsertList.add(dectionAccountList.get(i));
-			if(detectionAccountInsertList.size()==500||i==dectionAccountList.size()) {
+			if(detectionAccountInsertList.size()==500||i==dectionAccountList.size()-1) {
 				detectionAccountMapper.insertList(detectionAccountInsertList);
 				detectionAccountInsertList.clear();
 			}
