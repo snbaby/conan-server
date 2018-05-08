@@ -14,7 +14,9 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -64,39 +66,12 @@ public class DetectionService {
 	private MinioService minioService;
 
 	@Transactional
-	public JSONObject getDetectionAccountPages(UserGetScanHistoryParameters userGetScanHistoryParameters,
+	public JSONObject getDetectionAccountLink(UserGetScanHistoryParameters userGetScanHistoryParameters,
 			String user_info_id) {
 		JSONObject resultJsonObject = new JSONObject();
-		JSONArray recordsJsonArray = new JSONArray();
-		List<DetectionAccount> detectionAccountResult = detectionAccountMapper.selectByUserGetScanHistoryParameters(
-				userGetScanHistoryParameters, user_info_id, ConanApplicationConstants.INIT_PAGE_SIZE);
+
 		List<DetectionAccount> detectionAccountAllResult = detectionAccountMapper
 				.selectByUserGetScanHistoryAllParameters(userGetScanHistoryParameters, user_info_id);
-		PageInfo pageInfo = new PageInfo();
-		pageInfo.setPageNo(userGetScanHistoryParameters.getPageNo());
-		pageInfo.setPageSize(ConanApplicationConstants.INIT_PAGE_SIZE);
-		if(detectionAccountAllResult==null) {
-			pageInfo.setTotal(0);
-		}else {
-			pageInfo.setTotal(detectionAccountAllResult.size());	
-		}
-		
-		resultJsonObject.put("page_info", pageInfo);
-
-		for (DetectionAccount detectionAccount : detectionAccountResult) {
-			JSONObject tempObject = new JSONObject();
-			tempObject.put("detection_account_id", detectionAccount.getId());
-			tempObject.put("created_at", detectionAccount.getCreated_at());
-			tempObject.put("account_name", detectionAccount.getAccount_name());
-			tempObject.put("account_score", detectionAccount.getAccount_score());
-			tempObject.put("detail_score0", detectionAccount.getDetail_score0());
-			tempObject.put("detail_score1", detectionAccount.getDetail_score1());
-			tempObject.put("detail_score2", detectionAccount.getDetail_score2());
-			tempObject.put("detail_score3", detectionAccount.getDetail_score3());
-			tempObject.put("detail_score4", detectionAccount.getDetail_score4());
-			recordsJsonArray.add(tempObject);
-		}
-		resultJsonObject.put("records", recordsJsonArray);
 
 		XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
 		XSSFSheet xssfSheet = xssfWorkbook.createSheet("conan");
@@ -117,9 +92,15 @@ public class DetectionService {
 		XSSFCell0_6.setCellValue("交易活跃度");
 		XSSFCell XSSFCell0_7 = XSSFRow0.createCell(7);
 		XSSFCell0_7.setCellValue("账号历史");
-
+		XSSFCell XSSFCell0_8 = XSSFRow0.createCell(8);
+		XSSFCell0_8.setCellValue("检测日期");
+		
+		CreationHelper createHelper = xssfWorkbook.getCreationHelper();
+		CellStyle cellDateStyle = xssfWorkbook.createCellStyle();
+		cellDateStyle.setDataFormat(createHelper.createDataFormat().getFormat("yyyy/mm/dd hh:mm:ss"));
+		
 		for (int i = 1; i <= detectionAccountAllResult.size(); i++) {
-			DetectionAccount detectionAccount = detectionAccountAllResult.get(i-1);
+			DetectionAccount detectionAccount = detectionAccountAllResult.get(i - 1);
 			XSSFRow XSSFRow = xssfSheet.createRow(i);
 			Cell cell0 = XSSFRow.createCell(0);
 			Cell cell1 = XSSFRow.createCell(1);
@@ -129,6 +110,9 @@ public class DetectionService {
 			Cell cell5 = XSSFRow.createCell(5);
 			Cell cell6 = XSSFRow.createCell(6);
 			Cell cell7 = XSSFRow.createCell(7);
+			Cell cell8 = XSSFRow.createCell(8);
+			cell8.setCellStyle(cellDateStyle);
+			
 			cell0.setCellValue(detectionAccount.getAccount_name());
 			Float score = detectionAccount.getAccount_score();
 			String scoreMessage = "";
@@ -148,15 +132,18 @@ public class DetectionService {
 			cell5.setCellValue(detectionAccount.getDetail_score2());
 			cell6.setCellValue(detectionAccount.getDetail_score3());
 			cell7.setCellValue(detectionAccount.getDetail_score4());
+			cell8.setCellValue(detectionAccount.getCreated_at());
 		}
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		InputStream is = null;
 		try {
 			xssfWorkbook.write(os);
 			byte[] content = os.toByteArray();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 			String ymd = sdf.format(new Date());
 			String objectName = user_info_id + "/" + ymd + "/" + UUID.randomUUID().toString() + ".xlsx";
-			minioService.uploadFile(new ByteArrayInputStream(content), objectName, "application/octet-stream");
+			is = new ByteArrayInputStream(content);
+			minioService.uploadFile(is, objectName, "application/octet-stream");
 			resultJsonObject.put("export_link", minioService.presignedGetObject(objectName));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -166,13 +153,50 @@ public class DetectionService {
 				if (xssfWorkbook != null) {
 					xssfWorkbook.close();
 				}
-				os.close();
+				if (os != null) {
+					os.close();
+				}
+				if (is != null) {
+					is.close();
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		return resultJsonObject;
+	}
 
+	@Transactional
+	public JSONObject getDetectionAccountPages(UserGetScanHistoryParameters userGetScanHistoryParameters,
+			String user_info_id) {
+		JSONObject resultJsonObject = new JSONObject();
+		JSONArray recordsJsonArray = new JSONArray();
+		List<DetectionAccount> detectionAccountResult = detectionAccountMapper.selectByUserGetScanHistoryParameters(
+				userGetScanHistoryParameters, user_info_id, ConanApplicationConstants.INIT_PAGE_SIZE);
+		int total = detectionAccountMapper.selectByUserGetScanHistoryTotalParameters(userGetScanHistoryParameters,
+				user_info_id);
+		PageInfo pageInfo = new PageInfo();
+		pageInfo.setPageNo(userGetScanHistoryParameters.getPageNo());
+		pageInfo.setPageSize(ConanApplicationConstants.INIT_PAGE_SIZE);
+		pageInfo.setTotal(total);
+
+		resultJsonObject.put("page_info", pageInfo);
+
+		for (DetectionAccount detectionAccount : detectionAccountResult) {
+			JSONObject tempObject = new JSONObject();
+			tempObject.put("detection_account_id", detectionAccount.getId());
+			tempObject.put("created_at", detectionAccount.getCreated_at());
+			tempObject.put("account_name", detectionAccount.getAccount_name());
+			tempObject.put("account_score", detectionAccount.getAccount_score());
+			tempObject.put("detail_score0", detectionAccount.getDetail_score0());
+			tempObject.put("detail_score1", detectionAccount.getDetail_score1());
+			tempObject.put("detail_score2", detectionAccount.getDetail_score2());
+			tempObject.put("detail_score3", detectionAccount.getDetail_score3());
+			tempObject.put("detail_score4", detectionAccount.getDetail_score4());
+			recordsJsonArray.add(tempObject);
+		}
+		resultJsonObject.put("records", recordsJsonArray);
 		return resultJsonObject;
 
 	}
@@ -184,13 +208,13 @@ public class DetectionService {
 		if (costRecord == null) {
 			return jsonObject;
 		}
-		
-		int totalScanNo = detectionAccountMapper.selectByUserInfoIdTotal(user_info_id);//总检测数量
-		int dangerScanNo = detectionAccountMapper.selectDangerByUserInfoIdTotal(user_info_id);//总检测数量
-		
+
+		int totalScanNo = detectionAccountMapper.selectByUserInfoIdTotal(user_info_id);// 总检测数量
+		int dangerScanNo = detectionAccountMapper.selectDangerByUserInfoIdTotal(user_info_id);// 总检测数量
+
 		jsonObject.put("totalScanNo", totalScanNo);
 		jsonObject.put("dangerScanNo", dangerScanNo);
-		jsonObject.put("dangerPercent", dangerScanNo*100f / totalScanNo);
+		jsonObject.put("dangerPercent", dangerScanNo * 100f / totalScanNo);
 		jsonObject.put("recentScanTime", costRecord.getCreated_at());
 		return jsonObject;
 	}
@@ -205,7 +229,7 @@ public class DetectionService {
 		}
 		// 生产用户账单
 		String uuid = UUID.randomUUID().toString();// 生成唯一主键
-		
+
 		float gold_amount = userRemain.getGold_amount();
 		float gold_coupon = userRemain.getGold_coupon();
 		float bill_amount = 0;
@@ -246,7 +270,7 @@ public class DetectionService {
 					detectionAccount.setCost(1.0f);
 				} else {
 					List<Float> scoreList = ConanUtils.randomList5(scan_account, finalResult.getResult());
-					detectionAccount.setAccount_score(finalResult.getResult()*1f);
+					detectionAccount.setAccount_score(finalResult.getResult() * 1f);
 					detectionAccount.setDetail_score0(scoreList.get(0));
 					detectionAccount.setDetail_score1(scoreList.get(1));
 					detectionAccount.setDetail_score2(scoreList.get(2));
@@ -299,7 +323,7 @@ public class DetectionService {
 		costRecordMapper.insertSelective(costRecord);
 
 		detectionAccountMapper.insert(detectionAccount);
-		
+
 		JSONObject resultJsonObject = new JSONObject();
 		resultJsonObject.put("bill_id", uuid);
 		resultJsonObject.put("created_at", new Date());
@@ -308,19 +332,19 @@ public class DetectionService {
 		resultJsonObject.put("bill_remain", gold_amount + gold_coupon);
 		resultJsonObject.put("bill_digest", "单账号检测|检测记录ID: " + uuid);
 		resultJsonObject.put("cost_type", 1);
-		
+
 		JSONArray jsonArray = new JSONArray();
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("scan_account_id", detectionAccount.getId());
 		jsonObject.put("created_at", new Date());
 		jsonObject.put("account_name", detectionAccount.getAccount_name());
 		jsonObject.put("account_score", detectionAccount.getAccount_score());
-		jsonObject.put("detail_score0",detectionAccount.getDetail_score0());
-		jsonObject.put("detail_score1",detectionAccount.getDetail_score1());
-		jsonObject.put("detail_score2",detectionAccount.getDetail_score2());
-		jsonObject.put("detail_score3",detectionAccount.getDetail_score3());
-		jsonObject.put("detail_score4",detectionAccount.getDetail_score4());
-		jsonObject.put("scan_cost",detectionAccount.getCost());
+		jsonObject.put("detail_score0", detectionAccount.getDetail_score0());
+		jsonObject.put("detail_score1", detectionAccount.getDetail_score1());
+		jsonObject.put("detail_score2", detectionAccount.getDetail_score2());
+		jsonObject.put("detail_score3", detectionAccount.getDetail_score3());
+		jsonObject.put("detail_score4", detectionAccount.getDetail_score4());
+		jsonObject.put("scan_cost", detectionAccount.getCost());
 		jsonArray.add(jsonObject);
 		resultJsonObject.put("scan_accounts", jsonArray);
 		return resultJsonObject;
@@ -336,11 +360,11 @@ public class DetectionService {
 		}
 		// 生产用户账单
 		String uuid = UUID.randomUUID().toString();// 生成唯一主键
-		
+
 		float gold_amount = userRemain.getGold_amount();
 		float gold_coupon = userRemain.getGold_coupon();
 		float bill_amount = 0;
-		
+
 		String export_link = null;
 		List<DetectionAccount> dectionAccountList = new ArrayList<>();
 		List<String> scanAccountList = new ArrayList<>();
@@ -355,10 +379,10 @@ public class DetectionService {
 				String scanAccountStr = null;
 				scanAccountStr = ConanUtils.getCellValueByCell(xssfSheet.getRow(i).getCell(0));
 				if (StringUtils.isBlank(scanAccountStr)) {
-					Cell celli_0 =  xssfSheet.getRow(i).createCell(0);
+					Cell celli_0 = xssfSheet.getRow(i).createCell(0);
 					celli_0.setCellType(CellType.STRING);
 					celli_0.setCellValue("");
-					Cell celli_1 =  xssfSheet.getRow(i).createCell(1);
+					Cell celli_1 = xssfSheet.getRow(i).createCell(1);
 					celli_1.setCellType(CellType.STRING);
 					celli_1.setCellValue(ConanUtils.MD5(""));
 				} else {
@@ -441,7 +465,8 @@ public class DetectionService {
 							detectionAccount.setDetail_score4(0f);
 							detectionAccount.setCost(1.0f);
 						} else if (tempShort >= 60 && tempShort < 80) {
-							List<Float> scoreList = ConanUtils.randomList5(ConanUtils.getCellValueByCell(cell0), tempShort);
+							List<Float> scoreList = ConanUtils.randomList5(ConanUtils.getCellValueByCell(cell0),
+									tempShort);
 							cell1.setCellValue(ConanApplicationConstants.SUSPICIOUS);
 							cell2.setCellValue(tempShort);
 							cell3.setCellValue(scoreList.get(0));
@@ -457,8 +482,9 @@ public class DetectionService {
 							detectionAccount.setDetail_score3(scoreList.get(3));
 							detectionAccount.setDetail_score4(scoreList.get(4));
 							detectionAccount.setCost(1.0f);
-						}else {
-							List<Float> scoreList = ConanUtils.randomList5(ConanUtils.getCellValueByCell(cell0), tempShort);
+						} else {
+							List<Float> scoreList = ConanUtils.randomList5(ConanUtils.getCellValueByCell(cell0),
+									tempShort);
 							cell1.setCellValue(ConanApplicationConstants.DANGER);
 							cell2.setCellValue(tempShort);
 							cell3.setCellValue(scoreList.get(0));
@@ -541,7 +567,7 @@ public class DetectionService {
 		userRemain.setGold_coupon(gold_coupon);
 		userRemain.setUpdated_at(new Date());
 		userRemainMapper.updateByPrimaryKey(userRemain);
-		
+
 		UserBill userBill = new UserBill();
 		userBill.setId(uuid);
 		userBill.setCreated_at(new Date());
@@ -551,7 +577,7 @@ public class DetectionService {
 		userBill.setBill_digest("批量账号检测|检测记录ID: " + uuid);
 		userBill.setRemain_gold(gold_amount + gold_coupon);
 		userBillMapper.insertSelective(userBill);
-		
+
 		// 生产cost记录
 		CostRecord costRecord = new CostRecord();
 		costRecord.setId(uuid);
@@ -572,28 +598,29 @@ public class DetectionService {
 		resultJsonObject.put("bill_remain", gold_amount + gold_coupon);
 		resultJsonObject.put("bill_digest", "批量账号检测|检测记录ID: " + uuid);
 		resultJsonObject.put("cost_type", 2);
-		
+
 		resultJsonObject.put("export_link", export_link);
-		
+
 		JSONArray jsonArray = new JSONArray();
-		
+
 		List<DetectionAccount> detectionAccountInsertList = new ArrayList<>();
-		for (int i=0;i<dectionAccountList.size();i++) {
+		for (int i = 0; i < dectionAccountList.size(); i++) {
 			DetectionAccount detectionAccount = dectionAccountList.get(i);
-			/*JSONObject jsonObject = new JSONObject();
-			jsonObject.put("scan_account_id", detectionAccount.getId());
-			jsonObject.put("created_at", new Date());
-			jsonObject.put("account_name", detectionAccount.getAccount_name());
-			jsonObject.put("account_score", detectionAccount.getAccount_score());
-			jsonObject.put("detail_score0",detectionAccount.getDetail_score0());
-			jsonObject.put("detail_score1",detectionAccount.getDetail_score1());
-			jsonObject.put("detail_score2",detectionAccount.getDetail_score2());
-			jsonObject.put("detail_score3",detectionAccount.getDetail_score3());
-			jsonObject.put("detail_score4",detectionAccount.getDetail_score4());
-			jsonObject.put("scan_cost",detectionAccount.getCost());
-			jsonArray.add(jsonObject);*/
+			/*
+			 * JSONObject jsonObject = new JSONObject(); jsonObject.put("scan_account_id",
+			 * detectionAccount.getId()); jsonObject.put("created_at", new Date());
+			 * jsonObject.put("account_name", detectionAccount.getAccount_name());
+			 * jsonObject.put("account_score", detectionAccount.getAccount_score());
+			 * jsonObject.put("detail_score0",detectionAccount.getDetail_score0());
+			 * jsonObject.put("detail_score1",detectionAccount.getDetail_score1());
+			 * jsonObject.put("detail_score2",detectionAccount.getDetail_score2());
+			 * jsonObject.put("detail_score3",detectionAccount.getDetail_score3());
+			 * jsonObject.put("detail_score4",detectionAccount.getDetail_score4());
+			 * jsonObject.put("scan_cost",detectionAccount.getCost());
+			 * jsonArray.add(jsonObject);
+			 */
 			detectionAccountInsertList.add(dectionAccountList.get(i));
-			if(detectionAccountInsertList.size()==500||i==dectionAccountList.size()-1) {
+			if (detectionAccountInsertList.size() == 500 || i == dectionAccountList.size() - 1) {
 				detectionAccountMapper.insertList(detectionAccountInsertList);
 				detectionAccountInsertList.clear();
 			}

@@ -1,7 +1,5 @@
 package com.conan.console.server.parameter;
 
-import java.util.Date;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -9,7 +7,7 @@ import javax.validation.constraints.Size;
 
 public class UserGetScanHistoryParameters {
 	@NotNull(message = "pageNo不能为空")
-	@Min(value = 1, message = "pageNo最小为1")
+	@Min(value = 0, message = "pageNo最小为0")
 	private int pageNo;
 
 	@NotNull(message = "scan_status不能为空")
