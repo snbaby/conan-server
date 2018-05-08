@@ -13,13 +13,13 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.xssf.streaming.SXSSFCell;
-import org.apache.poi.xssf.streaming.SXSSFRow;
-import org.apache.poi.xssf.streaming.SXSSFSheet;
-import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,26 +73,26 @@ public class DetectionService {
 		List<DetectionAccount> detectionAccountAllResult = detectionAccountMapper
 				.selectByUserGetScanHistoryAllParameters(userGetScanHistoryParameters, user_info_id);
 
-		SXSSFWorkbook xssfWorkbook = new SXSSFWorkbook();
-		SXSSFSheet xssfSheet = xssfWorkbook.createSheet("conan");
-		SXSSFRow XSSFRow0 = xssfSheet.createRow(0);
-		SXSSFCell XSSFCell0_0 = XSSFRow0.createCell(0);
+		XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+		XSSFSheet xssfSheet = xssfWorkbook.createSheet("conan");
+		XSSFRow XSSFRow0 = xssfSheet.createRow(0);
+		XSSFCell XSSFCell0_0 = XSSFRow0.createCell(0);
 		XSSFCell0_0.setCellValue("账号名称");
-		SXSSFCell XSSFCell0_1 = XSSFRow0.createCell(1);
+		XSSFCell XSSFCell0_1 = XSSFRow0.createCell(1);
 		XSSFCell0_1.setCellValue("账号状态");
-		SXSSFCell XSSFCell0_2 = XSSFRow0.createCell(2);
+		XSSFCell XSSFCell0_2 = XSSFRow0.createCell(2);
 		XSSFCell0_2.setCellValue("分数");
-		SXSSFCell XSSFCell0_3 = XSSFRow0.createCell(3);
+		XSSFCell XSSFCell0_3 = XSSFRow0.createCell(3);
 		XSSFCell0_3.setCellValue("账号基本分数");
-		SXSSFCell XSSFCell0_4 = XSSFRow0.createCell(4);
+		XSSFCell XSSFCell0_4 = XSSFRow0.createCell(4);
 		XSSFCell0_4.setCellValue("账号标签属性");
-		SXSSFCell XSSFCell0_5 = XSSFRow0.createCell(5);
+		XSSFCell XSSFCell0_5 = XSSFRow0.createCell(5);
 		XSSFCell0_5.setCellValue("最近行为轨迹");
-		SXSSFCell XSSFCell0_6 = XSSFRow0.createCell(6);
+		XSSFCell XSSFCell0_6 = XSSFRow0.createCell(6);
 		XSSFCell0_6.setCellValue("交易活跃度");
-		SXSSFCell XSSFCell0_7 = XSSFRow0.createCell(7);
+		XSSFCell XSSFCell0_7 = XSSFRow0.createCell(7);
 		XSSFCell0_7.setCellValue("账号历史");
-		SXSSFCell XSSFCell0_8 = XSSFRow0.createCell(8);
+		XSSFCell XSSFCell0_8 = XSSFRow0.createCell(8);
 		XSSFCell0_8.setCellValue("检测日期");
 		
 		CreationHelper createHelper = xssfWorkbook.getCreationHelper();
@@ -101,16 +101,16 @@ public class DetectionService {
 		
 		for (int i = 1; i <= detectionAccountAllResult.size(); i++) {
 			DetectionAccount detectionAccount = detectionAccountAllResult.get(i - 1);
-			SXSSFRow SXSSFRow = xssfSheet.createRow(i);
-			SXSSFCell cell0 = SXSSFRow.createCell(0);
-			SXSSFCell cell1 = SXSSFRow.createCell(1);
-			SXSSFCell cell2 = SXSSFRow.createCell(2);
-			SXSSFCell cell3 = SXSSFRow.createCell(3);
-			SXSSFCell cell4 = SXSSFRow.createCell(4);
-			SXSSFCell cell5 = SXSSFRow.createCell(5);
-			SXSSFCell cell6 = SXSSFRow.createCell(6);
-			SXSSFCell cell7 = SXSSFRow.createCell(7);
-			SXSSFCell cell8 = SXSSFRow.createCell(8);
+			XSSFRow XSSFRow = xssfSheet.createRow(i);
+			Cell cell0 = XSSFRow.createCell(0);
+			Cell cell1 = XSSFRow.createCell(1);
+			Cell cell2 = XSSFRow.createCell(2);
+			Cell cell3 = XSSFRow.createCell(3);
+			Cell cell4 = XSSFRow.createCell(4);
+			Cell cell5 = XSSFRow.createCell(5);
+			Cell cell6 = XSSFRow.createCell(6);
+			Cell cell7 = XSSFRow.createCell(7);
+			Cell cell8 = XSSFRow.createCell(8);
 			cell8.setCellStyle(cellDateStyle);
 			
 			cell0.setCellValue(detectionAccount.getAccount_name());
@@ -152,7 +152,6 @@ public class DetectionService {
 			try {
 				if (xssfWorkbook != null) {
 					xssfWorkbook.close();
-					xssfWorkbook.dispose();
 				}
 				if (os != null) {
 					os.close();
@@ -369,23 +368,21 @@ public class DetectionService {
 		String export_link = null;
 		List<DetectionAccount> dectionAccountList = new ArrayList<>();
 		List<String> scanAccountList = new ArrayList<>();
-		SXSSFWorkbook xwb = null;
-		XSSFWorkbook xWorkbook = null;
+		XSSFWorkbook xwb = null;
 		InputStream inputStream = null;
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		try {
 			inputStream = minioService.downloadFile(scan_file);
-			xWorkbook = new XSSFWorkbook(inputStream);
-			xwb = new SXSSFWorkbook(xWorkbook);
-			SXSSFSheet xssfSheet = xwb.getSheetAt(0);
+			xwb = new XSSFWorkbook(inputStream);
+			XSSFSheet xssfSheet = xwb.getSheetAt(0);
 			for (int i = 1; i <= xssfSheet.getLastRowNum(); i++) {// 获取待检测账号列表
 				String scanAccountStr = null;
 				scanAccountStr = ConanUtils.getCellValueByCell(xssfSheet.getRow(i).getCell(0));
 				if (StringUtils.isBlank(scanAccountStr)) {
-					SXSSFCell celli_0 = xssfSheet.getRow(i).createCell(0);
+					Cell celli_0 = xssfSheet.getRow(i).createCell(0);
 					celli_0.setCellType(CellType.STRING);
 					celli_0.setCellValue("");
-					SXSSFCell celli_1 = xssfSheet.getRow(i).createCell(1);
+					Cell celli_1 = xssfSheet.getRow(i).createCell(1);
 					celli_1.setCellType(CellType.STRING);
 					celli_1.setCellValue(ConanUtils.MD5(""));
 				} else {
@@ -399,7 +396,7 @@ public class DetectionService {
 						md5 = ConanUtils.MD5(tempString.charAt(0) + "***" + tempString.charAt(tempString.length() - 1));
 						scanAccountList.add(md5);
 					}
-					SXSSFCell cell1 = xssfSheet.getRow(i).createCell(1);
+					Cell cell1 = xssfSheet.getRow(i).createCell(1);
 					cell1.setCellType(CellType.STRING);
 					cell1.setCellValue(md5);
 				}
@@ -413,14 +410,14 @@ public class DetectionService {
 
 			for (int i = 1; i <= xssfSheet.getLastRowNum(); i++) {
 				String dectionAccountId = UUID.randomUUID().toString();// 生成唯一主键
-				SXSSFCell cell0 = xssfSheet.getRow(i).getCell(0);
-				SXSSFCell cell1 = xssfSheet.getRow(i).getCell(1);
-				SXSSFCell cell2 = xssfSheet.getRow(i).createCell(2);
-				SXSSFCell cell3 = xssfSheet.getRow(i).createCell(3);
-				SXSSFCell cell4 = xssfSheet.getRow(i).createCell(4);
-				SXSSFCell cell5 = xssfSheet.getRow(i).createCell(5);
-				SXSSFCell cell6 = xssfSheet.getRow(i).createCell(6);
-				SXSSFCell cell7 = xssfSheet.getRow(i).createCell(7);
+				Cell cell0 = xssfSheet.getRow(i).getCell(0);
+				Cell cell1 = xssfSheet.getRow(i).getCell(1);
+				Cell cell2 = xssfSheet.getRow(i).createCell(2);
+				Cell cell3 = xssfSheet.getRow(i).createCell(3);
+				Cell cell4 = xssfSheet.getRow(i).createCell(4);
+				Cell cell5 = xssfSheet.getRow(i).createCell(5);
+				Cell cell6 = xssfSheet.getRow(i).createCell(6);
+				Cell cell7 = xssfSheet.getRow(i).createCell(7);
 				String md5 = ConanUtils.getCellValueByCell(cell1);// 字符
 				// 账号记录
 				DetectionAccount detectionAccount = new DetectionAccount();
@@ -545,12 +542,7 @@ public class DetectionService {
 			try {
 				if (xwb != null) {
 					xwb.close();
-					xwb.dispose();
 				}
-				if(xWorkbook != null) {
-					xWorkbook.close();
-				}
-				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -628,7 +620,7 @@ public class DetectionService {
 			 * jsonArray.add(jsonObject);
 			 */
 			detectionAccountInsertList.add(dectionAccountList.get(i));
-			if (detectionAccountInsertList.size() == 1000 || i == dectionAccountList.size() - 1) {
+			if (detectionAccountInsertList.size() == 500 || i == dectionAccountList.size() - 1) {
 				detectionAccountMapper.insertList(detectionAccountInsertList);
 				detectionAccountInsertList.clear();
 			}

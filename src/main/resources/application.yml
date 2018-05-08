@@ -1,14 +1,6 @@
 server:
   port: 7080
-
-spring:
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 10MB
-      max-request-size: 10MB
-
-
+  
 logging:
     path: /var/log/conan/console
     level:
