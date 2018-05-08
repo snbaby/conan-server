@@ -20,6 +20,7 @@
     <result column="recharge_type" jdbcType="VARCHAR" property="recharge_type" />
     <result column="user_info_id" jdbcType="VARCHAR" property="user_info_id" />
     <result column="phone_no" jdbcType="VARCHAR" property="phone_no" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
     <result column="verified_time" jdbcType="TIMESTAMP" property="verified_time" />
     <result column="success_time" jdbcType="TIMESTAMP" property="success_time" />
   </resultMap>
