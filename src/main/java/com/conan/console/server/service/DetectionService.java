@@ -209,6 +209,10 @@ public class DetectionService {
 		JSONObject jsonObject = new JSONObject();
 		CostRecord costRecord = costRecordMapper.selectLastRecordByUserInfoId(user_info_id);
 		if (costRecord == null) {
+			jsonObject.put("totalScanNo", 0);
+			jsonObject.put("dangerScanNo", 0);
+			jsonObject.put("dangerPercent", 0);
+			jsonObject.put("recentScanTime", null);
 			return jsonObject;
 		}
 
