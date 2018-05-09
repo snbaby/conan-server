@@ -42,6 +42,15 @@
     from detection_account
     where user_info_id = #{user_info_id}
     and cost_record_id = #{recordId}
+    <if test="account_name != null">
+        and account_name like "%"#{account_name}"%"
+    </if>
+    <if test="account_score_start != null">
+        and account_score <![CDATA[ >= ]]> #{account_score_start}
+    </if>
+    <if test="account_score_end != null">
+        and account_score <![CDATA[ <= ]]> #{account_score_end}
+    </if>
     limit ${(pageNo-1)*pageSize},${pageNo*pageSize}
   </select>
   
@@ -56,6 +65,15 @@
     from detection_account
     where user_info_id = #{user_info_id}
     and cost_record_id = #{recordId}
+    <if test="account_name != null">
+        and account_name like "%"#{account_name}"%"
+    </if>
+    <if test="account_score_start != null">
+        and account_score <![CDATA[ >= ]]> #{account_score_start}
+    </if>
+    <if test="account_score_end != null">
+        and account_score <![CDATA[ < ]]> #{account_score_end}
+    </if>
   </select>
   
   <select id="selectByUserInfoId" resultMap="BaseResultMap">

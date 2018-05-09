@@ -219,10 +219,10 @@ public class BillService {
 			resultJsonObject.put("cost_type", costRecord.getCost_type());
 			JSONArray jsonArray = new JSONArray();
 			List<DetectionAccount> detectionAccountList = detectionAccountMapper.selectByRecordIdAndUserInfoId(
-					costRecord.getId(), user_info_id, getBillDetailParameters.getPageNo(),
+					costRecord.getId(),getBillDetailParameters.getAccount_name(),getBillDetailParameters.getAccount_score_start(),getBillDetailParameters.getAccount_score_end(), user_info_id, getBillDetailParameters.getPageNo(),
 					ConanApplicationConstants.INIT_PAGE_SIZE);
 			List<DetectionAccount> detectionAccountListAll = detectionAccountMapper
-					.selectByRecordIdAndUserInfoIdAll(costRecord.getId(), user_info_id);
+					.selectByRecordIdAndUserInfoIdAll(costRecord.getId(),getBillDetailParameters.getAccount_name(),getBillDetailParameters.getAccount_score_start(),getBillDetailParameters.getAccount_score_end(), user_info_id);
 			PageInfo pageInfo = new PageInfo();
 			pageInfo.setPageNo(getBillDetailParameters.getPageNo());
 			pageInfo.setPageSize(ConanApplicationConstants.INIT_PAGE_SIZE);
