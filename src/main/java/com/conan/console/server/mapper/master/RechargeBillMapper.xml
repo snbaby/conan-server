@@ -21,6 +21,7 @@
     <result column="verified_time" jdbcType="TIMESTAMP" property="verified_time" />
     <result column="success_time" jdbcType="TIMESTAMP" property="success_time" />
     <result column="user_bill_id" jdbcType="VARCHAR" property="user_bill_id" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
     <result column="recharge_status" jdbcType="VARCHAR" property="recharge_status" />
   </resultMap>
   <sql id="Base_Column_List">
@@ -30,7 +31,7 @@
       This element was generated on Mon Apr 30 00:35:43 CST 2018.
     -->
     id, created_at, updated_at, recharge_type, photo, comment, rmb_amount, gold_amount, 
-    gold_coupon, gold_total, user_info_id, verified_time, success_time, user_bill_id,recharge_status
+    gold_coupon, gold_total, user_info_id, verified_time, success_time, user_bill_id,recharge_status,reason
   </sql>
   <select id="selectByUserIdAndRechargeStatusTotal" resultType="java.lang.Integer">
     <!--
@@ -143,7 +144,7 @@
       recharge_type, photo, comment, 
       rmb_amount, gold_amount, gold_coupon, 
       gold_total, user_info_id, verified_time, 
-      success_time, user_bill_id,recharge_status)
+      success_time, user_bill_id,recharge_status,reason)
     values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=TIMESTAMP}, #{updated_at,jdbcType=TIMESTAMP}, 
       #{recharge_type,jdbcType=VARCHAR}, #{photo,jdbcType=VARCHAR}, #{comment,jdbcType=VARCHAR}, 
       #{rmb_amount,jdbcType=REAL}, #{gold_amount,jdbcType=REAL}, #{gold_coupon,jdbcType=REAL}, 
