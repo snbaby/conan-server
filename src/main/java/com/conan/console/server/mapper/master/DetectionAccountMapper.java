@@ -26,7 +26,7 @@ public interface DetectionAccountMapper {
 			@Param("account_score_end") String account_score_end, @Param("user_info_id") String user_info_id,
 			@Param("pageNo") int pageNo, @Param("pageSize") int pageSize);
 
-	List<DetectionAccount> selectByRecordIdAndUserInfoIdAll(@Param("recordId") String costRecordId,
+	int selectByRecordIdAndUserInfoIdTotal(@Param("recordId") String costRecordId,
 			@Param("account_name") String account_name, @Param("account_score_start") String account_score_start,
 			@Param("account_score_end") String account_score_end, @Param("user_info_id") String user_info_id);
 

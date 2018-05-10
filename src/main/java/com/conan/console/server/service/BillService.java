@@ -221,17 +221,14 @@ public class BillService {
 			List<DetectionAccount> detectionAccountList = detectionAccountMapper.selectByRecordIdAndUserInfoId(
 					costRecord.getId(),getBillDetailParameters.getAccount_name(),getBillDetailParameters.getAccount_score_start(),getBillDetailParameters.getAccount_score_end(), user_info_id, getBillDetailParameters.getPageNo(),
 					ConanApplicationConstants.INIT_PAGE_SIZE);
-			List<DetectionAccount> detectionAccountListAll = detectionAccountMapper
-					.selectByRecordIdAndUserInfoIdAll(costRecord.getId(),getBillDetailParameters.getAccount_name(),getBillDetailParameters.getAccount_score_start(),getBillDetailParameters.getAccount_score_end(), user_info_id);
+			int detectionAccountListTotal = detectionAccountMapper
+					.selectByRecordIdAndUserInfoIdTotal(costRecord.getId(),getBillDetailParameters.getAccount_name(),getBillDetailParameters.getAccount_score_start(),getBillDetailParameters.getAccount_score_end(), user_info_id);
 			PageInfo pageInfo = new PageInfo();
 			pageInfo.setPageNo(getBillDetailParameters.getPageNo());
 			pageInfo.setPageSize(ConanApplicationConstants.INIT_PAGE_SIZE);
-			if (detectionAccountListAll == null) {
-				pageInfo.setTotal(0);
-			} else {
-				pageInfo.setTotal(detectionAccountListAll.size());
-			}
+			pageInfo.setTotal(detectionAccountListTotal);
 			resultJsonObject.put("page_info", pageInfo);
+			
 			for (DetectionAccount detectionAccount : detectionAccountList) {
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("scan_account_id", detectionAccount.getId());
