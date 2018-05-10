@@ -87,7 +87,7 @@
         and cost_id = #{queryCostListParameters.cost_id}
     </if>
     <if test="queryCostListParameters.pageNo != null">
-        limit ${(queryCostListParameters.pageNo-1)*pageSize},${queryCostListParameters.pageNo*pageSize}
+        limit ${(queryCostListParameters.pageNo-1)*pageSize},${pageSize}
     </if>
   </select>
 </mapper>

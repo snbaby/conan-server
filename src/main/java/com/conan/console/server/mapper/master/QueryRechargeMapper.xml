@@ -101,7 +101,7 @@
         and id = #{queryRechargeListParameters.recharge_id}
     </if>
     <if test="queryRechargeListParameters.pageNo != null">
-        limit ${(queryRechargeListParameters.pageNo-1)*pageSize},${queryRechargeListParameters.pageNo*pageSize}
+        limit ${(queryRechargeListParameters.pageNo-1)*pageSize},${pageSize}
     </if>
   </select>
   

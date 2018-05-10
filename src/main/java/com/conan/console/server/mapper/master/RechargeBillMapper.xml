@@ -112,7 +112,7 @@
        <when test="recharge_status ==2 ">and recharge_status = 2</when>  
        <when test="recharge_status ==3 ">and recharge_status = 3</when>    
     </choose>
-    limit ${(pageNo-1)*pageSize},${pageNo*pageSize}
+    limit ${(pageNo-1)*pageSize},${pageSize}
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     <!--

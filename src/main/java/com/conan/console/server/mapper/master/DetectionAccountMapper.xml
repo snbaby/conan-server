@@ -51,7 +51,7 @@
     <if test="account_score_end != null">
         and account_score <![CDATA[ <= ]]> #{account_score_end}
     </if>
-    limit ${(pageNo-1)*pageSize},${pageNo*pageSize}
+    limit ${(pageNo-1)*pageSize},${pageSize}
   </select>
   
   <select id="selectByRecordIdAndUserInfoIdTotal" resultType="java.lang.Integer">
@@ -150,7 +150,7 @@
     from detection_account
     where cost_record_id = #{recordId}
     <if test="pageNo != null">
-        limit ${(pageNo-1)*pageSize},${pageNo*pageSize}
+        limit ${(pageNo-1)*pageSize},${pageSize}
     </if>
   </select>
   
@@ -261,7 +261,7 @@
         and created_at <![CDATA[ <= ]]> #{userGetScanHistoryParameters.scan_date_end}
     </if>
     <if test="userGetScanHistoryParameters.pageNo!= null">
-        limit ${(userGetScanHistoryParameters.pageNo-1)*pageSize},${userGetScanHistoryParameters.pageNo*pageSize}
+        limit ${(userGetScanHistoryParameters.pageNo-1)*pageSize},${pageSize}
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
