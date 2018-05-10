@@ -51,6 +51,7 @@
     <if test="account_score_end != null">
         and account_score <![CDATA[ <= ]]> #{account_score_end}
     </if>
+    order by created_at desc
     limit ${(pageNo-1)*pageSize},${pageSize}
   </select>
   
@@ -149,6 +150,7 @@
     *
     from detection_account
     where cost_record_id = #{recordId}
+    order by created_at desc
     <if test="pageNo != null">
         limit ${(pageNo-1)*pageSize},${pageSize}
     </if>
@@ -260,6 +262,7 @@
     <if test="userGetScanHistoryParameters.scan_date_end != null">
         and created_at <![CDATA[ <= ]]> #{userGetScanHistoryParameters.scan_date_end}
     </if>
+    order by created_at desc
     <if test="userGetScanHistoryParameters.pageNo!= null">
         limit ${(userGetScanHistoryParameters.pageNo-1)*pageSize},${pageSize}
     </if>

@@ -86,6 +86,7 @@
     <if test="queryCostListParameters.cost_id != null">
         and cost_id = #{queryCostListParameters.cost_id}
     </if>
+    order by created_at desc
     <if test="queryCostListParameters.pageNo != null">
         limit ${(queryCostListParameters.pageNo-1)*pageSize},${pageSize}
     </if>

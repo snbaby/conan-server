@@ -112,6 +112,7 @@
        <when test="recharge_status ==2 ">and recharge_status = 2</when>  
        <when test="recharge_status ==3 ">and recharge_status = 3</when>    
     </choose>
+    order by created_at desc
     limit ${(pageNo-1)*pageSize},${pageSize}
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">

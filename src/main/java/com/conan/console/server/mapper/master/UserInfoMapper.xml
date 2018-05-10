@@ -116,6 +116,7 @@
     <if test="queryUserListParameters.login_end_date != null">
         and last_login_at <![CDATA[ <= ]]>  #{queryUserListParameters.login_end_date}
     </if>
+    order by created_at desc
     <if test="queryUserListParameters.pageNo != null">
         limit ${(queryUserListParameters.pageNo-1)*pageSize},${pageSize}
     </if>
