@@ -21,6 +21,7 @@ import org.apache.poi.xssf.streaming.SXSSFCell;
 import org.apache.poi.xssf.streaming.SXSSFRow;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -384,14 +385,17 @@ public class DetectionService {
 			XSSFSheet xssfSheet = xwb.getSheetAt(0);
 			for (int i = 1; i <= xssfSheet.getLastRowNum(); i++) {// 获取待检测账号列表
 				String scanAccountStr = null;
-				scanAccountStr = ConanUtils.getCellValueByCell(xssfSheet.getRow(i).getCell(0));
+				try {
+					scanAccountStr = ConanUtils.getCellValueByCell(xssfSheet.getRow(i).getCell(0));
+				} catch (Exception e) {
+					// TODO: handle exception
+					scanAccountStr = "";
+				}
 				if (StringUtils.isBlank(scanAccountStr)) {
+					xssfSheet.createRow(i);
 					Cell celli_0 = xssfSheet.getRow(i).createCell(0);
 					celli_0.setCellType(CellType.STRING);
 					celli_0.setCellValue("");
-					Cell celli_1 = xssfSheet.getRow(i).createCell(1);
-					celli_1.setCellType(CellType.STRING);
-					celli_1.setCellValue(ConanUtils.MD5(""));
 				} else {
 					String tempString = scanAccountStr.trim();
 					System.out.println(tempString);
@@ -414,10 +418,15 @@ public class DetectionService {
 			for (FinalResult finalResult : finalResultList) {
 				finalResultMap.put(finalResult.getNick_hash(), finalResult.getResult());
 			}
-
+			CreationHelper createHelper = xwb.getCreationHelper();
+			CellStyle cellDateStyle = xwb.createCellStyle();
+			cellDateStyle.setDataFormat(createHelper.createDataFormat().getFormat("yyyy/mm/dd hh:mm:ss"));
 			for (int i = 1; i <= xssfSheet.getLastRowNum(); i++) {
 				String dectionAccountId = UUID.randomUUID().toString();// 生成唯一主键
 				Cell cell0 = xssfSheet.getRow(i).getCell(0);
+				if(StringUtils.isBlank(ConanUtils.getCellValueByCell(cell0))) {
+					continue;
+				}
 				Cell cell1 = xssfSheet.getRow(i).getCell(1);
 				Cell cell2 = xssfSheet.getRow(i).createCell(2);
 				Cell cell3 = xssfSheet.getRow(i).createCell(3);
@@ -425,7 +434,10 @@ public class DetectionService {
 				Cell cell5 = xssfSheet.getRow(i).createCell(5);
 				Cell cell6 = xssfSheet.getRow(i).createCell(6);
 				Cell cell7 = xssfSheet.getRow(i).createCell(7);
+				Cell cell8 = xssfSheet.getRow(i).createCell(8);
+				cell8.setCellStyle(cellDateStyle);
 				String md5 = ConanUtils.getCellValueByCell(cell1);// 字符
+				
 				// 账号记录
 				DetectionAccount detectionAccount = new DetectionAccount();
 				detectionAccount.setId(dectionAccountId);
@@ -434,7 +446,7 @@ public class DetectionService {
 				detectionAccount.setCost_record_id(uuid);
 				detectionAccount.setAccount_name(ConanUtils.getCellValueByCell(cell0));
 				detectionAccount.setUser_info_id(user_info_id);
-
+				
 				if (gold_amount <= 0 && gold_coupon <= 0) {
 					// 设置excel
 					cell1.setCellValue(ConanApplicationConstants.NO_BALANCE_MESSAGE);
@@ -444,6 +456,7 @@ public class DetectionService {
 					cell5.setCellValue(0);
 					cell6.setCellValue(0);
 					cell7.setCellValue(0);
+					cell8.setCellValue(new Date());
 
 					detectionAccount.setAccount_score(ConanApplicationConstants.NO_BALANCE_CODE);
 					detectionAccount.setDetail_score0(0f);
@@ -463,6 +476,7 @@ public class DetectionService {
 							cell5.setCellValue(0);
 							cell6.setCellValue(0);
 							cell7.setCellValue(0);
+							cell8.setCellValue(new Date());
 
 							detectionAccount.setAccount_score(ConanApplicationConstants.NOT_MATCH_CODE);
 							detectionAccount.setDetail_score0(0f);
@@ -481,6 +495,7 @@ public class DetectionService {
 							cell5.setCellValue(scoreList.get(2));
 							cell6.setCellValue(scoreList.get(3));
 							cell7.setCellValue(scoreList.get(4));
+							cell8.setCellValue(new Date());
 
 							detectionAccount.setAccount_score(tempShort.floatValue());
 							detectionAccount.setDetail_score0(scoreList.get(0));
@@ -499,6 +514,7 @@ public class DetectionService {
 							cell5.setCellValue(scoreList.get(2));
 							cell6.setCellValue(scoreList.get(3));
 							cell7.setCellValue(scoreList.get(4));
+							cell8.setCellValue(new Date());
 
 							detectionAccount.setAccount_score(tempShort.floatValue());
 							detectionAccount.setDetail_score0(scoreList.get(0));
@@ -522,6 +538,7 @@ public class DetectionService {
 						cell5.setCellValue(0);
 						cell6.setCellValue(0);
 						cell7.setCellValue(0);
+						cell8.setCellValue(new Date());
 
 						detectionAccount.setAccount_score(-2.0f);
 						detectionAccount.setDetail_score0(0f);
