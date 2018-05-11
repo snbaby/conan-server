@@ -101,95 +101,66 @@ public class ConanUtils {
 		float f3 = Float.valueOf(decimalFormat.format(score * i3 / total));
 		float f4 = score - f0 - f1 - f2 - f3;
 		
-		float temp = 0.0f;
-		if(f0>10.0f) {
-			temp = f0-10.0f;
-			f0 = 10.0f;
+		float j0,j1,j2,j3,j4 = 0;
+		float temp = 0;
+		if(f0>10) {
+			temp = temp + f0-10;
+			f0=10;
+			j0=0;
 		}else {
-			temp = 0.0f;
-		}
-		f1 = temp+f1;
-		if(f1>20.0f) {
-			temp = f1-20.0f;
-			f1 = 20.0f;
-		}else {
-			temp = 0.0f;
-		}
-		f2 = temp+f2;
-		if(f2>30.0f) {
-			temp = f2-30.0f;
-			f2 = 30.0f;
-		}else {
-			temp = 0.0f;
+			j0 = 10 - f0;
 		}
 		
-		f3 = temp+f3;
-		if(f3>25.0f) {
-			temp = f3-25.0f;
-			f3 = 25.0f;
+		if(f1>20) {	
+			temp = temp + f1-20;
+			f1 = 20;
+			j1 = 0;
 		}else {
-			temp = 0.0f;
+			j1 = 20 -f1;
 		}
 		
-		f4 = temp+f4;
-		if(f4>15.0f) {
-			temp = f4-15.0f;
-			f4 = 15.0f;
+		if(f2>30) {
+			temp = temp + f2-30;
+			f2 = 30;
+			j2 = 0;
 		}else {
-			temp = 0.0f;
+			j2  = 30 -f2;
 		}
 		
-		if(temp>0.0f) {
-			f0 = f0 + temp;
-			if(f0>10.0f) {
-				temp = f0-10.0f;
-				f0 = 10.0f;
-			}else {
-				temp = 0.0f;
-			}
-		}
-		if(temp>0.0f) {	
-			f1 = temp+f1;
-			if(f1>20.0f) {
-				temp = f1-20.0f;
-				f1 = 20.0f;
-			}else {
-				temp = 0.0f;
-			}
-		}
-		if(temp>0.0f) {
-			f2 = temp+f2;
-			if(f2>30.0f) {
-				temp = f2-30.0f;
-				f2 = 30.0f;
-			}else {
-				temp = 0.0f;
-			}
-		}
-		if(temp>0.0f) {
-			f3 = temp+f3;
-			if(f3>25.0f) {
-				temp = f3-25.0f;
-				f3 = 25.0f;
-			}else {
-				temp = 0.0f;
-			}
-		}
-		if(temp>0.0f) {
-			f4 = temp+f4;
-			if(f4>15.0f) {
-				temp = f4-15.0f;
-				f4 = 15.0f;
-			}else {
-				temp = 0.0f;
-			}
+		if(f3>25) {
+			temp = temp + f3-25;
+			f3 = 25;
+			j3 = 0;
+		}else {
+			j3  = 25 -f3;
 		}
 		
-		resultList.add(f0);
-		resultList.add(f1);
-		resultList.add(f2);
-		resultList.add(f3);
-		resultList.add(f4);
+		if(f4>15) {
+			temp = temp + f4-15;
+			f4 = 15;
+			j4 = 0;
+		}else {
+			j4  = 15 -f4;
+		}
+		
+		float total1 = j0+j1+j2+j3+j4;
+		if(total>0) {
+			f0 = f0+ j0/total1*temp;
+			f1 = f1+ j1/total1*temp;
+			f2 = f2+ j2/total1*temp;
+			f3 = f3+ j3/total1*temp;
+			f4 = f4+ j4/total1*temp;
+		}
+		
+		resultList.add(fix2(f0));
+		resultList.add(fix2(f1));
+		resultList.add(fix2(f2));
+		resultList.add(fix2(f3));
+		resultList.add(fix2(f4));
 		return resultList;
+	}
+	
+	private static float fix2(float param) {
+		return (float)(Math.round(param*100))/100;
 	}
 }
