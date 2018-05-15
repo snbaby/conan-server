@@ -22,9 +22,9 @@ import com.conan.console.server.exception.ConanException;
 import com.conan.console.server.mapper.master.UserAuthMapper;
 import com.conan.console.server.mapper.master.UserInfoMapper;
 import com.conan.console.server.mapper.master.UserRemainMapper;
-import com.conan.console.server.parameter.QueryPreCheckParameters;
 import com.conan.console.server.utils.ConanApplicationConstants;
 import com.conan.console.server.utils.ConanExceptionConstants;
+import com.conan.console.server.utils.ConanUtils;
 
 @Service
 public class UserService {
@@ -307,7 +307,21 @@ public class UserService {
 				inputStream = minioService.downloadFile(scan_file);
 				xwb = new XSSFWorkbook(inputStream);
 				XSSFSheet xssfSheet = xwb.getSheetAt(0);
-				int scanAccountNo = xssfSheet.getLastRowNum();
+				int scanAccountNo = 0;
+				
+				for (int i = 1; i <= xssfSheet.getLastRowNum(); i++) {// 获取待检测账号列表
+					String scanAccountStr = null;
+					try {
+						scanAccountStr = ConanUtils.getCellValueByCell(xssfSheet.getRow(i).getCell(0));
+					} catch (Exception e) {
+						// TODO: handle exception
+						scanAccountStr = "";
+					}
+					if (!StringUtils.isBlank(scanAccountStr)) {
+						scanAccountNo ++;
+					} 
+				}
+				
 				if (userRemain.getGold_amount() + userRemain.getGold_coupon() >= scanAccountNo) {
 					resultJsonObject.put("scan_cnt", scanAccountNo);
 					resultJsonObject.put("scan_total", scanAccountNo);
@@ -331,7 +345,7 @@ public class UserService {
 					}
 				}
 				xwb.close();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				throw new ConanException(ConanExceptionConstants.SCAN_FILE_EXCEPTION_CODE,
 						ConanExceptionConstants.SCAN_FILE_EXCEPTION_MESSAGE,
