@@ -20,7 +20,7 @@ public class ConanApplicationConstants {
 	//未匹配
 	public static final float NOT_MATCH_CODE = -1f;
 	//不存在
-	public static final String NOT_EXIST_MESSAGE = "不存在";
+	public static final String NOT_EXIST_MESSAGE = "暂无危险信息";
 	//不存在
-	public static final float NOT_EXIST_CODE = -2f;
+	public static final float NOT_EXIST_CODE = 0f;
 }

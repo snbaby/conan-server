@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
@@ -85,82 +86,22 @@ public class ConanUtils {
 		return cellValue;
 	}
 
-	public static List<Float> randomList5(String str, float score) {
-		DecimalFormat decimalFormat = new DecimalFormat(".00");
-		String strMd5 = MD5(str);
-		int i0 = Integer.parseInt(Integer.toHexString(strMd5.charAt(0)));
-		int i1 = Integer.parseInt(Integer.toHexString(strMd5.charAt(1)));
-		int i2 = Integer.parseInt(Integer.toHexString(strMd5.charAt(2)));
-		int i3 = Integer.parseInt(Integer.toHexString(strMd5.charAt(3)));
-		int i4 = Integer.parseInt(Integer.toHexString(strMd5.charAt(4)));
-		int total = i0 + i1 + i2 + i3 + i4;
-		List<Float> resultList = new ArrayList<>();
-		float f0 = Float.valueOf(decimalFormat.format(score * i0 / total));
-		float f1 = Float.valueOf(decimalFormat.format(score * i1 / total));
-		float f2 = Float.valueOf(decimalFormat.format(score * i2 / total));
-		float f3 = Float.valueOf(decimalFormat.format(score * i3 / total));
-		float f4 = score - f0 - f1 - f2 - f3;
-		
-		float j0,j1,j2,j3,j4 = 0;
-		float temp = 0;
-		if(f0>10) {
-			temp = temp + f0-10;
-			f0=10;
-			j0=0;
-		}else {
-			j0 = 10 - f0;
+	public static List<Float> randomList5(float score) {
+		List<Float> floatList = new ArrayList<>();
+		floatList.add(10f);
+		floatList.add(20f);
+		floatList.add(30f);
+		floatList.add(25f);
+		floatList.add(15f);
+		int temp = (int) (100 - score);
+		while(temp>0) {
+			Random rand = new Random();
+	    	int index = rand.nextInt(5);
+	    	if(floatList.get(index)>5) {
+	    		floatList.set(index, floatList.get(index)-1);
+	    		temp = temp - 1 ;
+	    	}
 		}
-		
-		if(f1>20) {	
-			temp = temp + f1-20;
-			f1 = 20;
-			j1 = 0;
-		}else {
-			j1 = 20 -f1;
-		}
-		
-		if(f2>30) {
-			temp = temp + f2-30;
-			f2 = 30;
-			j2 = 0;
-		}else {
-			j2  = 30 -f2;
-		}
-		
-		if(f3>25) {
-			temp = temp + f3-25;
-			f3 = 25;
-			j3 = 0;
-		}else {
-			j3  = 25 -f3;
-		}
-		
-		if(f4>15) {
-			temp = temp + f4-15;
-			f4 = 15;
-			j4 = 0;
-		}else {
-			j4  = 15 -f4;
-		}
-		
-		float total1 = j0+j1+j2+j3+j4;
-		if(total>0) {
-			f0 = f0+ j0/total1*temp;
-			f1 = f1+ j1/total1*temp;
-			f2 = f2+ j2/total1*temp;
-			f3 = f3+ j3/total1*temp;
-			f4 = f4+ j4/total1*temp;
-		}
-		
-		resultList.add(fix2(f0));
-		resultList.add(fix2(f1));
-		resultList.add(fix2(f2));
-		resultList.add(fix2(f3));
-		resultList.add(fix2(f4));
-		return resultList;
-	}
-	
-	private static float fix2(float param) {
-		return (float)(Math.round(param*100))/100;
+		return floatList;
 	}
 }

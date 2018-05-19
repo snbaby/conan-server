@@ -260,7 +260,7 @@ public class DetectionService {
 		detectionAccount.setUser_info_id(user_info_id);
 		if (gold_coupon >= 0 || gold_amount >= 0) {
 			if (finalResult == null) {
-				detectionAccount.setAccount_score(-2.0f);
+				detectionAccount.setAccount_score(0f);
 				detectionAccount.setDetail_score0(0f);
 				detectionAccount.setDetail_score1(0f);
 				detectionAccount.setDetail_score2(0f);
@@ -277,7 +277,7 @@ public class DetectionService {
 					detectionAccount.setDetail_score4(0f);
 					detectionAccount.setCost(1.0f);
 				} else {
-					List<Float> scoreList = ConanUtils.randomList5(scan_account, finalResult.getResult());
+					List<Float> scoreList = ConanUtils.randomList5(finalResult.getResult());
 					detectionAccount.setAccount_score(finalResult.getResult() * 1f);
 					detectionAccount.setDetail_score0(scoreList.get(0));
 					detectionAccount.setDetail_score1(scoreList.get(1));
@@ -294,7 +294,7 @@ public class DetectionService {
 				bill_amount++;
 			}
 		} else {
-			detectionAccount.setAccount_score(-2.0f);
+			detectionAccount.setAccount_score(0f);
 			detectionAccount.setDetail_score0(0f);
 			detectionAccount.setDetail_score1(0f);
 			detectionAccount.setDetail_score2(0f);
@@ -486,8 +486,7 @@ public class DetectionService {
 							detectionAccount.setDetail_score4(0f);
 							detectionAccount.setCost(1.0f);
 						} else if (tempShort >= 60 && tempShort < 80) {
-							List<Float> scoreList = ConanUtils.randomList5(ConanUtils.getCellValueByCell(cell0),
-									tempShort);
+							List<Float> scoreList = ConanUtils.randomList5(tempShort);
 							cell1.setCellValue(ConanApplicationConstants.SUSPICIOUS);
 							cell2.setCellValue(tempShort);
 							cell3.setCellValue(scoreList.get(0));
@@ -505,8 +504,7 @@ public class DetectionService {
 							detectionAccount.setDetail_score4(scoreList.get(4));
 							detectionAccount.setCost(1.0f);
 						} else {
-							List<Float> scoreList = ConanUtils.randomList5(ConanUtils.getCellValueByCell(cell0),
-									tempShort);
+							List<Float> scoreList = ConanUtils.randomList5(tempShort);
 							cell1.setCellValue(ConanApplicationConstants.DANGER);
 							cell2.setCellValue(tempShort);
 							cell3.setCellValue(scoreList.get(0));
@@ -540,7 +538,7 @@ public class DetectionService {
 						cell7.setCellValue(0);
 						cell8.setCellValue(new Date());
 
-						detectionAccount.setAccount_score(-2.0f);
+						detectionAccount.setAccount_score(0f);
 						detectionAccount.setDetail_score0(0f);
 						detectionAccount.setDetail_score1(0f);
 						detectionAccount.setDetail_score2(0f);

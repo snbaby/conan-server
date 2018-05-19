@@ -24,10 +24,10 @@ datasource:
     username : root
     password : Apple1688!@#
     driver-class-name : com.mysql.jdbc.Driver
-    max-idle : 10
-    max-wait : 10000
-    min-idle : 5
-    initial-size : 5
+    max-idle : 40
+    max-wait : 40000
+    min-idle : 20
+    initial-size : 20
     validation-query : SELECT 1
     test-on-borrow : false
     test-while-idle : true
@@ -37,10 +37,10 @@ datasource:
     username : root
     password : Apple1688!@#
     driver-class-name : com.mysql.jdbc.Driver
-    max-idle : 10
-    max-wait : 10000
-    min-idle : 5
-    initial-size : 5
+    max-idle : 40
+    max-wait : 40000
+    min-idle : 20
+    initial-size : 20
     validation-query : SELECT 1
     test-on-borrow : false
     test-while-idle : true
