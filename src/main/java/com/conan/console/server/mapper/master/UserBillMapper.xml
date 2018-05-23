@@ -34,6 +34,7 @@
     <if test="userGetBillParameters.bill_date_end != null">
         and created_at <![CDATA[ <= ]]> #{userGetBillParameters.bill_date_end}
     </if>
+    order by created_at desc
   </select>
   <sql id="Base_Column_List">
     <!--

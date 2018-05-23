@@ -21,7 +21,6 @@ import org.apache.poi.xssf.streaming.SXSSFCell;
 import org.apache.poi.xssf.streaming.SXSSFRow;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +66,9 @@ public class DetectionService {
 
 	@Autowired
 	private MinioService minioService;
+	
+	@Autowired
+	private CacheService cacheService;
 
 	@Transactional
 	public JSONObject getDetectionAccountLink(UserGetScanHistoryParameters userGetScanHistoryParameters,
@@ -277,7 +279,7 @@ public class DetectionService {
 					detectionAccount.setDetail_score4(0f);
 					detectionAccount.setCost(1.0f);
 				} else {
-					List<Float> scoreList = ConanUtils.randomList5(finalResult.getResult());
+					List<Float> scoreList = cacheService.randomList5(scan_account,finalResult.getResult());
 					detectionAccount.setAccount_score(finalResult.getResult() * 1f);
 					detectionAccount.setDetail_score0(scoreList.get(0));
 					detectionAccount.setDetail_score1(scoreList.get(1));
@@ -486,7 +488,7 @@ public class DetectionService {
 							detectionAccount.setDetail_score4(0f);
 							detectionAccount.setCost(1.0f);
 						} else if (tempShort >= 60 && tempShort < 80) {
-							List<Float> scoreList = ConanUtils.randomList5(tempShort);
+							List<Float> scoreList = cacheService.randomList5(ConanUtils.getCellValueByCell(cell0),tempShort);
 							cell1.setCellValue(ConanApplicationConstants.SUSPICIOUS);
 							cell2.setCellValue(tempShort);
 							cell3.setCellValue(scoreList.get(0));
@@ -504,7 +506,7 @@ public class DetectionService {
 							detectionAccount.setDetail_score4(scoreList.get(4));
 							detectionAccount.setCost(1.0f);
 						} else {
-							List<Float> scoreList = ConanUtils.randomList5(tempShort);
+							List<Float> scoreList = cacheService.randomList5(ConanUtils.getCellValueByCell(cell0),tempShort);
 							cell1.setCellValue(ConanApplicationConstants.DANGER);
 							cell2.setCellValue(tempShort);
 							cell3.setCellValue(scoreList.get(0));

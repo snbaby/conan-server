@@ -2,17 +2,16 @@ package com.conan.console.server.utils;
 
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.Cell;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ConanUtils {
 	public static Date getLastDay(int lastDays) {
 		Date date = new Date();// 取时间
@@ -86,22 +85,4 @@ public class ConanUtils {
 		return cellValue;
 	}
 
-	public static List<Float> randomList5(float score) {
-		List<Float> floatList = new ArrayList<>();
-		floatList.add(10f);
-		floatList.add(20f);
-		floatList.add(30f);
-		floatList.add(25f);
-		floatList.add(15f);
-		int temp = (int) (100 - score);
-		while(temp>0) {
-			Random rand = new Random();
-	    	int index = rand.nextInt(5);
-	    	if(floatList.get(index)>5) {
-	    		floatList.set(index, floatList.get(index)-1);
-	    		temp = temp - 1 ;
-	    	}
-		}
-		return floatList;
-	}
 }
