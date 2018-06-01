@@ -112,6 +112,9 @@ public class DetectionAccount {
     private Float account_growup_score;
     private Float trade_frequency_score;
     private Float like_info_score;
+    private Float activity_score0;
+    private Float activity_score1;
+    private Float activity_score2;
     
     
     
@@ -542,6 +545,42 @@ public class DetectionAccount {
 
 	public void setCost(Float cost) {
 		this.cost = cost;
+	}
+
+
+
+	public Float getActivity_score0() {
+		return activity_score0;
+	}
+
+
+
+	public void setActivity_score0(Float activity_score0) {
+		this.activity_score0 = activity_score0;
+	}
+
+
+
+	public Float getActivity_score1() {
+		return activity_score1;
+	}
+
+
+
+	public void setActivity_score1(Float activity_score1) {
+		this.activity_score1 = activity_score1;
+	}
+
+
+
+	public Float getActivity_score2() {
+		return activity_score2;
+	}
+
+
+
+	public void setActivity_score2(Float activity_score2) {
+		this.activity_score2 = activity_score2;
 	}
     
     

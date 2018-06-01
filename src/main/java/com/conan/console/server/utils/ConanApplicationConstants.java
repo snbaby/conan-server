@@ -22,5 +22,6 @@ public class ConanApplicationConstants {
 	//不存在
 	public static final String NOT_EXIST_MESSAGE = "暂无危险信息";
 	//不存在
-	public static final float NOT_EXIST_CODE = 0f;
+	public static final float NOT_EXIST_CODE = -2f;
+	
 }
