@@ -18,6 +18,21 @@
     <result column="detail_score2" jdbcType="REAL" property="detail_score2" />
     <result column="detail_score3" jdbcType="REAL" property="detail_score3" />
     <result column="detail_score4" jdbcType="REAL" property="detail_score4" />
+    
+    <result column="register_info_score" jdbcType="REAL" property="register_info_score" />
+    <result column="identify_info_score" jdbcType="REAL" property="identify_info_score" />
+    <result column="background_info_score" jdbcType="REAL" property="background_info_score" />
+    <result column="trade_process_score" jdbcType="REAL" property="trade_process_score" />
+    <result column="trade_habit_score" jdbcType="REAL" property="trade_habit_score" />
+    <result column="logistics_character_score" jdbcType="REAL" property="logistics_character_score" />
+    <result column="account_history_score" jdbcType="REAL" property="account_history_score" />
+    <result column="activity_score0" jdbcType="REAL" property="activity_score0" />
+    <result column="activity_score1" jdbcType="REAL" property="activity_score1" />
+    <result column="activity_score2" jdbcType="REAL" property="activity_score2" />
+    <result column="account_growup_score" jdbcType="REAL" property="account_growup_score" />
+    <result column="trade_frequency_score" jdbcType="REAL" property="trade_frequency_score" />
+    <result column="like_info_score" jdbcType="REAL" property="like_info_score" />
+    
     <result column="user_info_id" jdbcType="VARCHAR" property="user_info_id" />
     <result column="cost" jdbcType="REAL" property="cost" />
   </resultMap>
@@ -28,7 +43,11 @@
       This element was generated on Mon Apr 23 00:59:28 CST 2018.
     -->
     id, created_at, updated_at, cost_record_id, account_name, account_score, detail_score0, 
-    detail_score1, detail_score2, detail_score3, detail_score4, user_info_id,cost
+    detail_score1, detail_score2, detail_score3, detail_score4, user_info_id,cost,
+    register_info_score,identify_info_score,background_info_score,
+    trade_process_score,trade_habit_score,logistics_character_score,
+    account_history_score,activity_score0,activity_score1,activity_score2,
+    account_growup_score,trade_frequency_score,like_info_score
   </sql>
   
   <select id="selectByRecordIdAndUserInfoId" resultMap="BaseResultMap">
@@ -296,12 +315,22 @@
     insert into detection_account (id, created_at, updated_at, 
       cost_record_id, account_name, account_score, 
       detail_score0, detail_score1, detail_score2, 
-      detail_score3, detail_score4, user_info_id,cost
+      detail_score3, detail_score4, user_info_id,cost,
+      
+      register_info_score,identify_info_score,background_info_score,
+    trade_process_score,trade_habit_score,logistics_character_score,
+    account_history_score,activity_score0,activity_score1,activity_score2,
+    account_growup_score,trade_frequency_score,like_info_score
       )
     values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=TIMESTAMP}, #{updated_at,jdbcType=TIMESTAMP}, 
       #{cost_record_id,jdbcType=VARCHAR}, #{account_name,jdbcType=VARCHAR}, #{account_score,jdbcType=REAL}, 
       #{detail_score0,jdbcType=REAL}, #{detail_score1,jdbcType=REAL}, #{detail_score2,jdbcType=REAL}, 
-      #{detail_score3,jdbcType=REAL}, #{detail_score4,jdbcType=REAL}, #{user_info_id,jdbcType=VARCHAR}, #{cost,jdbcType=REAL}
+      #{detail_score3,jdbcType=REAL}, #{detail_score4,jdbcType=REAL}, #{user_info_id,jdbcType=VARCHAR}, #{cost,jdbcType=REAL},
+      
+      #{register_info_score,jdbcType=REAL},#{identify_info_score,jdbcType=REAL},#{background_info_score,jdbcType=REAL},
+      #{trade_process_score,jdbcType=REAL},#{trade_habit_score,jdbcType=REAL},#{logistics_character_score,jdbcType=REAL},
+      #{account_history_score,jdbcType=REAL},#{activity_score0,jdbcType=REAL},#{activity_score1,jdbcType=REAL},#{activity_score2,jdbcType=REAL},
+      #{account_growup_score,jdbcType=REAL},#{trade_frequency_score,jdbcType=REAL},#{like_info_score,jdbcType=REAL}
       )
   </insert>
   <insert id="insertList" >
@@ -313,14 +342,24 @@
     insert into detection_account (id, created_at, updated_at, 
       cost_record_id, account_name, account_score, 
       detail_score0, detail_score1, detail_score2, 
-      detail_score3, detail_score4, user_info_id,cost
+      detail_score3, detail_score4, user_info_id,cost,
+      
+      register_info_score,identify_info_score,background_info_score,
+    trade_process_score,trade_habit_score,logistics_character_score,
+    account_history_score,activity_score0,activity_score1,activity_score2,
+    account_growup_score,trade_frequency_score,like_info_score
       )
     values 
      <foreach collection="recordList" item="record" separator=",">  
             (#{record.id,jdbcType=VARCHAR}, #{record.created_at,jdbcType=TIMESTAMP}, #{record.updated_at,jdbcType=TIMESTAMP}, 
       #{record.cost_record_id,jdbcType=VARCHAR}, #{record.account_name,jdbcType=VARCHAR}, #{record.account_score,jdbcType=REAL}, 
       #{record.detail_score0,jdbcType=REAL}, #{record.detail_score1,jdbcType=REAL}, #{record.detail_score2,jdbcType=REAL}, 
-      #{record.detail_score3,jdbcType=REAL}, #{record.detail_score4,jdbcType=REAL}, #{record.user_info_id,jdbcType=VARCHAR}, #{record.cost,jdbcType=REAL}
+      #{record.detail_score3,jdbcType=REAL}, #{record.detail_score4,jdbcType=REAL}, #{record.user_info_id,jdbcType=VARCHAR}, #{record.cost,jdbcType=REAL},
+      
+      #{register_info_score,jdbcType=REAL},#{identify_info_score,jdbcType=REAL},#{background_info_score,jdbcType=REAL},
+      #{trade_process_score,jdbcType=REAL},#{trade_habit_score,jdbcType=REAL},#{logistics_character_score,jdbcType=REAL},
+      #{account_history_score,jdbcType=REAL},#{activity_score0,jdbcType=REAL},#{activity_score1,jdbcType=REAL},#{activity_score2,jdbcType=REAL},
+      #{account_growup_score,jdbcType=REAL},#{trade_frequency_score,jdbcType=REAL},#{like_info_score,jdbcType=REAL}
       )
         </foreach>  
   </insert>
