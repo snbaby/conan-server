@@ -281,7 +281,7 @@ public class BillService {
 		rechargeBill.setPhoto(capture_id);
 		rechargeBill.setComment(comment);
 		rechargeBill.setRmb_amount(recharge_amount);
-		rechargeBill.setGold_amount(recharge_amount);
+		rechargeBill.setGold_amount(recharge_amount*ConanApplicationConstants.RMB_TO_COUPON_RATE);
 		rechargeBill.setGold_coupon(0f);
 
 		JSONObject rechargePackageJsonObject = jsonService.getrRechargePackage();
@@ -294,7 +294,7 @@ public class BillService {
 				break;
 			}
 		}
-		rechargeBill.setGold_total(recharge_amount + rechargeBill.getGold_coupon());
+		rechargeBill.setGold_total(recharge_amount*ConanApplicationConstants.RMB_TO_COUPON_RATE + rechargeBill.getGold_coupon());
 		rechargeBill.setUser_info_id(user_info_id);
 		rechargeBill.setUser_bill_id(uuid);
 		rechargeBill.setRecharge_status("2");// 未审核

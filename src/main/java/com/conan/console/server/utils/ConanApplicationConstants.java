@@ -23,5 +23,7 @@ public class ConanApplicationConstants {
 	public static final String NOT_EXIST_MESSAGE = "暂无危险信息";
 	//不存在
 	public static final float NOT_EXIST_CODE = -2f;
+	//RMB=>金币汇率
+	public static final Float RMB_TO_COUPON_RATE = ConanUtils.fix2(1f/0.8f);
 	
 }
