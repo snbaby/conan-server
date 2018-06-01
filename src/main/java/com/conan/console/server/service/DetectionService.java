@@ -268,6 +268,48 @@ public class DetectionService {
 				detectionAccount.setDetail_score2(0f);
 				detectionAccount.setDetail_score3(0f);
 				detectionAccount.setDetail_score4(0f);
+				
+				detectionAccount.setRegister_info_score(0f);
+				detectionAccount.setIdentify_info_score(0f);
+				detectionAccount.setBackground_info_score(0f);
+				
+		/*floatList.add(3.3f);// register_info_score
+		floatList.add(3.3f);// identify_info_score
+		floatList.add(3.4f);// background_info_score
+*/		
+				detectionAccount.setAccount_growup_score(0f);
+				detectionAccount.setTrade_frequency_score(0f);
+				detectionAccount.setLike_info_score(0f);;
+		
+		/*if (score >= 80) {// 危险
+			floatList.add(9.5f);// account_growup_score
+			floatList.add(9.5f);// trade_frequency_score
+			floatList.add(1f);// like_info_score 1危险,2可疑,3安全
+		} else if (score >= 60) {// 可疑
+			floatList.add(9f);// account_growup_score
+			floatList.add(9f);// trade_frequency_score
+			floatList.add(2f);// like_info_score 1危险,2可疑,3安全
+		} else {// 安全
+			floatList.add(8.5f);// account_growup_score
+			floatList.add(8.5f);// trade_frequency_score
+			floatList.add(3f);// like_info_score 1危险,2可疑,3安全
+		}*/
+		
+		detectionAccount.setTrade_process_score(0f);
+		detectionAccount.setTrade_habit_score(0f);
+		detectionAccount.setLogistics_character_score(0f);
+		
+//		floatList.add(10f);// trade_process_score
+//		floatList.add(10f);// trade_habit_score
+//		floatList.add(10f);// logistics_character_score
+		
+		detectionAccount.setLogistics_character_score(0f);
+		
+//		floatList.add(25f);// logistics_character_score
+		detectionAccount.setAccount_history_score(0f);
+		
+//		floatList.add(15f);// account_history_score
+				
 				detectionAccount.setCost(0.0f);
 			} else {
 				if (finalResult.getResult() < 60) {
