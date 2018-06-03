@@ -343,7 +343,6 @@
       cost_record_id, account_name, account_score, 
       detail_score0, detail_score1, detail_score2, 
       detail_score3, detail_score4, user_info_id,cost,
-      
       register_info_score,identify_info_score,background_info_score,
     trade_process_score,trade_habit_score,logistics_character_score,
     account_history_score,activity_score0,activity_score1,activity_score2,
@@ -355,11 +354,10 @@
       #{record.cost_record_id,jdbcType=VARCHAR}, #{record.account_name,jdbcType=VARCHAR}, #{record.account_score,jdbcType=REAL}, 
       #{record.detail_score0,jdbcType=REAL}, #{record.detail_score1,jdbcType=REAL}, #{record.detail_score2,jdbcType=REAL}, 
       #{record.detail_score3,jdbcType=REAL}, #{record.detail_score4,jdbcType=REAL}, #{record.user_info_id,jdbcType=VARCHAR}, #{record.cost,jdbcType=REAL},
-      
-      #{register_info_score,jdbcType=REAL},#{identify_info_score,jdbcType=REAL},#{background_info_score,jdbcType=REAL},
-      #{trade_process_score,jdbcType=REAL},#{trade_habit_score,jdbcType=REAL},#{logistics_character_score,jdbcType=REAL},
-      #{account_history_score,jdbcType=REAL},#{activity_score0,jdbcType=REAL},#{activity_score1,jdbcType=REAL},#{activity_score2,jdbcType=REAL},
-      #{account_growup_score,jdbcType=REAL},#{trade_frequency_score,jdbcType=REAL},#{like_info_score,jdbcType=REAL}
+      #{record.register_info_score,jdbcType=REAL},#{record.identify_info_score,jdbcType=REAL},#{record.background_info_score,jdbcType=REAL},
+      #{record.trade_process_score,jdbcType=REAL},#{record.trade_habit_score,jdbcType=REAL},#{record.logistics_character_score,jdbcType=REAL},
+      #{record.account_history_score,jdbcType=REAL},#{record.activity_score0,jdbcType=REAL},#{record.activity_score1,jdbcType=REAL},#{record.activity_score2,jdbcType=REAL},
+      #{record.account_growup_score,jdbcType=REAL},#{record.trade_frequency_score,jdbcType=REAL},#{record.like_info_score,jdbcType=REAL}
       )
         </foreach>  
   </insert>
