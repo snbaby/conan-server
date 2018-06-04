@@ -93,7 +93,7 @@ public class DetectionController {
 	}
 	
 	@PostMapping("scan")
-	public ResponseEntity<ResponseSuccessResult> scan(HttpServletRequest request,@RequestBody @Valid QueryPreCheckParameters queryPreCheckParameters, BindingResult bindingResult) {
+	public ResponseEntity<ResponseSuccessResult> scan(HttpServletRequest request,@RequestBody @Valid QueryPreCheckParameters queryPreCheckParameters, BindingResult bindingResult) throws InterruptedException {
 		if (bindingResult.hasErrors()) {
 			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
