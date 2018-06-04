@@ -6,7 +6,6 @@ import java.util.Random;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.util.UriEncoder;
 
 import com.alibaba.fastjson.JSONObject;
 import com.conan.console.server.utils.ConanUtils;
