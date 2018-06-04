@@ -24,8 +24,10 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.yaml.snakeyaml.util.UriEncoder;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -44,7 +46,9 @@ import com.conan.console.server.mapper.slave.FinalResultMapper;
 import com.conan.console.server.parameter.UserGetScanHistoryParameters;
 import com.conan.console.server.utils.ConanApplicationConstants;
 import com.conan.console.server.utils.ConanExceptionConstants;
+import com.conan.console.server.utils.ConanHttpClientUtils;
 import com.conan.console.server.utils.ConanUtils;
+import com.sun.org.apache.xerces.internal.util.URI;
 
 @Service
 public class DetectionService {
@@ -69,6 +73,9 @@ public class DetectionService {
 
 	@Autowired
 	private CacheService cacheService;
+	
+	@Value("${conan.server.account-validate-url}")
+	private String accountValidateUrl;
 
 	@Transactional
 	public JSONObject getDetectionAccountLink(UserGetScanHistoryParameters userGetScanHistoryParameters,
@@ -266,6 +273,7 @@ public class DetectionService {
 		float gold_coupon = userRemain.getGold_coupon();
 		float bill_amount = 0;
 		String md5 = null;
+		
 		if (scan_account.length() == 1) {
 			md5 = scan_account;
 		} else {
@@ -273,7 +281,11 @@ public class DetectionService {
 		}
 
 		FinalResult finalResult = finalResultMapper.selectByPrimaryKey(md5);
-
+		
+		if(!ConanHttpClientUtils.httpGet(UriEncoder.encode(accountValidateUrl+scan_account))) {//表示账号不存在
+			finalResult = null;
+		}
+		
 		String dectionAccountId = UUID.randomUUID().toString();// 生成唯一主键
 		DetectionAccount detectionAccount = new DetectionAccount();
 		detectionAccount.setId(dectionAccountId);

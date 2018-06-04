@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.yaml.snakeyaml.util.UriEncoder;
 
 import com.alibaba.fastjson.JSONObject;
 import com.conan.console.server.utils.ConanUtils;
@@ -22,17 +23,19 @@ public class CacheService {
 		floatList.add(3.4f);// background_info_score2
 
 		if (score >= 80) {// 危险
-			floatList.add(9.5f);// account_growup_score
-			floatList.add(9.5f);// trade_frequency_score
-			floatList.add(1f);// like_info_score 1危险,2可疑,3安全
+			floatList.add(7f);// account_growup_score
+			floatList.add(7f);// trade_frequency_score
+			floatList.add(6f);// like_info_score 1危险,2可疑,3安全
 		} else if (score >= 60) {// 可疑
-			floatList.add(9f);// account_growup_score
-			floatList.add(9f);// trade_frequency_score
-			floatList.add(2f);// like_info_score 1危险,2可疑,3安全
+			score = score -2;
+			floatList.add(7f);// account_growup_score
+			floatList.add(7f);// trade_frequency_score
+			floatList.add(4f);// like_info_score 1危险,2可疑,3安全
 		} else {// 安全
-			floatList.add(8.5f);// account_growup_score
-			floatList.add(8.5f);// trade_frequency_score
-			floatList.add(3f);// like_info_score 1危险,2可疑,3安全
+			score = score -4;
+			floatList.add(7f);// account_growup_score
+			floatList.add(7f);// trade_frequency_score
+			floatList.add(2f);// like_info_score 1危险,2可疑,3安全
 		}
 
 		floatList.add(10f);// trade_process_score
@@ -74,21 +77,20 @@ public class CacheService {
 
 		resultJson.put("account_history_score", floatList.get(12));
 
-		resultJson.put("detail_score0", resultJson.getFloat("register_info_score")
-				+ resultJson.getFloat("identify_info_score") + resultJson.getFloat("background_info_score"));
+		resultJson.put("detail_score0", ConanUtils.fix2(resultJson.getFloat("register_info_score")
+				+ resultJson.getFloat("identify_info_score") + resultJson.getFloat("background_info_score")));
 		
-		resultJson.put("detail_score1", resultJson.getFloat("account_growup_score")
-				+ resultJson.getFloat("trade_frequency_score") + resultJson.getFloat("like_info_score"));
+		resultJson.put("detail_score1", ConanUtils.fix2(resultJson.getFloat("account_growup_score")
+				+ resultJson.getFloat("trade_frequency_score") + resultJson.getFloat("like_info_score")));
 		
-		resultJson.put("detail_score2", resultJson.getFloat("trade_process_score")
-				+ resultJson.getFloat("trade_habit_score") + resultJson.getFloat("logistics_character_score"));
+		resultJson.put("detail_score2", ConanUtils.fix2(resultJson.getFloat("trade_process_score")
+				+ resultJson.getFloat("trade_habit_score") + resultJson.getFloat("logistics_character_score")));
 		
-		resultJson.put("detail_score3", resultJson.getFloat("activity_score0")
-				+ resultJson.getFloat("activity_score1") + resultJson.getFloat("activity_score2"));
+		resultJson.put("detail_score3", ConanUtils.fix2(resultJson.getFloat("activity_score0")
+				+ resultJson.getFloat("activity_score1") + resultJson.getFloat("activity_score2")));
 		
-		resultJson.put("detail_score4", resultJson.getFloat("account_history_score"));
+		resultJson.put("detail_score4",ConanUtils.fix2( resultJson.getFloat("account_history_score")));
 		return resultJson;
 	}
-
 
 }

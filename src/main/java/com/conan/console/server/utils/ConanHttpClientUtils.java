@@ -1,13 +1,11 @@
 package com.conan.console.server.utils;
 
 import java.nio.charset.Charset;
-import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -58,6 +56,50 @@ public class ConanHttpClientUtils {
 			if (post != null) {
 				try {
 					post.releaseConnection();
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return isSuccess;
+	}
+	
+	public static boolean httpGet(String url) {
+		boolean isSuccess = false;
+
+		HttpGet get = null;
+		try {
+			HttpClient httpClient = new DefaultHttpClient();
+
+			// 设置超时时间
+			httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 10000);
+			httpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 10000);
+
+			get = new HttpGet(url);
+			// 构造消息头
+			get.setHeader("Content-type", "application/json; charset=utf-8");
+			get.setHeader("Connection", "Close");
+
+
+			HttpResponse response = httpClient.execute(get);
+
+			// 检验返回码
+			int statusCode = response.getStatusLine().getStatusCode();
+			if (statusCode != HttpStatus.SC_OK) {
+				System.out.println("请求出错: " + url);
+				isSuccess = false;
+			} else {
+				System.out.println("请求成功: " + url);
+				isSuccess = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			isSuccess = false;
+		} finally {
+			if (get != null) {
+				try {
+					get.releaseConnection();
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
