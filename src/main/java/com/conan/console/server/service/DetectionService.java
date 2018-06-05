@@ -132,7 +132,7 @@ public class DetectionService {
 				scoreMessage = ConanApplicationConstants.DANGER;
 			} else if (score < 80 && score >= 60) {
 				scoreMessage = ConanApplicationConstants.SUSPICIOUS;
-			} else if (score == -1.0f) {
+			} else if (score == 0f) {
 				scoreMessage = ConanApplicationConstants.NOT_MATCH_MESSAGE;
 			} else {
 				scoreMessage = ConanApplicationConstants.NOT_EXIST_MESSAGE;
