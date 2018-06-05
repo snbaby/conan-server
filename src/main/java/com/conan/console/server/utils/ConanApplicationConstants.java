@@ -16,7 +16,7 @@ public class ConanApplicationConstants {
 	//可疑
 	public static final String SUSPICIOUS = "可疑";
 	//未匹配
-	public static final String NOT_MATCH_MESSAGE = "暂无";
+	public static final String NOT_MATCH_MESSAGE = "暂无危险信息";
 	//未匹配
 	public static final float NOT_MATCH_CODE = 0f;
 	//不存在
