@@ -326,7 +326,7 @@ public class DetectionService {
 						detectionAccount.setDetail_score4(0f);
 						detectionAccount.setAccount_history_score(0f);
 
-						detectionAccount.setCost(0.0f);
+						detectionAccount.setCost(1.0f);
 					}else {
 						detectionAccount.setAccount_score(ConanApplicationConstants.NOT_EXIST_CODE);
 
@@ -353,7 +353,7 @@ public class DetectionService {
 						detectionAccount.setDetail_score4(0f);
 						detectionAccount.setAccount_history_score(0f);
 
-						detectionAccount.setCost(0.0f);
+						detectionAccount.setCost(1.0f);
 					}
 				} else {
 					if(accountExist) {
@@ -413,12 +413,6 @@ public class DetectionService {
 
 							detectionAccount.setCost(1.0f);
 						}
-						if (gold_coupon > 0) {
-							gold_coupon = gold_coupon - 1;
-						} else {
-							gold_amount = gold_amount - 1;
-						}
-						bill_amount++;
 					}else {
 						detectionAccount.setAccount_score(ConanApplicationConstants.NOT_EXIST_CODE);
 
@@ -445,9 +439,15 @@ public class DetectionService {
 						detectionAccount.setDetail_score4(0f);
 						detectionAccount.setAccount_history_score(0f);
 
-						detectionAccount.setCost(0.0f);
+						detectionAccount.setCost(1.0f);
 					}
 				}
+				if (gold_coupon > 0) {
+					gold_coupon = gold_coupon - 1;
+				} else {
+					gold_amount = gold_amount - 1;
+				}
+				bill_amount++;
 			} else {
 				detectionAccount.setAccount_score(ConanApplicationConstants.NO_BALANCE_CODE);
 
@@ -804,12 +804,6 @@ public class DetectionService {
 
 								detectionAccount.setCost(1.0f);
 							}
-							if (gold_coupon > 0) {
-								gold_coupon = gold_coupon - 1;
-							} else {
-								gold_amount = gold_amount - 1;
-							}
-							bill_amount++;
 						} else {
 							cell1.setCellValue(ConanApplicationConstants.NOT_EXIST_MESSAGE);
 							cell2.setCellValue(ConanApplicationConstants.NOT_EXIST_CODE);
@@ -845,8 +839,14 @@ public class DetectionService {
 							detectionAccount.setDetail_score4(0f);
 							detectionAccount.setAccount_history_score(0f);
 
-							detectionAccount.setCost(0.0f);
+							detectionAccount.setCost(1.0f);
 						}
+						if (gold_coupon > 0) {
+							gold_coupon = gold_coupon - 1;
+						} else {
+							gold_amount = gold_amount - 1;
+						}
+						bill_amount++;
 					}
 					dectionAccountList.add(detectionAccount);
 				}
