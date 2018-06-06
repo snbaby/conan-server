@@ -132,7 +132,7 @@ public class DetectionService {
 				scoreMessage = ConanApplicationConstants.DANGER;
 			} else if (score < 80 && score >= 60) {
 				scoreMessage = ConanApplicationConstants.SUSPICIOUS;
-			} else if (score == 0f) {
+			} else if (score < 60 && score >= 0) {
 				scoreMessage = ConanApplicationConstants.NOT_MATCH_MESSAGE;
 			} else {
 				scoreMessage = ConanApplicationConstants.NOT_EXIST_MESSAGE;
@@ -300,30 +300,34 @@ public class DetectionService {
 			if (gold_coupon >= 0 || gold_amount >= 0) {
 				if (finalResult == null) {
 					if(accountExist) {
-						detectionAccount.setAccount_score(ConanApplicationConstants.NOT_MATCH_CODE);
+						JSONObject jsonObject = cacheService.randomSaftyScoreList5(scan_account);
+						
+						//detectionAccount.setAccount_score(ConanApplicationConstants.NOT_MATCH_CODE);
 
-						detectionAccount.setDetail_score0(0f);
-						detectionAccount.setRegister_info_score(0f);
-						detectionAccount.setIdentify_info_score(0f);
-						detectionAccount.setBackground_info_score(0f);
+						detectionAccount.setAccount_score(jsonObject.getFloat("account_score"));
 
-						detectionAccount.setDetail_score1(0f);
-						detectionAccount.setAccount_growup_score(0f);
-						detectionAccount.setTrade_frequency_score(0f);
-						detectionAccount.setLike_info_score(0f);
+						detectionAccount.setDetail_score0(jsonObject.getFloat("detail_score0"));
+						detectionAccount.setRegister_info_score(jsonObject.getFloat("register_info_score"));
+						detectionAccount.setIdentify_info_score(jsonObject.getFloat("identify_info_score"));
+						detectionAccount.setBackground_info_score(jsonObject.getFloat("background_info_score"));
 
-						detectionAccount.setDetail_score2(0f);
-						detectionAccount.setTrade_process_score(0f);
-						detectionAccount.setTrade_habit_score(0f);
-						detectionAccount.setLogistics_character_score(0f);
+						detectionAccount.setDetail_score1(jsonObject.getFloat("detail_score1"));
+						detectionAccount.setAccount_growup_score(jsonObject.getFloat("account_growup_score"));
+						detectionAccount.setTrade_frequency_score(jsonObject.getFloat("trade_frequency_score"));
+						detectionAccount.setLike_info_score(jsonObject.getFloat("like_info_score"));
 
-						detectionAccount.setDetail_score3(0f);
-						detectionAccount.setActivity_score0(0f);
-						detectionAccount.setActivity_score1(0f);
-						detectionAccount.setActivity_score2(0f);
+						detectionAccount.setDetail_score2(jsonObject.getFloat("detail_score2"));
+						detectionAccount.setTrade_process_score(jsonObject.getFloat("trade_process_score"));
+						detectionAccount.setTrade_habit_score(jsonObject.getFloat("trade_habit_score"));
+						detectionAccount.setLogistics_character_score(jsonObject.getFloat("logistics_character_score"));
 
-						detectionAccount.setDetail_score4(0f);
-						detectionAccount.setAccount_history_score(0f);
+						detectionAccount.setDetail_score3(jsonObject.getFloat("detail_score3"));
+						detectionAccount.setActivity_score0(jsonObject.getFloat("activity_score0"));
+						detectionAccount.setActivity_score1(jsonObject.getFloat("activity_score1"));
+						detectionAccount.setActivity_score2(jsonObject.getFloat("activity_score2"));
+
+						detectionAccount.setDetail_score4(jsonObject.getFloat("detail_score4"));
+						detectionAccount.setAccount_history_score(jsonObject.getFloat("account_history_score"));
 
 						detectionAccount.setCost(1.0f);
 					}else {
@@ -357,30 +361,34 @@ public class DetectionService {
 				} else {
 					if(accountExist) {
 						if (finalResult.getResult() < 60) {
-							detectionAccount.setAccount_score(ConanApplicationConstants.NOT_MATCH_CODE);
+							JSONObject jsonObject = cacheService.randomSaftyScoreList5(scan_account);
+							
+							//detectionAccount.setAccount_score(ConanApplicationConstants.NOT_MATCH_CODE);
 
-							detectionAccount.setDetail_score0(0f);
-							detectionAccount.setRegister_info_score(0f);
-							detectionAccount.setIdentify_info_score(0f);
-							detectionAccount.setBackground_info_score(0f);
+							detectionAccount.setAccount_score(jsonObject.getFloat("account_score"));
 
-							detectionAccount.setDetail_score1(0f);
-							detectionAccount.setAccount_growup_score(0f);
-							detectionAccount.setTrade_frequency_score(0f);
-							detectionAccount.setLike_info_score(0f);
+							detectionAccount.setDetail_score0(jsonObject.getFloat("detail_score0"));
+							detectionAccount.setRegister_info_score(jsonObject.getFloat("register_info_score"));
+							detectionAccount.setIdentify_info_score(jsonObject.getFloat("identify_info_score"));
+							detectionAccount.setBackground_info_score(jsonObject.getFloat("background_info_score"));
 
-							detectionAccount.setDetail_score2(0f);
-							detectionAccount.setTrade_process_score(0f);
-							detectionAccount.setTrade_habit_score(0f);
-							detectionAccount.setLogistics_character_score(0f);
+							detectionAccount.setDetail_score1(jsonObject.getFloat("detail_score1"));
+							detectionAccount.setAccount_growup_score(jsonObject.getFloat("account_growup_score"));
+							detectionAccount.setTrade_frequency_score(jsonObject.getFloat("trade_frequency_score"));
+							detectionAccount.setLike_info_score(jsonObject.getFloat("like_info_score"));
 
-							detectionAccount.setDetail_score3(0f);
-							detectionAccount.setActivity_score0(0f);
-							detectionAccount.setActivity_score1(0f);
-							detectionAccount.setActivity_score2(0f);
+							detectionAccount.setDetail_score2(jsonObject.getFloat("detail_score2"));
+							detectionAccount.setTrade_process_score(jsonObject.getFloat("trade_process_score"));
+							detectionAccount.setTrade_habit_score(jsonObject.getFloat("trade_habit_score"));
+							detectionAccount.setLogistics_character_score(jsonObject.getFloat("logistics_character_score"));
 
-							detectionAccount.setDetail_score4(0f);
-							detectionAccount.setAccount_history_score(0f);
+							detectionAccount.setDetail_score3(jsonObject.getFloat("detail_score3"));
+							detectionAccount.setActivity_score0(jsonObject.getFloat("activity_score0"));
+							detectionAccount.setActivity_score1(jsonObject.getFloat("activity_score1"));
+							detectionAccount.setActivity_score2(jsonObject.getFloat("activity_score2"));
+
+							detectionAccount.setDetail_score4(jsonObject.getFloat("detail_score4"));
+							detectionAccount.setAccount_history_score(jsonObject.getFloat("account_history_score"));
 
 							detectionAccount.setCost(1.0f);
 						} else {
@@ -688,39 +696,43 @@ public class DetectionService {
 						if (finalResultMap.containsKey(md5)) {
 							Short tempShort = finalResultMap.get(md5);
 							if (tempShort < 60) {
+								JSONObject jsonObject = cacheService.randomSaftyScoreList5(ConanUtils.getCellValueByCell(cell0));
+								
 								cell1.setCellValue(ConanApplicationConstants.NOT_MATCH_MESSAGE);
-								cell2.setCellValue(ConanApplicationConstants.NOT_MATCH_CODE);
-								cell3.setCellValue(0);
-								cell4.setCellValue(0);
-								cell5.setCellValue(0);
-								cell6.setCellValue(0);
-								cell7.setCellValue(0);
+								cell2.setCellValue(jsonObject.getFloat("account_score"));
+								cell3.setCellValue(jsonObject.getFloat("detail_score0"));
+								cell4.setCellValue(jsonObject.getFloat("detail_score1"));
+								cell5.setCellValue(jsonObject.getFloat("detail_score2"));
+								cell6.setCellValue(jsonObject.getFloat("detail_score3"));
+								cell7.setCellValue(jsonObject.getFloat("detail_score4"));
 								cell8.setCellValue(new Date());
+								
+								//detectionAccount.setAccount_score(ConanApplicationConstants.NOT_MATCH_CODE);
 
-								detectionAccount.setAccount_score(ConanApplicationConstants.NOT_MATCH_CODE);
+								detectionAccount.setAccount_score(jsonObject.getFloat("account_score"));
 
-								detectionAccount.setDetail_score0(0f);
-								detectionAccount.setRegister_info_score(0f);
-								detectionAccount.setIdentify_info_score(0f);
-								detectionAccount.setBackground_info_score(0f);
+								detectionAccount.setDetail_score0(jsonObject.getFloat("detail_score0"));
+								detectionAccount.setRegister_info_score(jsonObject.getFloat("register_info_score"));
+								detectionAccount.setIdentify_info_score(jsonObject.getFloat("identify_info_score"));
+								detectionAccount.setBackground_info_score(jsonObject.getFloat("background_info_score"));
 
-								detectionAccount.setDetail_score1(0f);
-								detectionAccount.setAccount_growup_score(0f);
-								detectionAccount.setTrade_frequency_score(0f);
-								detectionAccount.setLike_info_score(0f);
+								detectionAccount.setDetail_score1(jsonObject.getFloat("detail_score1"));
+								detectionAccount.setAccount_growup_score(jsonObject.getFloat("account_growup_score"));
+								detectionAccount.setTrade_frequency_score(jsonObject.getFloat("trade_frequency_score"));
+								detectionAccount.setLike_info_score(jsonObject.getFloat("like_info_score"));
 
-								detectionAccount.setDetail_score2(0f);
-								detectionAccount.setTrade_process_score(0f);
-								detectionAccount.setTrade_habit_score(0f);
-								detectionAccount.setLogistics_character_score(0f);
+								detectionAccount.setDetail_score2(jsonObject.getFloat("detail_score2"));
+								detectionAccount.setTrade_process_score(jsonObject.getFloat("trade_process_score"));
+								detectionAccount.setTrade_habit_score(jsonObject.getFloat("trade_habit_score"));
+								detectionAccount.setLogistics_character_score(jsonObject.getFloat("logistics_character_score"));
 
-								detectionAccount.setDetail_score3(0f);
-								detectionAccount.setActivity_score0(0f);
-								detectionAccount.setActivity_score1(0f);
-								detectionAccount.setActivity_score2(0f);
+								detectionAccount.setDetail_score3(jsonObject.getFloat("detail_score3"));
+								detectionAccount.setActivity_score0(jsonObject.getFloat("activity_score0"));
+								detectionAccount.setActivity_score1(jsonObject.getFloat("activity_score1"));
+								detectionAccount.setActivity_score2(jsonObject.getFloat("activity_score2"));
 
-								detectionAccount.setDetail_score4(0f);
-								detectionAccount.setAccount_history_score(0f);
+								detectionAccount.setDetail_score4(jsonObject.getFloat("detail_score4"));
+								detectionAccount.setAccount_history_score(jsonObject.getFloat("account_history_score"));
 
 								detectionAccount.setCost(1.0f);
 
@@ -804,39 +816,43 @@ public class DetectionService {
 								detectionAccount.setCost(1.0f);
 							}
 						} else {
+							JSONObject jsonObject = cacheService.randomSaftyScoreList5(ConanUtils.getCellValueByCell(cell0));
+							
 							cell1.setCellValue(ConanApplicationConstants.NOT_MATCH_MESSAGE);
-							cell2.setCellValue(ConanApplicationConstants.NOT_MATCH_CODE);
-							cell3.setCellValue(0);
-							cell4.setCellValue(0);
-							cell5.setCellValue(0);
-							cell6.setCellValue(0);
-							cell7.setCellValue(0);
+							cell2.setCellValue(jsonObject.getFloat("account_score"));
+							cell3.setCellValue(jsonObject.getFloat("detail_score0"));
+							cell4.setCellValue(jsonObject.getFloat("detail_score1"));
+							cell5.setCellValue(jsonObject.getFloat("detail_score2"));
+							cell6.setCellValue(jsonObject.getFloat("detail_score3"));
+							cell7.setCellValue(jsonObject.getFloat("detail_score4"));
 							cell8.setCellValue(new Date());
+							
+							//detectionAccount.setAccount_score(ConanApplicationConstants.NOT_MATCH_CODE);
 
-							detectionAccount.setAccount_score(ConanApplicationConstants.NOT_MATCH_CODE);
+							detectionAccount.setAccount_score(jsonObject.getFloat("account_score"));
 
-							detectionAccount.setDetail_score0(0f);
-							detectionAccount.setRegister_info_score(0f);
-							detectionAccount.setIdentify_info_score(0f);
-							detectionAccount.setBackground_info_score(0f);
+							detectionAccount.setDetail_score0(jsonObject.getFloat("detail_score0"));
+							detectionAccount.setRegister_info_score(jsonObject.getFloat("register_info_score"));
+							detectionAccount.setIdentify_info_score(jsonObject.getFloat("identify_info_score"));
+							detectionAccount.setBackground_info_score(jsonObject.getFloat("background_info_score"));
 
-							detectionAccount.setDetail_score1(0f);
-							detectionAccount.setAccount_growup_score(0f);
-							detectionAccount.setTrade_frequency_score(0f);
-							detectionAccount.setLike_info_score(0f);
+							detectionAccount.setDetail_score1(jsonObject.getFloat("detail_score1"));
+							detectionAccount.setAccount_growup_score(jsonObject.getFloat("account_growup_score"));
+							detectionAccount.setTrade_frequency_score(jsonObject.getFloat("trade_frequency_score"));
+							detectionAccount.setLike_info_score(jsonObject.getFloat("like_info_score"));
 
-							detectionAccount.setDetail_score2(0f);
-							detectionAccount.setTrade_process_score(0f);
-							detectionAccount.setTrade_habit_score(0f);
-							detectionAccount.setLogistics_character_score(0f);
+							detectionAccount.setDetail_score2(jsonObject.getFloat("detail_score2"));
+							detectionAccount.setTrade_process_score(jsonObject.getFloat("trade_process_score"));
+							detectionAccount.setTrade_habit_score(jsonObject.getFloat("trade_habit_score"));
+							detectionAccount.setLogistics_character_score(jsonObject.getFloat("logistics_character_score"));
 
-							detectionAccount.setDetail_score3(0f);
-							detectionAccount.setActivity_score0(0f);
-							detectionAccount.setActivity_score1(0f);
-							detectionAccount.setActivity_score2(0f);
+							detectionAccount.setDetail_score3(jsonObject.getFloat("detail_score3"));
+							detectionAccount.setActivity_score0(jsonObject.getFloat("activity_score0"));
+							detectionAccount.setActivity_score1(jsonObject.getFloat("activity_score1"));
+							detectionAccount.setActivity_score2(jsonObject.getFloat("activity_score2"));
 
-							detectionAccount.setDetail_score4(0f);
-							detectionAccount.setAccount_history_score(0f);
+							detectionAccount.setDetail_score4(jsonObject.getFloat("detail_score4"));
+							detectionAccount.setAccount_history_score(jsonObject.getFloat("account_history_score"));
 
 							detectionAccount.setCost(1.0f);
 						}

@@ -234,7 +234,8 @@
         	and account_score <![CDATA[ >= ]]> 60
     	</if>
     	<if test="userGetScanHistoryParameters.scan_status == 3">
-        	and account_score = 0
+        	and account_score <![CDATA[ < ]]> 60
+        	and account_score <![CDATA[ >= ]]> 0
     	</if>
     	<if test="userGetScanHistoryParameters.scan_status == 4">
         	and account_score = -2
@@ -269,7 +270,8 @@
         	and account_score <![CDATA[ >= ]]> 60
     	</if>
     	<if test="userGetScanHistoryParameters.scan_status == 3">
-        	and account_score = 0
+        	and account_score <![CDATA[ < ]]> 60
+        	and account_score <![CDATA[ >= ]]> 0
     	</if>
     	<if test="userGetScanHistoryParameters.scan_status == 4">
         	and account_score = -2
