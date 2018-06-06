@@ -804,8 +804,8 @@ public class DetectionService {
 								detectionAccount.setCost(1.0f);
 							}
 						} else {
-							cell1.setCellValue(ConanApplicationConstants.NOT_EXIST_MESSAGE);
-							cell2.setCellValue(ConanApplicationConstants.NOT_EXIST_CODE);
+							cell1.setCellValue(ConanApplicationConstants.NOT_MATCH_MESSAGE);
+							cell2.setCellValue(ConanApplicationConstants.NOT_MATCH_CODE);
 							cell3.setCellValue(0);
 							cell4.setCellValue(0);
 							cell5.setCellValue(0);
@@ -813,7 +813,7 @@ public class DetectionService {
 							cell7.setCellValue(0);
 							cell8.setCellValue(new Date());
 
-							detectionAccount.setAccount_score(ConanApplicationConstants.NOT_EXIST_CODE);
+							detectionAccount.setAccount_score(ConanApplicationConstants.NOT_MATCH_CODE);
 
 							detectionAccount.setDetail_score0(0f);
 							detectionAccount.setRegister_info_score(0f);
