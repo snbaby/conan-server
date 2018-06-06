@@ -203,7 +203,6 @@ public class DetectionService {
 			tempObject.put("account_name", detectionAccount.getAccount_name());
 			tempObject.put("account_score", detectionAccount.getAccount_score());
 			tempObject.put("scan_account_id", detectionAccount.getId());
-			tempObject.put("created_at", new Date());
 			tempObject.put("account_name", detectionAccount.getAccount_name());
 			tempObject.put("account_score", detectionAccount.getAccount_score());
 
