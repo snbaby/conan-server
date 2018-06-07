@@ -240,7 +240,7 @@ public class BillService {
 				jsonObject.put("detail_score2", detectionAccount.getDetail_score2());
 				jsonObject.put("detail_score3", detectionAccount.getDetail_score3());
 				jsonObject.put("detail_score4", detectionAccount.getDetail_score4());
-				jsonObject.put("scan_cost", detectionAccount.getAccount_score() < 0 ? 0 : 1);
+				jsonObject.put("scan_cost", detectionAccount.getCost());
 				jsonArray.add(jsonObject);
 			}
 			resultJsonObject.put("scan_accounts", jsonArray);

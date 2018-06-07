@@ -86,7 +86,7 @@ public class ConanHttpClientUtils {
 
 			// 检验返回码
 			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode != HttpStatus.SC_OK) {
+			if (statusCode == HttpStatus.SC_NOT_FOUND) {
 				System.out.println("请求出错: " + url);
 				isSuccess = false;
 			} else {
@@ -95,7 +95,7 @@ public class ConanHttpClientUtils {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			isSuccess = false;
+			isSuccess = true;
 		} finally {
 			if (get != null) {
 				try {
