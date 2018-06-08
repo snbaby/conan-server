@@ -46,7 +46,7 @@ public class QueryCost {
      *
      * @mbg.generated Tue May 08 01:33:39 CST 2018
      */
-    private Float cost_gold;
+    private Double cost_gold;
 
     /**
      *
@@ -55,7 +55,7 @@ public class QueryCost {
      *
      * @mbg.generated Tue May 08 01:33:39 CST 2018
      */
-    private Float remain_gold;
+    private Double remain_gold;
 
     /**
      *
@@ -179,7 +179,7 @@ public class QueryCost {
      *
      * @mbg.generated Tue May 08 01:33:39 CST 2018
      */
-    public Float getCost_gold() {
+    public Double getCost_gold() {
         return cost_gold;
     }
 
@@ -191,7 +191,7 @@ public class QueryCost {
      *
      * @mbg.generated Tue May 08 01:33:39 CST 2018
      */
-    public void setCost_gold(Float cost_gold) {
+    public void setCost_gold(Double cost_gold) {
         this.cost_gold = cost_gold;
     }
 
@@ -203,7 +203,7 @@ public class QueryCost {
      *
      * @mbg.generated Tue May 08 01:33:39 CST 2018
      */
-    public Float getRemain_gold() {
+    public Double getRemain_gold() {
         return remain_gold;
     }
 
@@ -215,7 +215,7 @@ public class QueryCost {
      *
      * @mbg.generated Tue May 08 01:33:39 CST 2018
      */
-    public void setRemain_gold(Float remain_gold) {
+    public void setRemain_gold(Double remain_gold) {
         this.remain_gold = remain_gold;
     }
 

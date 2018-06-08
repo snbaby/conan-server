@@ -55,7 +55,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    private Float account_score;
+    private Double account_score;
 
     /**
      *
@@ -64,7 +64,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    private Float detail_score0;
+    private Double detail_score0;
 
     /**
      *
@@ -73,7 +73,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    private Float detail_score1;
+    private Double detail_score1;
 
     /**
      *
@@ -82,7 +82,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    private Float detail_score2;
+    private Double detail_score2;
 
     /**
      *
@@ -91,7 +91,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    private Float detail_score3;
+    private Double detail_score3;
 
     /**
      *
@@ -100,25 +100,25 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    private Float detail_score4;
+    private Double detail_score4;
     
-    private Float register_info_score;
-    private Float identify_info_score;
-    private Float background_info_score;
-    private Float trade_process_score;
-    private Float trade_habit_score;
-    private Float logistics_character_score;
-    private Float account_history_score;
-    private Float account_growup_score;
-    private Float trade_frequency_score;
-    private Float like_info_score;
-    private Float activity_score0;
-    private Float activity_score1;
-    private Float activity_score2;
+    private Double register_info_score;
+    private Double identify_info_score;
+    private Double background_info_score;
+    private Double trade_process_score;
+    private Double trade_habit_score;
+    private Double logistics_character_score;
+    private Double account_history_score;
+    private Double account_growup_score;
+    private Double trade_frequency_score;
+    private Double like_info_score;
+    private Double activity_score0;
+    private Double activity_score1;
+    private Double activity_score2;
     
     
     
-    private Float cost;
+    private Double cost;
 
     /**
      *
@@ -143,121 +143,121 @@ public class DetectionAccount {
 
     
     
-    public Float getRegister_info_score() {
+    public Double getRegister_info_score() {
 		return register_info_score;
 	}
 
 
 
-	public void setRegister_info_score(Float register_info_score) {
+	public void setRegister_info_score(Double register_info_score) {
 		this.register_info_score = register_info_score;
 	}
 
 
 
-	public Float getIdentify_info_score() {
+	public Double getIdentify_info_score() {
 		return identify_info_score;
 	}
 
 
 
-	public void setIdentify_info_score(Float identify_info_score) {
+	public void setIdentify_info_score(Double identify_info_score) {
 		this.identify_info_score = identify_info_score;
 	}
 
 
 
-	public Float getBackground_info_score() {
+	public Double getBackground_info_score() {
 		return background_info_score;
 	}
 
 
 
-	public void setBackground_info_score(Float background_info_score) {
+	public void setBackground_info_score(Double background_info_score) {
 		this.background_info_score = background_info_score;
 	}
 
 
 
-	public Float getTrade_process_score() {
+	public Double getTrade_process_score() {
 		return trade_process_score;
 	}
 
 
 
-	public void setTrade_process_score(Float trade_process_score) {
+	public void setTrade_process_score(Double trade_process_score) {
 		this.trade_process_score = trade_process_score;
 	}
 
 
 
-	public Float getTrade_habit_score() {
+	public Double getTrade_habit_score() {
 		return trade_habit_score;
 	}
 
 
 
-	public void setTrade_habit_score(Float trade_habit_score) {
+	public void setTrade_habit_score(Double trade_habit_score) {
 		this.trade_habit_score = trade_habit_score;
 	}
 
 
 
-	public Float getLogistics_character_score() {
+	public Double getLogistics_character_score() {
 		return logistics_character_score;
 	}
 
 
 
-	public void setLogistics_character_score(Float logistics_character_score) {
+	public void setLogistics_character_score(Double logistics_character_score) {
 		this.logistics_character_score = logistics_character_score;
 	}
 
 
 
-	public Float getAccount_history_score() {
+	public Double getAccount_history_score() {
 		return account_history_score;
 	}
 
 
 
-	public void setAccount_history_score(Float account_history_score) {
+	public void setAccount_history_score(Double account_history_score) {
 		this.account_history_score = account_history_score;
 	}
 
 
 
-	public Float getAccount_growup_score() {
+	public Double getAccount_growup_score() {
 		return account_growup_score;
 	}
 
 
 
-	public void setAccount_growup_score(Float account_growup_score) {
+	public void setAccount_growup_score(Double account_growup_score) {
 		this.account_growup_score = account_growup_score;
 	}
 
 
 
-	public Float getTrade_frequency_score() {
+	public Double getTrade_frequency_score() {
 		return trade_frequency_score;
 	}
 
 
 
-	public void setTrade_frequency_score(Float trade_frequency_score) {
+	public void setTrade_frequency_score(Double trade_frequency_score) {
 		this.trade_frequency_score = trade_frequency_score;
 	}
 
 
 
-	public Float getLike_info_score() {
+	public Double getLike_info_score() {
 		return like_info_score;
 	}
 
 
 
-	public void setLike_info_score(Float like_info_score) {
+	public void setLike_info_score(Double like_info_score) {
 		this.like_info_score = like_info_score;
 	}
 
@@ -379,7 +379,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public Float getAccount_score() {
+    public Double getAccount_score() {
         return account_score;
     }
 
@@ -391,7 +391,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public void setAccount_score(Float account_score) {
+    public void setAccount_score(Double account_score) {
         this.account_score = account_score;
     }
 
@@ -403,7 +403,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public Float getDetail_score0() {
+    public Double getDetail_score0() {
         return detail_score0;
     }
 
@@ -415,7 +415,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public void setDetail_score0(Float detail_score0) {
+    public void setDetail_score0(Double detail_score0) {
         this.detail_score0 = detail_score0;
     }
 
@@ -427,7 +427,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public Float getDetail_score1() {
+    public Double getDetail_score1() {
         return detail_score1;
     }
 
@@ -439,7 +439,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public void setDetail_score1(Float detail_score1) {
+    public void setDetail_score1(Double detail_score1) {
         this.detail_score1 = detail_score1;
     }
 
@@ -451,7 +451,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public Float getDetail_score2() {
+    public Double getDetail_score2() {
         return detail_score2;
     }
 
@@ -463,7 +463,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public void setDetail_score2(Float detail_score2) {
+    public void setDetail_score2(Double detail_score2) {
         this.detail_score2 = detail_score2;
     }
 
@@ -475,7 +475,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public Float getDetail_score3() {
+    public Double getDetail_score3() {
         return detail_score3;
     }
 
@@ -487,7 +487,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public void setDetail_score3(Float detail_score3) {
+    public void setDetail_score3(Double detail_score3) {
         this.detail_score3 = detail_score3;
     }
 
@@ -499,7 +499,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public Float getDetail_score4() {
+    public Double getDetail_score4() {
         return detail_score4;
     }
 
@@ -511,7 +511,7 @@ public class DetectionAccount {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public void setDetail_score4(Float detail_score4) {
+    public void setDetail_score4(Double detail_score4) {
         this.detail_score4 = detail_score4;
     }
 
@@ -539,47 +539,47 @@ public class DetectionAccount {
         this.user_info_id = user_info_id == null ? null : user_info_id.trim();
     }
 
-	public Float getCost() {
+	public Double getCost() {
 		return cost;
 	}
 
-	public void setCost(Float cost) {
+	public void setCost(Double cost) {
 		this.cost = cost;
 	}
 
 
 
-	public Float getActivity_score0() {
+	public Double getActivity_score0() {
 		return activity_score0;
 	}
 
 
 
-	public void setActivity_score0(Float activity_score0) {
+	public void setActivity_score0(Double activity_score0) {
 		this.activity_score0 = activity_score0;
 	}
 
 
 
-	public Float getActivity_score1() {
+	public Double getActivity_score1() {
 		return activity_score1;
 	}
 
 
 
-	public void setActivity_score1(Float activity_score1) {
+	public void setActivity_score1(Double activity_score1) {
 		this.activity_score1 = activity_score1;
 	}
 
 
 
-	public Float getActivity_score2() {
+	public Double getActivity_score2() {
 		return activity_score2;
 	}
 
 
 
-	public void setActivity_score2(Float activity_score2) {
+	public void setActivity_score2(Double activity_score2) {
 		this.activity_score2 = activity_score2;
 	}
     

@@ -23,9 +23,9 @@ public class QueryRechargeListParameters {
 	
 	private Integer recharge_status;
 	
-	private Float rmb_amount_start;
+	private Double rmb_amount_start;
 	
-	private Float rmb_amount_end;
+	private Double rmb_amount_end;
 	
 	private String recharge_id;
 	
@@ -81,19 +81,19 @@ public class QueryRechargeListParameters {
 		this.recharge_status = recharge_status;
 	}
 
-	public Float getRmb_amount_start() {
+	public Double getRmb_amount_start() {
 		return rmb_amount_start;
 	}
 
-	public void setRmb_amount_start(Float rmb_amount_start) {
+	public void setRmb_amount_start(Double rmb_amount_start) {
 		this.rmb_amount_start = rmb_amount_start;
 	}
 
-	public Float getRmb_amount_end() {
+	public Double getRmb_amount_end() {
 		return rmb_amount_end;
 	}
 
-	public void setRmb_amount_end(Float rmb_amount_end) {
+	public void setRmb_amount_end(Double rmb_amount_end) {
 		this.rmb_amount_end = rmb_amount_end;
 	}
 

@@ -11,8 +11,8 @@
     <result column="created_at" jdbcType="TIMESTAMP" property="created_at" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updated_at" />
     <result column="cost_type" jdbcType="VARCHAR" property="cost_type" />
-    <result column="cost_gold" jdbcType="REAL" property="cost_gold" />
-    <result column="remain_gold" jdbcType="REAL" property="remain_gold" />
+    <result column="cost_gold" jdbcType="DOUBLE" property="cost_gold" />
+    <result column="remain_gold" jdbcType="DOUBLE" property="remain_gold" />
     <result column="user_info_id" jdbcType="VARCHAR" property="user_info_id" />
     <result column="phone_no" jdbcType="VARCHAR" property="phone_no" />
   </resultMap>

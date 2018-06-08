@@ -85,8 +85,8 @@ public class ConanUtils {
 		return cellValue;
 	}
 	
-	public static float fix2(float prama) {
-		return (float) (Math.round(prama * 100) / 100.0);
+	public static double fix2(double prama) {
+		return (double) (Math.round(prama * 100) / 100.0);
 	}
 
 }

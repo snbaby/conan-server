@@ -12,29 +12,29 @@
     <result column="updated_at" jdbcType="TIMESTAMP" property="updated_at" />
     <result column="cost_record_id" jdbcType="VARCHAR" property="cost_record_id" />
     <result column="account_name" jdbcType="VARCHAR" property="account_name" />
-    <result column="account_score" jdbcType="REAL" property="account_score" />
-    <result column="detail_score0" jdbcType="REAL" property="detail_score0" />
-    <result column="detail_score1" jdbcType="REAL" property="detail_score1" />
-    <result column="detail_score2" jdbcType="REAL" property="detail_score2" />
-    <result column="detail_score3" jdbcType="REAL" property="detail_score3" />
-    <result column="detail_score4" jdbcType="REAL" property="detail_score4" />
+    <result column="account_score" jdbcType="DOUBLE" property="account_score" />
+    <result column="detail_score0" jdbcType="DOUBLE" property="detail_score0" />
+    <result column="detail_score1" jdbcType="DOUBLE" property="detail_score1" />
+    <result column="detail_score2" jdbcType="DOUBLE" property="detail_score2" />
+    <result column="detail_score3" jdbcType="DOUBLE" property="detail_score3" />
+    <result column="detail_score4" jdbcType="DOUBLE" property="detail_score4" />
     
-    <result column="register_info_score" jdbcType="REAL" property="register_info_score" />
-    <result column="identify_info_score" jdbcType="REAL" property="identify_info_score" />
-    <result column="background_info_score" jdbcType="REAL" property="background_info_score" />
-    <result column="trade_process_score" jdbcType="REAL" property="trade_process_score" />
-    <result column="trade_habit_score" jdbcType="REAL" property="trade_habit_score" />
-    <result column="logistics_character_score" jdbcType="REAL" property="logistics_character_score" />
-    <result column="account_history_score" jdbcType="REAL" property="account_history_score" />
-    <result column="activity_score0" jdbcType="REAL" property="activity_score0" />
-    <result column="activity_score1" jdbcType="REAL" property="activity_score1" />
-    <result column="activity_score2" jdbcType="REAL" property="activity_score2" />
-    <result column="account_growup_score" jdbcType="REAL" property="account_growup_score" />
-    <result column="trade_frequency_score" jdbcType="REAL" property="trade_frequency_score" />
-    <result column="like_info_score" jdbcType="REAL" property="like_info_score" />
+    <result column="register_info_score" jdbcType="DOUBLE" property="register_info_score" />
+    <result column="identify_info_score" jdbcType="DOUBLE" property="identify_info_score" />
+    <result column="background_info_score" jdbcType="DOUBLE" property="background_info_score" />
+    <result column="trade_process_score" jdbcType="DOUBLE" property="trade_process_score" />
+    <result column="trade_habit_score" jdbcType="DOUBLE" property="trade_habit_score" />
+    <result column="logistics_character_score" jdbcType="DOUBLE" property="logistics_character_score" />
+    <result column="account_history_score" jdbcType="DOUBLE" property="account_history_score" />
+    <result column="activity_score0" jdbcType="DOUBLE" property="activity_score0" />
+    <result column="activity_score1" jdbcType="DOUBLE" property="activity_score1" />
+    <result column="activity_score2" jdbcType="DOUBLE" property="activity_score2" />
+    <result column="account_growup_score" jdbcType="DOUBLE" property="account_growup_score" />
+    <result column="trade_frequency_score" jdbcType="DOUBLE" property="trade_frequency_score" />
+    <result column="like_info_score" jdbcType="DOUBLE" property="like_info_score" />
     
     <result column="user_info_id" jdbcType="VARCHAR" property="user_info_id" />
-    <result column="cost" jdbcType="REAL" property="cost" />
+    <result column="cost" jdbcType="DOUBLE" property="cost" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -325,14 +325,14 @@
     account_growup_score,trade_frequency_score,like_info_score
       )
     values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=TIMESTAMP}, #{updated_at,jdbcType=TIMESTAMP}, 
-      #{cost_record_id,jdbcType=VARCHAR}, #{account_name,jdbcType=VARCHAR}, #{account_score,jdbcType=REAL}, 
-      #{detail_score0,jdbcType=REAL}, #{detail_score1,jdbcType=REAL}, #{detail_score2,jdbcType=REAL}, 
-      #{detail_score3,jdbcType=REAL}, #{detail_score4,jdbcType=REAL}, #{user_info_id,jdbcType=VARCHAR}, #{cost,jdbcType=REAL},
+      #{cost_record_id,jdbcType=VARCHAR}, #{account_name,jdbcType=VARCHAR}, #{account_score,jdbcType=DOUBLE}, 
+      #{detail_score0,jdbcType=DOUBLE}, #{detail_score1,jdbcType=DOUBLE}, #{detail_score2,jdbcType=DOUBLE}, 
+      #{detail_score3,jdbcType=DOUBLE}, #{detail_score4,jdbcType=DOUBLE}, #{user_info_id,jdbcType=VARCHAR}, #{cost,jdbcType=DOUBLE},
       
-      #{register_info_score,jdbcType=REAL},#{identify_info_score,jdbcType=REAL},#{background_info_score,jdbcType=REAL},
-      #{trade_process_score,jdbcType=REAL},#{trade_habit_score,jdbcType=REAL},#{logistics_character_score,jdbcType=REAL},
-      #{account_history_score,jdbcType=REAL},#{activity_score0,jdbcType=REAL},#{activity_score1,jdbcType=REAL},#{activity_score2,jdbcType=REAL},
-      #{account_growup_score,jdbcType=REAL},#{trade_frequency_score,jdbcType=REAL},#{like_info_score,jdbcType=REAL}
+      #{register_info_score,jdbcType=DOUBLE},#{identify_info_score,jdbcType=DOUBLE},#{background_info_score,jdbcType=DOUBLE},
+      #{trade_process_score,jdbcType=DOUBLE},#{trade_habit_score,jdbcType=DOUBLE},#{logistics_character_score,jdbcType=DOUBLE},
+      #{account_history_score,jdbcType=DOUBLE},#{activity_score0,jdbcType=DOUBLE},#{activity_score1,jdbcType=DOUBLE},#{activity_score2,jdbcType=DOUBLE},
+      #{account_growup_score,jdbcType=DOUBLE},#{trade_frequency_score,jdbcType=DOUBLE},#{like_info_score,jdbcType=DOUBLE}
       )
   </insert>
   <insert id="insertList" >
@@ -353,13 +353,13 @@
     values 
      <foreach collection="recordList" item="record" separator=",">  
             (#{record.id,jdbcType=VARCHAR}, #{record.created_at,jdbcType=TIMESTAMP}, #{record.updated_at,jdbcType=TIMESTAMP}, 
-      #{record.cost_record_id,jdbcType=VARCHAR}, #{record.account_name,jdbcType=VARCHAR}, #{record.account_score,jdbcType=REAL}, 
-      #{record.detail_score0,jdbcType=REAL}, #{record.detail_score1,jdbcType=REAL}, #{record.detail_score2,jdbcType=REAL}, 
-      #{record.detail_score3,jdbcType=REAL}, #{record.detail_score4,jdbcType=REAL}, #{record.user_info_id,jdbcType=VARCHAR}, #{record.cost,jdbcType=REAL},
-      #{record.register_info_score,jdbcType=REAL},#{record.identify_info_score,jdbcType=REAL},#{record.background_info_score,jdbcType=REAL},
-      #{record.trade_process_score,jdbcType=REAL},#{record.trade_habit_score,jdbcType=REAL},#{record.logistics_character_score,jdbcType=REAL},
-      #{record.account_history_score,jdbcType=REAL},#{record.activity_score0,jdbcType=REAL},#{record.activity_score1,jdbcType=REAL},#{record.activity_score2,jdbcType=REAL},
-      #{record.account_growup_score,jdbcType=REAL},#{record.trade_frequency_score,jdbcType=REAL},#{record.like_info_score,jdbcType=REAL}
+      #{record.cost_record_id,jdbcType=VARCHAR}, #{record.account_name,jdbcType=VARCHAR}, #{record.account_score,jdbcType=DOUBLE}, 
+      #{record.detail_score0,jdbcType=DOUBLE}, #{record.detail_score1,jdbcType=DOUBLE}, #{record.detail_score2,jdbcType=DOUBLE}, 
+      #{record.detail_score3,jdbcType=DOUBLE}, #{record.detail_score4,jdbcType=DOUBLE}, #{record.user_info_id,jdbcType=VARCHAR}, #{record.cost,jdbcType=DOUBLE},
+      #{record.register_info_score,jdbcType=DOUBLE},#{record.identify_info_score,jdbcType=DOUBLE},#{record.background_info_score,jdbcType=DOUBLE},
+      #{record.trade_process_score,jdbcType=DOUBLE},#{record.trade_habit_score,jdbcType=DOUBLE},#{record.logistics_character_score,jdbcType=DOUBLE},
+      #{record.account_history_score,jdbcType=DOUBLE},#{record.activity_score0,jdbcType=DOUBLE},#{record.activity_score1,jdbcType=DOUBLE},#{record.activity_score2,jdbcType=DOUBLE},
+      #{record.account_growup_score,jdbcType=DOUBLE},#{record.trade_frequency_score,jdbcType=DOUBLE},#{record.like_info_score,jdbcType=DOUBLE}
       )
         </foreach>  
   </insert>
@@ -429,28 +429,28 @@
         #{account_name,jdbcType=VARCHAR},
       </if>
       <if test="account_score != null">
-        #{account_score,jdbcType=REAL},
+        #{account_score,jdbcType=DOUBLE},
       </if>
       <if test="detail_score0 != null">
-        #{detail_score0,jdbcType=REAL},
+        #{detail_score0,jdbcType=DOUBLE},
       </if>
       <if test="detail_score1 != null">
-        #{detail_score1,jdbcType=REAL},
+        #{detail_score1,jdbcType=DOUBLE},
       </if>
       <if test="detail_score2 != null">
-        #{detail_score2,jdbcType=REAL},
+        #{detail_score2,jdbcType=DOUBLE},
       </if>
       <if test="detail_score3 != null">
-        #{detail_score3,jdbcType=REAL},
+        #{detail_score3,jdbcType=DOUBLE},
       </if>
       <if test="detail_score4 != null">
-        #{detail_score4,jdbcType=REAL},
+        #{detail_score4,jdbcType=DOUBLE},
       </if>
       <if test="user_info_id != null">
         #{user_info_id,jdbcType=VARCHAR},
       </if>
       <if test="cost != null">
-        #{cost,jdbcType=REAL},
+        #{cost,jdbcType=DOUBLE},
       </if>
     </trim>
   </insert>
@@ -475,28 +475,28 @@
         account_name = #{account_name,jdbcType=VARCHAR},
       </if>
       <if test="account_score != null">
-        account_score = #{account_score,jdbcType=REAL},
+        account_score = #{account_score,jdbcType=DOUBLE},
       </if>
       <if test="detail_score0 != null">
-        detail_score0 = #{detail_score0,jdbcType=REAL},
+        detail_score0 = #{detail_score0,jdbcType=DOUBLE},
       </if>
       <if test="detail_score1 != null">
-        detail_score1 = #{detail_score1,jdbcType=REAL},
+        detail_score1 = #{detail_score1,jdbcType=DOUBLE},
       </if>
       <if test="detail_score2 != null">
-        detail_score2 = #{detail_score2,jdbcType=REAL},
+        detail_score2 = #{detail_score2,jdbcType=DOUBLE},
       </if>
       <if test="detail_score3 != null">
-        detail_score3 = #{detail_score3,jdbcType=REAL},
+        detail_score3 = #{detail_score3,jdbcType=DOUBLE},
       </if>
       <if test="detail_score4 != null">
-        detail_score4 = #{detail_score4,jdbcType=REAL},
+        detail_score4 = #{detail_score4,jdbcType=DOUBLE},
       </if>
       <if test="user_info_id != null">
         user_info_id = #{user_info_id,jdbcType=VARCHAR},
       </if>
       <if test="cost != null">
-        cost = #{cost,jdbcType=REAL},
+        cost = #{cost,jdbcType=DOUBLE},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -512,14 +512,14 @@
       updated_at = #{updated_at,jdbcType=TIMESTAMP},
       cost_record_id = #{cost_record_id,jdbcType=VARCHAR},
       account_name = #{account_name,jdbcType=VARCHAR},
-      account_score = #{account_score,jdbcType=REAL},
-      detail_score0 = #{detail_score0,jdbcType=REAL},
-      detail_score1 = #{detail_score1,jdbcType=REAL},
-      detail_score2 = #{detail_score2,jdbcType=REAL},
-      detail_score3 = #{detail_score3,jdbcType=REAL},
-      detail_score4 = #{detail_score4,jdbcType=REAL},
+      account_score = #{account_score,jdbcType=DOUBLE},
+      detail_score0 = #{detail_score0,jdbcType=DOUBLE},
+      detail_score1 = #{detail_score1,jdbcType=DOUBLE},
+      detail_score2 = #{detail_score2,jdbcType=DOUBLE},
+      detail_score3 = #{detail_score3,jdbcType=DOUBLE},
+      detail_score4 = #{detail_score4,jdbcType=DOUBLE},
       user_info_id = #{user_info_id,jdbcType=VARCHAR},
-      cost = #{cost,jdbcType=REAL}
+      cost = #{cost,jdbcType=DOUBLE}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

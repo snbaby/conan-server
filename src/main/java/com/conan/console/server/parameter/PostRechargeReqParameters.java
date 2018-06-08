@@ -18,7 +18,7 @@ public class PostRechargeReqParameters {
 
 	@NotNull(message = "recharge_amount不能为空")
 	@DecimalMin(value = "1.0", message = "recharge_amount最小为1.0")
-	private float recharge_amount;
+	private double recharge_amount;
 
 	@Size(max = 255, message = "comment最大长度为255")
 	private String comment;
@@ -37,11 +37,11 @@ public class PostRechargeReqParameters {
 		this.recharge_type = recharge_type;
 	}
 
-	public float getRecharge_amount() {
+	public double getRecharge_amount() {
 		return recharge_amount;
 	}
 
-	public void setRecharge_amount(float recharge_amount) {
+	public void setRecharge_amount(double recharge_amount) {
 		this.recharge_amount = recharge_amount;
 	}
 

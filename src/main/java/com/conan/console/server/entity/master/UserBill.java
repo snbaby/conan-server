@@ -37,7 +37,7 @@ public class UserBill {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    private Float remain_gold;
+    private Double remain_gold;
 
     /**
      *
@@ -147,7 +147,7 @@ public class UserBill {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public Float getRemain_gold() {
+    public Double getRemain_gold() {
         return remain_gold;
     }
 
@@ -159,7 +159,7 @@ public class UserBill {
      *
      * @mbg.generated Mon Apr 23 00:59:28 CST 2018
      */
-    public void setRemain_gold(Float remain_gold) {
+    public void setRemain_gold(Double remain_gold) {
         this.remain_gold = remain_gold;
     }
 

@@ -18,9 +18,9 @@ public class QueryCostListParameters {
 	
 	private Integer cost_type;
 	
-	private Float cost_gold_start;
+	private Double cost_gold_start;
 	
-	private Float cost_gold_end;
+	private Double cost_gold_end;
 	
 	private String cost_id;
 	
@@ -68,19 +68,19 @@ public class QueryCostListParameters {
 		this.cost_type = cost_type;
 	}
 
-	public Float getCost_gold_start() {
+	public Double getCost_gold_start() {
 		return cost_gold_start;
 	}
 
-	public void setCost_gold_start(Float cost_gold_start) {
+	public void setCost_gold_start(Double cost_gold_start) {
 		this.cost_gold_start = cost_gold_start;
 	}
 
-	public Float getCost_gold_end() {
+	public Double getCost_gold_end() {
 		return cost_gold_end;
 	}
 
-	public void setCost_gold_end(Float cost_gold_end) {
+	public void setCost_gold_end(Double cost_gold_end) {
 		this.cost_gold_end = cost_gold_end;
 	}
 

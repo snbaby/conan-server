@@ -12,10 +12,10 @@
     <result column="updated_at" jdbcType="TIMESTAMP" property="updated_at" />
     <result column="photo" jdbcType="VARCHAR" property="photo" />
     <result column="comment" jdbcType="VARCHAR" property="comment" />
-    <result column="rmb_amount" jdbcType="REAL" property="rmb_amount" />
-    <result column="gold_amount" jdbcType="REAL" property="gold_amount" />
-    <result column="gold_coupon" jdbcType="REAL" property="gold_coupon" />
-    <result column="gold_total" jdbcType="REAL" property="gold_total" />
+    <result column="rmb_amount" jdbcType="DOUBLE" property="rmb_amount" />
+    <result column="gold_amount" jdbcType="DOUBLE" property="gold_amount" />
+    <result column="gold_coupon" jdbcType="DOUBLE" property="gold_coupon" />
+    <result column="gold_total" jdbcType="DOUBLE" property="gold_total" />
     <result column="recharge_status" jdbcType="VARCHAR" property="recharge_status" />
     <result column="recharge_type" jdbcType="VARCHAR" property="recharge_type" />
     <result column="user_info_id" jdbcType="VARCHAR" property="user_info_id" />

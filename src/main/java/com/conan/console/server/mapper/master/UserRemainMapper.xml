@@ -8,8 +8,8 @@
       This element was generated on Mon Apr 23 00:59:28 CST 2018.
     -->
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="gold_amount" jdbcType="REAL" property="gold_amount" />
-    <result column="gold_coupon" jdbcType="REAL" property="gold_coupon" />
+    <result column="gold_amount" jdbcType="DOUBLE" property="gold_amount" />
+    <result column="gold_coupon" jdbcType="DOUBLE" property="gold_coupon" />
     <result column="user_info_id" jdbcType="VARCHAR" property="user_info_id" />
     <result column="created_at" jdbcType="TIMESTAMP" property="created_at" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updated_at" />
@@ -51,7 +51,7 @@
     insert into user_remain (id, gold_amount, gold_coupon, 
       user_info_id, created_at, updated_at
       )
-    values (#{id,jdbcType=VARCHAR}, #{gold_amount,jdbcType=REAL}, #{gold_coupon,jdbcType=REAL}, 
+    values (#{id,jdbcType=VARCHAR}, #{gold_amount,jdbcType=DOUBLE}, #{gold_coupon,jdbcType=DOUBLE}, 
       #{user_info_id,jdbcType=VARCHAR}, #{created_at,jdbcType=TIMESTAMP}, #{updated_at,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -87,10 +87,10 @@
         #{id,jdbcType=VARCHAR},
       </if>
       <if test="gold_amount != null">
-        #{gold_amount,jdbcType=REAL},
+        #{gold_amount,jdbcType=DOUBLE},
       </if>
       <if test="gold_coupon != null">
-        #{gold_coupon,jdbcType=REAL},
+        #{gold_coupon,jdbcType=DOUBLE},
       </if>
       <if test="user_info_id != null">
         #{user_info_id,jdbcType=VARCHAR},
@@ -112,10 +112,10 @@
     update user_remain
     <set>
       <if test="gold_amount != null">
-        gold_amount = #{gold_amount,jdbcType=REAL},
+        gold_amount = #{gold_amount,jdbcType=DOUBLE},
       </if>
       <if test="gold_coupon != null">
-        gold_coupon = #{gold_coupon,jdbcType=REAL},
+        gold_coupon = #{gold_coupon,jdbcType=DOUBLE},
       </if>
       <if test="user_info_id != null">
         user_info_id = #{user_info_id,jdbcType=VARCHAR},
@@ -136,8 +136,8 @@
       This element was generated on Mon Apr 23 00:59:28 CST 2018.
     -->
     update user_remain
-    set gold_amount = #{gold_amount,jdbcType=REAL},
-      gold_coupon = #{gold_coupon,jdbcType=REAL},
+    set gold_amount = #{gold_amount,jdbcType=DOUBLE},
+      gold_coupon = #{gold_coupon,jdbcType=DOUBLE},
       user_info_id = #{user_info_id,jdbcType=VARCHAR},
       created_at = #{created_at,jdbcType=TIMESTAMP},
       updated_at = #{updated_at,jdbcType=TIMESTAMP}

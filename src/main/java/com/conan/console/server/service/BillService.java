@@ -56,8 +56,8 @@ public class BillService {
 		JSONObject resultJsonObject = new JSONObject();
 		List<UserBill> userBillList = userBillMapper.selectByUserGetBillParameters(userGetBillParameters, user_info_id);
 
-		float recharge_total = 0f;
-		float cost_total = 0f;
+		double recharge_total = 0f;
+		double cost_total = 0f;
 		JSONArray jsonArray = new JSONArray();
 		for (UserBill userBill : userBillList) {
 			JSONObject userBillJsonObject = new JSONObject();
@@ -254,7 +254,7 @@ public class BillService {
 	}
 
 	@Transactional
-	public JSONObject postRechargeReq(int recharge_type, float recharge_amount, String comment, String capture_id,
+	public JSONObject postRechargeReq(int recharge_type, double recharge_amount, String comment, String capture_id,
 			String user_info_id) {
 		UserRemain userRemain = userRemainMapper.selectByPrimaryKey(user_info_id);// 用户信息 用户权限 用户金额 所使用的ID 均为同一ID
 		if (userRemain == null) {
@@ -282,13 +282,13 @@ public class BillService {
 		rechargeBill.setComment(comment);
 		rechargeBill.setRmb_amount(recharge_amount);
 		rechargeBill.setGold_amount(recharge_amount*ConanApplicationConstants.RMB_TO_COUPON_RATE);
-		rechargeBill.setGold_coupon(0f);
+		rechargeBill.setGold_coupon(0d);
 
 		JSONObject rechargePackageJsonObject = jsonService.getrRechargePackage();
 		JSONArray packagesJsonArray = rechargePackageJsonObject.getJSONArray("packages");
 		for (int i = 0; i < packagesJsonArray.size(); i++) {
 			if (packagesJsonArray.getJSONObject(i).getIntValue("package_amount") == recharge_amount) {
-				rechargeBill.setGold_coupon(packagesJsonArray.getJSONObject(i).getIntValue("package_copon") * 1f);
+				rechargeBill.setGold_coupon(packagesJsonArray.getJSONObject(i).getIntValue("package_copon") * 1d);
 				userBill.setBill_digest("人民币充值: " + recharge_amount + "元|额外赠送"
 						+ packagesJsonArray.getJSONObject(i).getIntValue("package_copon") + "金币");
 				break;

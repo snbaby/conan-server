@@ -198,13 +198,13 @@ public class ManageService {
 	@Transactional
 	public JSONObject getStats() {
 		Date td = ConanUtils.getStartTime();
-		int new_recharge_cnt =rechargeBillMapper.selectNewRechargeCntTotal();
-		int today_register_cnt = userInfoMapper.selectTdRegisterCntTotal(td);
-		int today_login_cnt = userInfoMapper.selectTdLoginCntTotal(td);
-		int total_registered_cnt = userInfoMapper.selectTtRegisteredCntTotal();
-		int today_recharge_agree_cnt =rechargeBillMapper.selectTdRechargeAgreeCntTotal(td);
-		int today_recharge_agree_amount = rechargeBillMapper.selectTdRechargeAgreeAmountTotal(td);
-		int total_recharge_agree_amount = rechargeBillMapper.selectTtRechargeAgreeAmountTotal();
+		long new_recharge_cnt =rechargeBillMapper.selectNewRechargeCntTotal();
+		long today_register_cnt = userInfoMapper.selectTdRegisterCntTotal(td);
+		long today_login_cnt = userInfoMapper.selectTdLoginCntTotal(td);
+		long total_registered_cnt = userInfoMapper.selectTtRegisteredCntTotal();
+		long today_recharge_agree_cnt =rechargeBillMapper.selectTdRechargeAgreeCntTotal(td);
+		long today_recharge_agree_amount = rechargeBillMapper.selectTdRechargeAgreeAmountTotal(td);
+		long total_recharge_agree_amount = rechargeBillMapper.selectTtRechargeAgreeAmountTotal();
 		JSONObject resultJsonObject = new JSONObject();
 		resultJsonObject.put("new_recharge_cnt", new_recharge_cnt);
 		resultJsonObject.put("today_register_cnt", today_register_cnt);

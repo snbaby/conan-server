@@ -64,7 +64,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 30 00:35:43 CST 2018
      */
-    private Float rmb_amount;
+    private Double rmb_amount;
 
     /**
      *
@@ -73,7 +73,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 30 00:35:43 CST 2018
      */
-    private Float gold_amount;
+    private Double gold_amount;
 
     /**
      *
@@ -82,7 +82,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 30 00:35:43 CST 2018
      */
-    private Float gold_coupon;
+    private Double gold_coupon;
 
     /**
      *
@@ -91,7 +91,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 30 00:35:43 CST 2018
      */
-    private Float gold_total;
+    private Double gold_total;
 
     /**
      *
@@ -286,7 +286,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 30 00:35:43 CST 2018
      */
-    public Float getRmb_amount() {
+    public Double getRmb_amount() {
         return rmb_amount;
     }
 
@@ -298,7 +298,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 30 00:35:43 CST 2018
      */
-    public void setRmb_amount(Float rmb_amount) {
+    public void setRmb_amount(Double rmb_amount) {
         this.rmb_amount = rmb_amount;
     }
 
@@ -310,7 +310,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 30 00:35:43 CST 2018
      */
-    public Float getGold_amount() {
+    public Double getGold_amount() {
         return gold_amount;
     }
 
@@ -322,7 +322,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 30 00:35:43 CST 2018
      */
-    public void setGold_amount(Float gold_amount) {
+    public void setGold_amount(Double gold_amount) {
         this.gold_amount = gold_amount;
     }
 
@@ -334,7 +334,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 30 00:35:43 CST 2018
      */
-    public Float getGold_coupon() {
+    public Double getGold_coupon() {
         return gold_coupon;
     }
 
@@ -346,7 +346,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 30 00:35:43 CST 2018
      */
-    public void setGold_coupon(Float gold_coupon) {
+    public void setGold_coupon(Double gold_coupon) {
         this.gold_coupon = gold_coupon;
     }
 
@@ -358,7 +358,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 30 00:35:43 CST 2018
      */
-    public Float getGold_total() {
+    public Double getGold_total() {
         return gold_total;
     }
 
@@ -370,7 +370,7 @@ public class RechargeBill {
      *
      * @mbg.generated Mon Apr 30 00:35:43 CST 2018
      */
-    public void setGold_total(Float gold_total) {
+    public void setGold_total(Double gold_total) {
         this.gold_total = gold_total;
     }
 

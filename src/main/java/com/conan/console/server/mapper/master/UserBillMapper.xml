@@ -10,7 +10,7 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="created_at" jdbcType="TIMESTAMP" property="created_at" />
     <result column="bill_type" jdbcType="VARCHAR" property="bill_type" />
-    <result column="remain_gold" jdbcType="REAL" property="remain_gold" />
+    <result column="remain_gold" jdbcType="DOUBLE" property="remain_gold" />
     <result column="bill_digest" jdbcType="VARCHAR" property="bill_digest" />
     <result column="updated_at" jdbcType="TIMESTAMP" property="updated_at" />
     <result column="user_info_id" jdbcType="VARCHAR" property="user_info_id" />
@@ -74,7 +74,7 @@
       remain_gold, bill_digest, 
       updated_at, user_info_id)
     values (#{id,jdbcType=VARCHAR}, #{created_at,jdbcType=TIMESTAMP}, #{bill_type,jdbcType=VARCHAR}, 
-      #{remain_gold,jdbcType=REAL}, #{bill_digest,jdbcType=VARCHAR},
+      #{remain_gold,jdbcType=DOUBLE}, #{bill_digest,jdbcType=VARCHAR},
       #{updated_at,jdbcType=TIMESTAMP}, #{user_info_id,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.conan.console.server.entity.master.UserBill">
@@ -118,7 +118,7 @@
         #{bill_type,jdbcType=VARCHAR},
       </if>
       <if test="remain_gold != null">
-        #{remain_gold,jdbcType=REAL},
+        #{remain_gold,jdbcType=DOUBLE},
       </if>
       <if test="bill_digest != null">
         #{bill_digest,jdbcType=VARCHAR},
@@ -146,7 +146,7 @@
         bill_type = #{bill_type,jdbcType=VARCHAR},
       </if>
       <if test="remain_gold != null">
-        remain_gold = #{remain_gold,jdbcType=REAL},
+        remain_gold = #{remain_gold,jdbcType=DOUBLE},
       </if>
       <if test="bill_digest != null">
         bill_digest = #{bill_digest,jdbcType=VARCHAR},
@@ -169,7 +169,7 @@
     update user_bill
     set created_at = #{created_at,jdbcType=TIMESTAMP},
       bill_type = #{bill_type,jdbcType=VARCHAR},
-      remain_gold = #{remain_gold,jdbcType=REAL},
+      remain_gold = #{remain_gold,jdbcType=DOUBLE},
       bill_digest = #{bill_digest,jdbcType=VARCHAR},
       updated_at = #{updated_at,jdbcType=TIMESTAMP},
       user_info_id = #{user_info_id,jdbcType=VARCHAR}
