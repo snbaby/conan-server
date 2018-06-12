@@ -287,7 +287,7 @@ public class BillService {
 		JSONObject rechargePackageJsonObject = jsonService.getrRechargePackage();
 		JSONArray packagesJsonArray = rechargePackageJsonObject.getJSONArray("packages");
 		for (int i = 0; i < packagesJsonArray.size(); i++) {
-			if (packagesJsonArray.getJSONObject(i).getIntValue("package_amount") == recharge_amount) {
+			if (recharge_amount>=packagesJsonArray.getJSONObject(i).getIntValue("package_amount")) {
 				rechargeBill.setGold_coupon(packagesJsonArray.getJSONObject(i).getIntValue("package_copon") * 1d);
 				userBill.setBill_digest("人民币充值: " + recharge_amount + "元|额外赠送"
 						+ packagesJsonArray.getJSONObject(i).getIntValue("package_copon") + "金币");
