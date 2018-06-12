@@ -17,7 +17,7 @@ public class PostRechargeReqParameters {
 	private int recharge_type;
 
 	@NotNull(message = "recharge_amount不能为空")
-	@DecimalMin(value = "1.0", message = "recharge_amount最小为1.0")
+	@DecimalMin(value = "100.0", message = "recharge_amount最小为100.0")
 	private double recharge_amount;
 
 	@Size(max = 255, message = "comment最大长度为255")
