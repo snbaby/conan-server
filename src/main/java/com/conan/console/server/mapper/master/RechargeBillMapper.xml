@@ -59,7 +59,7 @@
     select 
     IFNULL(count(id),0)
     from recharge_bill
-    where recharge_status = 1
+    where recharge_status = 2
   </select>
   <select id="selectTdRechargeAgreeCntTotal" resultType="java.lang.Long">
     <!--
@@ -94,7 +94,7 @@
     select 
     IFNULL(sum(rmb_amount),0)
     from recharge_bill
-    where recharge_status = 2
+    where recharge_status = 1
   </select>
   
   <select id="selectByUserIdAndRechargeStatus" resultMap="BaseResultMap">

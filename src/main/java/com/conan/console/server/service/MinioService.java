@@ -57,6 +57,7 @@ public class MinioService {
 			minioClient.putObject(minio_bucketName, objectName, inputStream, contentType);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
 			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);

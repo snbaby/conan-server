@@ -10,7 +10,7 @@ logging:
 conan:
   server:
     validate-url: http://120.79.152.124:8080/api/v1.0/sendValidationCode
-    account-validate-url: http://103.249.108.107:4444/members/
+    account-validate-url: http://127.0.0.1/members/
     batch-template-file: batch_template.xlsx
 
 minio:
@@ -22,8 +22,8 @@ minio:
 datasource:
   master:
     jdbcUrl : jdbc:mysql://127.0.0.1:3306/tknDb2?autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false  
-    username : root
-    password : Apple1688!@#
+    username : tongcheng
+    password : mysqlTC!@#123
     driver-class-name : com.mysql.jdbc.Driver
     max-idle : 40
     max-wait : 40000
@@ -35,8 +35,8 @@ datasource:
     time-between-eviction-runs-millis : 18800
   slave:
     jdbcUrl : jdbc:mysql://127.0.0.1:3306/ptbrain?autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false  
-    username : root
-    password : Apple1688!@#
+    username : tongcheng
+    password : mysqlTC!@#123
     driver-class-name : com.mysql.jdbc.Driver
     max-idle : 40
     max-wait : 40000

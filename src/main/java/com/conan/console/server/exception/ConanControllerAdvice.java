@@ -18,6 +18,7 @@ public class ConanControllerAdvice {
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ResponseFaildResult> errorHandler(Exception ex) {
+    	ex.printStackTrace();
     	ResponseFaildResult responseFaildResult = new ResponseFaildResult();
     	responseFaildResult.setCode(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE);
     	responseFaildResult.setDescription(ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE);
