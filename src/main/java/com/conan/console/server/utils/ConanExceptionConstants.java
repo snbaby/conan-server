@@ -15,6 +15,17 @@ public class ConanExceptionConstants {
 	public static final String USER_EXISTS_EXCEPTION_CODE = "USER_EXISTS_EXCEPTION";
 	public static final String USER_EXISTS_EXCEPTION_MESSAGE = "用户已存在";
 	public static final HttpStatus USER_EXISTS_EXCEPTION_HTTP_STATUS = HttpStatus.FORBIDDEN;
+	
+	// 用户组重复添加或修改
+	public static final String GROUP_EXISTS_EXCEPTION_CODE = "GROUP_EXISTS_EXCEPTION";
+	public static final String GROUP_EXISTS_EXCEPTION_MESSAGE = "用户该组已存在";
+	public static final HttpStatus GROUP_EXISTS_EXCEPTION_HTTP_STATUS = HttpStatus.FORBIDDEN;
+	
+	// 用户组重复添加或修改
+	public static final String GROUP_NOT_EXISTS_EXCEPTION_CODE = "GROUP_NOT_EXISTS_EXCEPTION";
+	public static final String GROUP_NOT_EXISTS_EXCEPTION_MESSAGE = "该组不存在";
+	public static final HttpStatus GROUP_NOT_EXISTS_EXCEPTION_HTTP_STATUS = HttpStatus.NOT_FOUND;
+	
 	// 用户权限问题
 	public static final String USER_LOGIN_EXCEPTION_CODE = "USER_LOGIN_EXCEPTION";
 	public static final String USER_LOGIN_EXCEPTION_MESSAGE = "账号或密码错误";
