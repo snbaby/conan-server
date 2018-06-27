@@ -16,12 +16,12 @@ public interface GroupDetailMapper {
 	
 	int selectByQueryGroupDetailParametersTotal(
 			@Param("user_info_id") String user_info_id,
-			@Param("queryCostListParameters") QueryGroupDetailParameters queryGroupDetailParameters);
+			@Param("queryGroupDetailParameters") QueryGroupDetailParameters queryGroupDetailParameters);
 	
 	int selectByQueryGroupDetailParametersScanStatus(
 			@Param("user_info_id") String user_info_id,
 			@Param("scan_status") int scan_status,
-			@Param("queryCostListParameters") QueryGroupDetailParameters queryGroupDetailParameters);
+			@Param("queryGroupDetailParameters") QueryGroupDetailParameters queryGroupDetailParameters);
 	
 	List<GroupDetail> selectByUserInfoIdAndGroupId(
     		@Param("user_info_id") String user_info_id,

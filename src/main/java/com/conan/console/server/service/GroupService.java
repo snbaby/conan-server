@@ -79,9 +79,9 @@ public class GroupService {
 			groupMapper.insertSelective(group);//保存组信息
 		} catch (DuplicateKeyException e) {
 			// TODO: handle exception
-			throw new ConanException(ConanExceptionConstants.USER_EXISTS_EXCEPTION_CODE,
-					ConanExceptionConstants.USER_EXISTS_EXCEPTION_MESSAGE,
-					ConanExceptionConstants.USER_EXISTS_EXCEPTION_HTTP_STATUS);
+			throw new ConanException(ConanExceptionConstants.GROUP_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.GROUP_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.GROUP_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
 		
 		JSONObject jsonObject = new JSONObject();
@@ -109,8 +109,16 @@ public class GroupService {
 			group.setGroup_comment(group_comment);
 		}
 		group.setUpdated_at(new Date());
-		groupMapper.updateByPrimaryKeySelective(group);
 		
+		try {
+			groupMapper.updateByPrimaryKeySelective(group);
+		} catch (DuplicateKeyException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw new ConanException(ConanExceptionConstants.GROUP_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.GROUP_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.GROUP_EXISTS_EXCEPTION_HTTP_STATUS);
+		}
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("id",group.getId());
 		jsonObject.put("created_at", group.getCreated_at());

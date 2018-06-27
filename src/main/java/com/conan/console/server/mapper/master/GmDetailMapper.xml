@@ -23,7 +23,7 @@
     -->
     select 
     *
-    from group_detail
+    from gm_detail
     where user_info_id = #{user_info_id} 
     and  detection_id = #{detection_account_id} 
   </select>
