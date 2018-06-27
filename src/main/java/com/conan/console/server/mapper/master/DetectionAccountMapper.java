@@ -37,6 +37,8 @@ public interface DetectionAccountMapper {
 
 	List<DetectionAccount> selectByRecordId(@Param("recordId") String costRecordId, @Param("pageNo") int pageNo,
 			@Param("pageSize") int pageSize);
+	
+	List<DetectionAccount> selectByRecordIdAndyUserInfoId(@Param("recordId") String costRecordId,@Param("user_info_id") String user_info_id);
 
 	int selectByRecordIdTotal(@Param("recordId") String costRecordId);
 

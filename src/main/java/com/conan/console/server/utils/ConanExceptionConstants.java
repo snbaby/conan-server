@@ -50,6 +50,10 @@ public class ConanExceptionConstants {
 	public static final String SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_CODE = "SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION";
 	public static final String SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_MESSAGE = "scan_account未传入错误";
 	public static final HttpStatus SCAN_ACCOUNT_NOT_EXISTS_EXCEPTION_HTTP_STATUS = HttpStatus.BAD_REQUEST;
+	// 檢測賬號不存在
+	public static final String DETECTION_ACCOUNT_NOT_EXISTS_EXCEPTION_CODE = "DETECTION_ACCOUNT_NOT_EXISTS_EXCEPTION";
+	public static final String DETECTION_ACCOUNT_NOT_EXISTS_EXCEPTION_MESSAGE = "detection_id不存在";
+	public static final HttpStatus DETECTION_ACCOUNT_NOT_EXISTS_EXCEPTION_HTTP_STATUS = HttpStatus.NOT_FOUND;
 	// 账单查询预扣费错误
 	public static final String SCAN_FILE_NOT_EXISTS_EXCEPTION_CODE = "SCAN_FILE_NOT_EXISTS_EXCEPTION";
 	public static final String SCAN_FILE_EXISTS_EXCEPTION_MESSAGE = "scan_file未传入错误";

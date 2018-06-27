@@ -7,7 +7,8 @@ public class AddIntoGroupParameters {
 	private String bill_id;
 	private String[] detection_account_id;
 	private String group_id;
-	private Map<String,String> query_params;
+	private Map<String,Object> query_params;
+	private String target_group_id;
 	public Integer getAdd_method() {
 		return add_method;
 	}
@@ -32,10 +33,17 @@ public class AddIntoGroupParameters {
 	public void setGroup_id(String group_id) {
 		this.group_id = group_id;
 	}
-	public Map<String, String> getQuery_params() {
+	public String getTarget_group_id() {
+		return target_group_id;
+	}
+	public void setTarget_group_id(String target_group_id) {
+		this.target_group_id = target_group_id;
+	}
+	public Map<String, Object> getQuery_params() {
 		return query_params;
 	}
-	public void setQuery_params(Map<String, String> query_params) {
+	public void setQuery_params(Map<String, Object> query_params) {
 		this.query_params = query_params;
 	}
+	
 }

@@ -92,7 +92,15 @@ public class GroupController {
 	@PostMapping("deleteGroups")
 	public ResponseEntity<ResponseSuccessResult> deleteGroups(HttpServletRequest request,
 			@RequestBody DeleteGroupsParameters deleteGroupsParameters, BindingResult bindingResult) {
-		return null;
+		String userInfoId = (String) request.getSession().getAttribute("user_info_id");
+		if (StringUtils.isBlank(userInfoId)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		groupService.deleteGroups(userInfoId,deleteGroupsParameters.getGroup_id());
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success");
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 	
 	@PostMapping("queryGroupDetail")
@@ -104,7 +112,58 @@ public class GroupController {
 	@PostMapping("addIntoGroup")
 	public ResponseEntity<ResponseSuccessResult> addIntoGroup(HttpServletRequest request,
 			@RequestBody AddIntoGroupParameters addIntoGroupParameters, BindingResult bindingResult) {
-		return null;
+		String userInfoId = (String) request.getSession().getAttribute("user_info_id");
+		if (StringUtils.isBlank(userInfoId)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		Integer addMethod = addIntoGroupParameters.getAdd_method();
+		if(addMethod != null) {
+			if(addMethod==1) {//1:添加分组内的所有账号到分组,根据group_id
+				if(StringUtils.isNotBlank(addIntoGroupParameters.getGroup_id())||StringUtils.isNotBlank(addIntoGroupParameters.getTarget_group_id())) {
+					groupService.addIntoGroupByGroup_id(userInfoId, addIntoGroupParameters.getGroup_id(), addIntoGroupParameters.getTarget_group_id());
+				}else {
+					throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+							ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE,
+							ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+				}
+			}else if(addMethod==2) {//2:添加指定账号列表到分组,根据detection_account_id 
+				if(addIntoGroupParameters.getDetection_account_id()!=null&&addIntoGroupParameters.getDetection_account_id().length>0&&StringUtils.isNotBlank(addIntoGroupParameters.getTarget_group_id())) {
+					groupService.addIntoGroupByDetection_account_id(userInfoId, addIntoGroupParameters.getDetection_account_id(), addIntoGroupParameters.getTarget_group_id());
+				}else {
+					throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+							ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE,
+							ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+				}
+			}else if(addMethod==3) {//3:添加查询参数的结果内的所有账号到分组,根据查询参数 
+				if(StringUtils.isNotBlank(addIntoGroupParameters.getTarget_group_id())) {
+					groupService.addIntoGroupByQuery_params(userInfoId, addIntoGroupParameters.getQuery_params(), addIntoGroupParameters.getTarget_group_id());
+				}else {
+					throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+							ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE,
+							ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+				}
+			}else if(addMethod==4) {//4:添加账号查询记录内的所有账号到分组,根据bill_id
+				if(StringUtils.isNotBlank(addIntoGroupParameters.getBill_id())&&StringUtils.isNotBlank(addIntoGroupParameters.getTarget_group_id())) {
+					groupService.addIntoGroupByBill_id(userInfoId, addIntoGroupParameters.getBill_id(), addIntoGroupParameters.getTarget_group_id());
+				}else {
+					throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+							ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE,
+							ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+				}
+			}else {
+				throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+						ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE,
+						ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+			}
+		}else {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+		}
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success");
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 	
 	@PostMapping("deleteFromGroup")
