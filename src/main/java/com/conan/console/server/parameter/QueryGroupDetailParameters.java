@@ -1,21 +1,11 @@
 package com.conan.console.server.parameter;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 public class QueryGroupDetailParameters {
-	@NotNull(message = "group_id不能为空")
-	@NotBlank(message = "group_id不能为空")
-	@NotEmpty(message = "group_id不能为空")
-	@Size(max = 45, message = "group_id长度最大长度为45")
 	private String group_id;
 	
-	@NotNull(message = "account_name不能为空")
-	@NotBlank(message = "account_name不能为空")
-	@NotEmpty(message = "account_name不能为空")
-	@Size(max = 45, message = "account_name长度最大长度为255")
 	private String account_name;
 	
 	private Integer scan_status;
@@ -23,6 +13,10 @@ public class QueryGroupDetailParameters {
 	private String scan_time_start;
 	
 	private String scan_time_end;
+	
+	@NotNull(message = "pageNo不能为空")
+	@Min(value = 1, message = "pageNo最小为1")
+	private int pageNo;
 
 	public String getGroup_id() {
 		return group_id;
@@ -63,4 +57,13 @@ public class QueryGroupDetailParameters {
 	public void setScan_time_end(String scan_time_end) {
 		this.scan_time_end = scan_time_end;
 	}
+
+	public int getPageNo() {
+		return pageNo;
+	}
+
+	public void setPageNo(int pageNo) {
+		this.pageNo = pageNo;
+	}
+	
 }

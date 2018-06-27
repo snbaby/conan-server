@@ -106,7 +106,20 @@ public class GroupController {
 	@PostMapping("queryGroupDetail")
 	public ResponseEntity<ResponseSuccessResult> queryGroupDetail(HttpServletRequest request,
 			@RequestBody QueryGroupDetailParameters queryGroupDetailParameters, BindingResult bindingResult) {
-		return null;
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+		}
+		String userInfoId = (String) request.getSession().getAttribute("user_info_id");
+		if (StringUtils.isBlank(userInfoId)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success",
+				groupService.queryGroupDetail(userInfoId,queryGroupDetailParameters));
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 	
 	@PostMapping("addIntoGroup")
