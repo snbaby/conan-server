@@ -231,7 +231,7 @@ public class GroupService {
 		userGetScanHistoryParameters.setScan_account(query_params.get("account_name").toString());
 		userGetScanHistoryParameters.setScan_date_end(query_params.get("scan_time_end").toString());
 		userGetScanHistoryParameters.setScan_status(Integer.parseInt(query_params.get("scan_status").toString()));
-		userGetScanHistoryParameters.setScan_date_start(query_params.get("scan_time_end").toString());
+		userGetScanHistoryParameters.setScan_date_start(query_params.get("scan_time_start").toString());
 		
 		List<DetectionAccount> detectionAccountList= detectionAccountMapper.selectByUserGetScanHistoryAllParameters(userGetScanHistoryParameters, user_info_id);
 		Group targetGroup = groupMapper.selectByPrimaryKey(target_group_id);
