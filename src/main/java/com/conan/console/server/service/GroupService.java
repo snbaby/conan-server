@@ -378,7 +378,11 @@ public class GroupService {
 		statsJsobObject.put("total", total);
 		statsJsobObject.put("danger_accounts_num", totalDanger);
 		statsJsobObject.put("doubtful_accounts_num", totalDoubtful);
-		statsJsobObject.put("danger_account_percent", ConanUtils.fix2(totalDanger/total*100));
+		if(totalDanger==0||total==0) {
+			statsJsobObject.put("danger_account_percent", 0);
+		}else {
+			statsJsobObject.put("danger_account_percent", ConanUtils.fix2(totalDanger/total*100));	
+		}
 		resultJsonObject.put("stats", statsJsobObject);
 		return resultJsonObject;
 	}
@@ -428,7 +432,12 @@ public class GroupService {
 				}
 				jsonObject.put("first_detection_time", minDate);
 				jsonObject.put("last_detection_time", maxDate);
-				jsonObject.put("danger_percent", ConanUtils.fix2(danger/groupDetailList.size()*100));
+				if(danger==0||groupDetailList.size()==0) {
+					jsonObject.put("danger_percent", 0);	
+				}else {
+					jsonObject.put("danger_percent", ConanUtils.fix2(danger/groupDetailList.size()*100));
+				}
+				
 			}
 			jsonArray.add(jsonObject);
 		}
