@@ -204,7 +204,9 @@ public class ManageService {
 		long total_registered_cnt = userInfoMapper.selectTtRegisteredCntTotal();
 		long today_recharge_agree_cnt =rechargeBillMapper.selectTdRechargeAgreeCntTotal(td);
 		long today_recharge_agree_amount = rechargeBillMapper.selectTdRechargeAgreeAmountTotal(td);
+		long today_recharge_agree_gold = rechargeBillMapper.selectTdRechargeAgreeGoldTotal(td);
 		long total_recharge_agree_amount = rechargeBillMapper.selectTtRechargeAgreeAmountTotal();
+		long total_recharge_agree_gold = rechargeBillMapper.selectTtRechargeAgreeGoldTotal();
 		JSONObject resultJsonObject = new JSONObject();
 		resultJsonObject.put("new_recharge_cnt", new_recharge_cnt);
 		resultJsonObject.put("today_register_cnt", today_register_cnt);
@@ -212,7 +214,9 @@ public class ManageService {
 		resultJsonObject.put("total_registered_cnt", total_registered_cnt);
 		resultJsonObject.put("today_recharge_agree_cnt", today_recharge_agree_cnt);
 		resultJsonObject.put("today_recharge_agree_amount", today_recharge_agree_amount);
+		resultJsonObject.put("today_recharge_agree_gold", today_recharge_agree_gold);
 		resultJsonObject.put("total_recharge_agree_amount", total_recharge_agree_amount);
+		resultJsonObject.put("total_recharge_agree_gold", total_recharge_agree_gold);
 		return resultJsonObject;
 	}
 	

@@ -42,7 +42,15 @@ public class GroupController {
 					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
 					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
 		}
-		return null;
+		String userInfoId = (String) request.getSession().getAttribute("user_info_id");
+		if (StringUtils.isBlank(userInfoId)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success",
+				groupService.queryGroupList(userInfoId,queryGroupListParameters.getPageNo()));
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 
 	@PostMapping("createGroup")
@@ -86,7 +94,20 @@ public class GroupController {
 	@PostMapping("exportGroups")
 	public ResponseEntity<ResponseSuccessResult> exportGroups(HttpServletRequest request,
 			@RequestBody ExportGroupsParameters exportGroupsParameters, BindingResult bindingResult) {
-		return null;
+		String userInfoId = (String) request.getSession().getAttribute("user_info_id");
+		if (StringUtils.isBlank(userInfoId)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		if(exportGroupsParameters.getGroup_id() == null || exportGroupsParameters.getGroup_id().length == 0) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+		}
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success",
+				groupService.exportGroups(userInfoId,exportGroupsParameters.getGroup_id()));
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 	
 	@PostMapping("deleteGroups")
