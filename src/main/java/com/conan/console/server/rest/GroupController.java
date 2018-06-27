@@ -169,6 +169,49 @@ public class GroupController {
 	@PostMapping("deleteFromGroup")
 	public ResponseEntity<ResponseSuccessResult> deleteFromGroup(HttpServletRequest request,
 			@RequestBody DeleteFromGroupParameters deleteFromGroupParameters, BindingResult bindingResult) {
-		return null;
+		String userInfoId = (String) request.getSession().getAttribute("user_info_id");
+		if (StringUtils.isBlank(userInfoId)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+		Integer addMethod = deleteFromGroupParameters.getAdd_method();
+		if(addMethod != null) {
+			if(addMethod==1) {//1:删除分组内的所有账号到分组,根据group_id
+				if(StringUtils.isNotBlank(deleteFromGroupParameters.getDelete_from_group_id())) {
+					groupService.deleteFromGroup(userInfoId, deleteFromGroupParameters.getDelete_from_group_id());
+				}else {
+					throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+							ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE,
+							ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+				}
+			}else if(addMethod==2) {//2:添加指定账号列表到分组,根据detection_account_id 
+				if(deleteFromGroupParameters.getDetection_account_id()!=null&&deleteFromGroupParameters.getDetection_account_id().length>0&&StringUtils.isNotBlank(deleteFromGroupParameters.getDelete_from_group_id())) {
+					groupService.deleteFromGroup(userInfoId,deleteFromGroupParameters.getDetection_account_id(), deleteFromGroupParameters.getDelete_from_group_id());
+				}else {
+					throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+							ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE,
+							ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+				}
+			}else if(addMethod==3) {//3:添加查询参数的结果内的所有账号到分组,根据查询参数 
+				if(StringUtils.isNotBlank(deleteFromGroupParameters.getDelete_from_group_id())) {
+					groupService.deleteFromGroup(userInfoId,deleteFromGroupParameters.getQuery_params(), deleteFromGroupParameters.getDelete_from_group_id());
+				}else {
+					throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+							ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE,
+							ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+				}
+			}else {
+				throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+						ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE,
+						ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+			}
+		}else {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+		}
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success");
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 }

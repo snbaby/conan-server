@@ -1,12 +1,14 @@
 package com.conan.console.server.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.conan.console.server.entity.master.DetectionAccount;
 import com.conan.console.server.entity.master.Group;
 import com.conan.console.server.entity.master.GroupMember;
-import com.conan.console.server.entity.master.UserBill;
 import com.conan.console.server.exception.ConanException;
 import com.conan.console.server.mapper.master.DetectionAccountMapper;
 import com.conan.console.server.mapper.master.GroupMapper;
@@ -268,5 +269,62 @@ public class GroupService {
 		}
 	}
 	
+	@Transactional
+	public void deleteFromGroup(String user_info_id,String delete_from_group_id) {
+		
+		Group group = groupMapper.selectByPrimaryKey(delete_from_group_id);
+		
+		if (group == null || !group.getUser_info_id().equals(user_info_id)) {
+			throw new ConanException(ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+		}
+		
+		groupMemberMapper.deleteByGroupId(delete_from_group_id);
+	}
+	
+	@Transactional
+	public void deleteFromGroup(String user_info_id,String[] detection_account_id,String delete_from_group_id) {
+		
+		Group group = groupMapper.selectByPrimaryKey(delete_from_group_id);
+		
+		if (group == null || !group.getUser_info_id().equals(user_info_id)) {
+			throw new ConanException(ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_CODE,
+					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_MESSAGE,
+					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
+		}
+
+		List<String> detectionAccountList = new ArrayList<>();
+		Collections.addAll(detectionAccountList,detection_account_id);
+		groupMemberMapper.deleteByGroupIdAndDetectionList(delete_from_group_id, detectionAccountList);
+	}
+	
+	@Transactional
+	public void deleteFromGroup(String user_info_id,Map<String,Object> query_params,String delete_from_group_id) {
+		UserGetScanHistoryParameters userGetScanHistoryParameters = new UserGetScanHistoryParameters();
+		userGetScanHistoryParameters.setScan_account(query_params.get("account_name").toString());
+		userGetScanHistoryParameters.setScan_date_end(query_params.get("scan_time_end").toString());
+		userGetScanHistoryParameters.setScan_status(Integer.parseInt(query_params.get("scan_status").toString()));
+		userGetScanHistoryParameters.setScan_date_start(query_params.get("scan_time_end").toString());
+		
+		List<DetectionAccount> detectionAccountList= detectionAccountMapper.selectByUserGetScanHistoryAllParameters(userGetScanHistoryParameters, user_info_id);
+		if(detectionAccountList!=null && detectionAccountList.size()>0) {
+			List<String> detectionAccountStrList = new ArrayList<>();
+			for(DetectionAccount detectionAccount:detectionAccountList) {
+				detectionAccountStrList.add(detectionAccount.getId());
+				if(detectionAccountStrList.size()==500) {
+					groupMemberMapper.deleteByGroupIdAndDetectionList(delete_from_group_id, detectionAccountStrList);
+					detectionAccountStrList.clear();
+				}
+			}
+			
+			if(detectionAccountStrList.size()>0) {
+				groupMemberMapper.deleteByGroupIdAndDetectionList(delete_from_group_id, detectionAccountStrList);
+			}
+			
+		}
+	}
+	 
+	 
 	
 }
