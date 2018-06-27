@@ -40,6 +40,7 @@ import com.conan.console.server.entity.slave.FinalResult;
 import com.conan.console.server.exception.ConanException;
 import com.conan.console.server.mapper.master.CostRecordMapper;
 import com.conan.console.server.mapper.master.DetectionAccountMapper;
+import com.conan.console.server.mapper.master.GmDetailMapper;
 import com.conan.console.server.mapper.master.UserBillMapper;
 import com.conan.console.server.mapper.master.UserRemainMapper;
 import com.conan.console.server.mapper.slave.FinalResultMapper;
@@ -70,6 +71,9 @@ public class DetectionService {
 
 	@Autowired
 	private MinioService minioService;
+	
+	@Autowired
+	private GmDetailMapper gmDetailMapper;
 
 	@Autowired
 	private CacheService cacheService;
@@ -228,7 +232,10 @@ public class DetectionService {
 
 			tempObject.put("detail_score4", detectionAccount.getDetail_score4());
 			tempObject.put("account_history_score", detectionAccount.getAccount_history_score());
+			
+			tempObject.put("group_infos", gmDetailMapper.selectByDetectionId(user_info_id, detectionAccount.getId()));
 			recordsJsonArray.add(tempObject);
+			
 		}
 		resultJsonObject.put("records", recordsJsonArray);
 		return resultJsonObject;

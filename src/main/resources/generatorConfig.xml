@@ -86,8 +86,14 @@
 			enableSelectByExample="false" selectByExampleQueryId="false">
 			<property name="useActualColumnNames" value="true" />
 		</table> -->
-		<table schema="tknDb2" tableName="group_detail"
+		<!-- <table schema="tknDb2" tableName="group_detail"
 			domainObjectName="GroupDetail" enableCountByExample="false"
+			enableUpdateByExample="false" enableDeleteByExample="false"
+			enableSelectByExample="false" selectByExampleQueryId="false">
+			<property name="useActualColumnNames" value="true" />
+		</table> -->
+		<table schema="tknDb2" tableName="gm_detail"
+			domainObjectName="GmDetail" enableCountByExample="false"
 			enableUpdateByExample="false" enableDeleteByExample="false"
 			enableSelectByExample="false" selectByExampleQueryId="false">
 			<property name="useActualColumnNames" value="true" />
