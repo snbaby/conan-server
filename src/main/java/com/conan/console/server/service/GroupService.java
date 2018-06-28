@@ -131,6 +131,14 @@ public class GroupService {
 	
 	@Transactional
 	public void deleteGroups(String user_info_id,String[] group_id_array) {
+		if(group_id_array == null||group_id_array.length==0) {
+			List<Group> groupList = groupMapper.selectByUserInfoIdAll(user_info_id);
+			List<String> groupId = new ArrayList<>();
+			for(Group Group: groupList) {
+				groupId.add(Group.getId());
+			}
+			group_id_array =  groupId.toArray(new String[groupId.size()]);
+		}
 		for(String group_id:group_id_array) {
 			Group group = groupMapper.selectByPrimaryKey(group_id);
 			if (group == null || !group.getUser_info_id().equals(user_info_id)) {
@@ -372,7 +380,7 @@ public class GroupService {
 		
 		
 		int totalDanger = groupDetailMapper.selectByQueryGroupDetailParametersScanStatus(user_info_id,1,queryGroupDetailParameters);
-		int totalDoubtful = groupDetailMapper.selectByQueryGroupDetailParametersScanStatus(user_info_id,1,queryGroupDetailParameters);
+		int totalDoubtful = groupDetailMapper.selectByQueryGroupDetailParametersScanStatus(user_info_id,2,queryGroupDetailParameters);
 		
 		JSONObject statsJsobObject = new JSONObject();
 		statsJsobObject.put("total", total);
@@ -448,6 +456,16 @@ public class GroupService {
 	public JSONObject exportGroups(String user_info_id,String[] group_ids) {
 		JSONObject resultJsonObject = new JSONObject();
 		SXSSFWorkbook xssfWorkbook = new SXSSFWorkbook();
+		
+		if(group_ids == null||group_ids.length==0) {
+			List<Group> groupList = groupMapper.selectByUserInfoIdAll(user_info_id);
+			List<String> groupId = new ArrayList<>();
+			for(Group Group: groupList) {
+				groupId.add(Group.getId());
+			}
+			group_ids =  groupId.toArray(new String[groupId.size()]);
+		}
+		
 		for(String group_id:group_ids) {
 			Group group = groupMapper.selectByPrimaryKey(group_id);
 			if (group == null || !group.getUser_info_id().equals(user_info_id)) {

@@ -40,6 +40,8 @@ public interface GroupMapper {
 	List<Group> selectByUserInfoId(@Param("user_info_id") String user_info_id, @Param("pageNo") int pageNo,
 			@Param("pageSize") int pageSize);
 	
+	List<Group> selectByUserInfoIdAll(@Param("user_info_id") String user_info_id);
+	
 	int selectByUserInfoIdTotal(@Param("user_info_id") String user_info_id);
 
 	Group selectByPrimaryKey(String id);

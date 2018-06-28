@@ -49,7 +49,7 @@
         and group_id = #{queryGroupDetailParameters.group_id}
     </if>
     <if test="queryGroupDetailParameters.account_name != null">
-        and account_name = #{queryGroupDetailParameters.account_name}
+        and account_name = like "%"#{queryGroupDetailParameters.account_name}"%"
     </if>
     <if test="queryGroupDetailParameters.scan_status != 0">
     	<if test="queryGroupDetailParameters.scan_status == 1">
@@ -92,7 +92,7 @@
         and group_id = #{queryGroupDetailParameters.group_id}
     </if>
     <if test="queryGroupDetailParameters.account_name != null">
-        and account_name = #{queryGroupDetailParameters.account_name}
+        and account_name = like "%"#{queryGroupDetailParameters.account_name}"%"
     </if>
     <if test="queryGroupDetailParameters.scan_status != 0">
     	<if test="queryGroupDetailParameters.scan_status == 1">
@@ -136,7 +136,7 @@
         and group_id = #{queryGroupDetailParameters.group_id}
     </if>
     <if test="queryGroupDetailParameters.account_name != null">
-        and account_name = #{queryGroupDetailParameters.account_name}
+        and account_name = like "%"#{queryGroupDetailParameters.account_name}"%"
     </if>
     <if test="queryGroupDetailParameters.scan_status != 0">
     	<if test="queryGroupDetailParameters.scan_status == 1">
