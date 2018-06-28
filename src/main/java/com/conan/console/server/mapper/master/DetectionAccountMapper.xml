@@ -197,7 +197,9 @@
     *
     from detection_account
     where cost_record_id = #{recordId}
+    
     and user_info_id = #{user_info_id}
+    
     <if test="account_name != null">
         and account_name like "%"#{account_name}"%"
     </if>
