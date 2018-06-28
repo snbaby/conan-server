@@ -39,6 +39,8 @@ public interface DetectionAccountMapper {
 			@Param("pageSize") int pageSize);
 	
 	List<DetectionAccount> selectByRecordIdAndyUserInfoId(@Param("recordId") String costRecordId,@Param("user_info_id") String user_info_id);
+	
+	List<DetectionAccount> selectByParams(@Param("recordId") String costRecordId,@Param("user_info_id") String user_info_id,@Param("account_name") String account_name,@Param("scan_status") int scan_status);
 
 	int selectByRecordIdTotal(@Param("recordId") String costRecordId);
 

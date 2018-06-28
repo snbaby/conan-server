@@ -237,26 +237,15 @@ public class GroupService {
 	@Transactional
 	public void addIntoGroupByQuery_params(String user_info_id, Map<String, Object> query_params,
 			String group_id,String target_group_id) {
-		UserGetScanHistoryParameters userGetScanHistoryParameters = new UserGetScanHistoryParameters();
-		if (StringUtils.isBlank(query_params.get("account_name").toString())) {
-			userGetScanHistoryParameters.setScan_account(null);
-		} else {
-			userGetScanHistoryParameters.setScan_account(query_params.get("account_name").toString());
-		}
-		if (StringUtils.isBlank(query_params.get("scan_time_end").toString())) {
-			userGetScanHistoryParameters.setScan_date_end(null);
-		} else {
-			userGetScanHistoryParameters.setScan_date_end(query_params.get("scan_time_end").toString());
-		}
-		userGetScanHistoryParameters.setScan_status(Integer.parseInt(query_params.get("scan_status").toString()));
-		if (StringUtils.isBlank(query_params.get("scan_time_start").toString())) {
-			userGetScanHistoryParameters.setScan_date_start(null);
-		} else {
-			userGetScanHistoryParameters.setScan_date_start(query_params.get("scan_time_start").toString());
-		}
+		QueryGroupDetailParameters queryGroupDetailParameters = new QueryGroupDetailParameters();
+		queryGroupDetailParameters.setGroup_id(group_id);
+		queryGroupDetailParameters.setAccount_name(query_params.get("account_name").toString());
+		queryGroupDetailParameters.setPageNo(0);
+		queryGroupDetailParameters.setScan_status(Integer.parseInt(query_params.get("scan_status").toString()));
+		queryGroupDetailParameters.setScan_time_end(query_params.get("scan_time_end").toString());
+		queryGroupDetailParameters.setScan_time_start(query_params.get("scan_time_start").toString());
 
-		List<DetectionAccount> detectionAccountList = detectionAccountMapper
-				.selectByUserGetScanHistoryAllParameters(userGetScanHistoryParameters, user_info_id);
+		List<GroupDetail> groupDetailList = groupDetailMapper.selectByQueryGroupDetailParameters(user_info_id, queryGroupDetailParameters, 0);
 		Group targetGroup = groupMapper.selectByPrimaryKey(target_group_id);
 
 		if (targetGroup == null || !targetGroup.getUser_info_id().equals(user_info_id)) {
@@ -271,11 +260,11 @@ public class GroupService {
 			targetDectionList.add(groupMember.getDetection_id());
 		}
 		List<GroupMember> resultGroupMemberList = new ArrayList<>();
-		for (DetectionAccount detectionAccount : detectionAccountList) {
-			if (!targetDectionList.contains(detectionAccount.getId())) {
+		for (GroupDetail groupDetail : groupDetailList) {
+			if (!targetDectionList.contains(groupDetail.getDetection_account_id())) {
 				GroupMember resultGroupMember = new GroupMember();
 				resultGroupMember.setId(UUID.randomUUID().toString());
-				resultGroupMember.setDetection_id(detectionAccount.getId());
+				resultGroupMember.setDetection_id(groupDetail.getDetection_account_id());
 				resultGroupMember.setGroup_id(target_group_id);
 				resultGroupMemberList.add(resultGroupMember);
 			}
@@ -290,9 +279,14 @@ public class GroupService {
 	}
 
 	@Transactional
-	public void addIntoGroupByBill_id(String user_info_id, String bill_id, String target_group_id) {
-		List<DetectionAccount> detectionAccountList = detectionAccountMapper.selectByRecordIdAndyUserInfoId(bill_id,
-				user_info_id);
+	public void addIntoGroupByBill_id(String user_info_id, Map<String, Object> query_params, String bill_id, String target_group_id) {
+		String account_name = null;
+		if(StringUtils.isNotBlank(query_params.get("account_name").toString())) {
+			account_name = query_params.get("account_name").toString();
+		}
+		int scan_status = Integer.parseInt(query_params.get("scan_status").toString());
+		List<DetectionAccount> detectionAccountList = detectionAccountMapper.selectByParams(bill_id,
+				user_info_id,account_name,scan_status);
 		Group targetGroup = groupMapper.selectByPrimaryKey(target_group_id);
 
 		if (targetGroup == null || !targetGroup.getUser_info_id().equals(user_info_id)) {

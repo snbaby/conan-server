@@ -182,7 +182,7 @@ public class GroupController {
 				}
 			}else if(addMethod==4) {//4:添加账号查询记录内的所有账号到分组,根据bill_id
 				if(StringUtils.isNotBlank(addIntoGroupParameters.getBill_id())&&StringUtils.isNotBlank(addIntoGroupParameters.getTarget_group_id())) {
-					groupService.addIntoGroupByBill_id(userInfoId, addIntoGroupParameters.getBill_id(), addIntoGroupParameters.getTarget_group_id());
+					groupService.addIntoGroupByBill_id(userInfoId, addIntoGroupParameters.getQuery_params(),addIntoGroupParameters.getBill_id(), addIntoGroupParameters.getTarget_group_id());
 				}else {
 					throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 							ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE,

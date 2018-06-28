@@ -117,7 +117,7 @@
         and created_at <![CDATA[ <= ]]> #{queryGroupDetailParameters.scan_time_end}
     </if>
     order by created_at desc
-    <if test="queryGroupDetailParameters.pageNo != null">
+    <if test="queryGroupDetailParameters.pageNo != null && queryGroupDetailParameters.pageNo != 0">
         limit ${(queryGroupDetailParameters.pageNo-1)*pageSize},${pageSize}
     </if>
   </select>
