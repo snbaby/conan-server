@@ -3,6 +3,8 @@ package com.conan.console.server.parameter;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class QueryGroupDetailParameters {
 	private String group_id;
 	
@@ -23,7 +25,12 @@ public class QueryGroupDetailParameters {
 	}
 
 	public void setGroup_id(String group_id) {
-		this.group_id = group_id;
+		if(StringUtils.isBlank(group_id)) {
+			this.group_id = null;	
+		}else {
+			this.group_id = group_id;
+		}
+		
 	}
 
 	public String getAccount_name() {
@@ -31,7 +38,11 @@ public class QueryGroupDetailParameters {
 	}
 
 	public void setAccount_name(String account_name) {
-		this.account_name = account_name;
+		if(StringUtils.isBlank(account_name)) {
+			this.account_name = null;	
+		}else {
+			this.account_name = account_name;
+		}
 	}
 
 	public Integer getScan_status() {
@@ -47,7 +58,11 @@ public class QueryGroupDetailParameters {
 	}
 
 	public void setScan_time_start(String scan_time_start) {
-		this.scan_time_start = scan_time_start;
+		if(StringUtils.isBlank(scan_time_start)) {
+			this.scan_time_start = null;	
+		}else {
+			this.scan_time_start = scan_time_start;
+		}
 	}
 
 	public String getScan_time_end() {
@@ -55,7 +70,11 @@ public class QueryGroupDetailParameters {
 	}
 
 	public void setScan_time_end(String scan_time_end) {
-		this.scan_time_end = scan_time_end;
+		if(StringUtils.isBlank(scan_time_end)) {
+			this.scan_time_end = null;	
+		}else {
+			this.scan_time_end = scan_time_end;
+		}
 	}
 
 	public int getPageNo() {

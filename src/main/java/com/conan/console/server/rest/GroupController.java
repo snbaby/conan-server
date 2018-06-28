@@ -139,6 +139,7 @@ public class GroupController {
 					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
 		}
 		
+		
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success",
 				groupService.queryGroupDetail(userInfoId,queryGroupDetailParameters));
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
