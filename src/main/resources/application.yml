@@ -21,9 +21,9 @@ minio:
     
 datasource:
   master:
-    jdbcUrl : jdbc:mysql://127.0.0.1:3306/tknDb2?autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false  
-    username : tongcheng
-    password : mysqlTC!@#123
+    jdbcUrl : jdbc:mysql://120.79.197.22:3306/tknDb2?autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false  
+    username : root
+    password : Apple1688!@#
     driver-class-name : com.mysql.jdbc.Driver
     max-idle : 40
     max-wait : 40000
@@ -34,9 +34,9 @@ datasource:
     test-while-idle : true
     time-between-eviction-runs-millis : 18800
   slave:
-    jdbcUrl : jdbc:mysql://127.0.0.1:3306/ptbrain?autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false  
-    username : tongcheng
-    password : mysqlTC!@#123
+    jdbcUrl : jdbc:mysql://120.79.197.22:3306/ptbrain?autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false  
+    username : root
+    password : Apple1688!@#
     driver-class-name : com.mysql.jdbc.Driver
     max-idle : 40
     max-wait : 40000

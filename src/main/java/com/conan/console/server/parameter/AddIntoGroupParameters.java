@@ -2,6 +2,8 @@ package com.conan.console.server.parameter;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class AddIntoGroupParameters {
 	private Integer add_method;
 	private String bill_id;
@@ -19,7 +21,12 @@ public class AddIntoGroupParameters {
 		return bill_id;
 	}
 	public void setBill_id(String bill_id) {
-		this.bill_id = bill_id;
+		if(StringUtils.isBlank(bill_id)) {
+			this.bill_id = null;
+		}else {
+			this.bill_id = bill_id;	
+		}
+		
 	}
 	public String[] getDetection_account_id() {
 		return detection_account_id;
@@ -31,13 +38,22 @@ public class AddIntoGroupParameters {
 		return group_id;
 	}
 	public void setGroup_id(String group_id) {
-		this.group_id = group_id;
+		if(StringUtils.isBlank(group_id)) {
+			this.group_id = null;
+		}else {
+			this.group_id = group_id;	
+		}
+		
 	}
 	public String getTarget_group_id() {
 		return target_group_id;
 	}
 	public void setTarget_group_id(String target_group_id) {
-		this.target_group_id = target_group_id;
+		if(StringUtils.isBlank(target_group_id)) {
+			this.target_group_id = null;
+		}else {
+			this.target_group_id = target_group_id;	
+		}
 	}
 	public Map<String, Object> getQuery_params() {
 		return query_params;

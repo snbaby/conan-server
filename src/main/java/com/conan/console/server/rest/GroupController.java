@@ -173,8 +173,8 @@ public class GroupController {
 							ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
 				}
 			}else if(addMethod==3) {//3:添加查询参数的结果内的所有账号到分组,根据查询参数 
-				if(StringUtils.isNotBlank(addIntoGroupParameters.getTarget_group_id())) {
-					groupService.addIntoGroupByQuery_params(userInfoId, addIntoGroupParameters.getQuery_params(), addIntoGroupParameters.getTarget_group_id());
+				if(StringUtils.isNotBlank(addIntoGroupParameters.getTarget_group_id())&&StringUtils.isNotBlank(addIntoGroupParameters.getGroup_id())) {
+					groupService.addIntoGroupByQuery_params(userInfoId, addIntoGroupParameters.getQuery_params(),addIntoGroupParameters.getGroup_id(), addIntoGroupParameters.getTarget_group_id());
 				}else {
 					throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
 							ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE,

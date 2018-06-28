@@ -45,30 +45,29 @@ import com.conan.console.server.utils.ConanUtils;
 
 @Service
 public class GroupService {
-	
+
 	@Autowired
 	private GroupMapper groupMapper;
-	
+
 	@Autowired
 	private GroupMemberMapper groupMemberMapper;
-	
+
 	@Autowired
 	private DetectionAccountMapper detectionAccountMapper;
-	
+
 	@Autowired
 	private UserBillMapper userBillMapper;
-	
+
 	@Autowired
 	private GroupDetailMapper groupDetailMapper;
-	
+
 	@Autowired
 	private MinioService minioService;
-	
-	
+
 	@Transactional
-	public JSONObject createGroup(String user_info_id,String group_name) {
+	public JSONObject createGroup(String user_info_id, String group_name) {
 		String uuid = UUID.randomUUID().toString();// 生成唯一主键
-		Date date = new Date();//创建时间
+		Date date = new Date();// 创建时间
 		Group group = new Group();
 		group.setId(uuid);
 		group.setCreated_at(date);
@@ -76,40 +75,40 @@ public class GroupService {
 		group.setGroup_name(group_name);
 		group.setUser_info_id(user_info_id);
 		try {
-			groupMapper.insertSelective(group);//保存组信息
+			groupMapper.insertSelective(group);// 保存组信息
 		} catch (DuplicateKeyException e) {
 			// TODO: handle exception
 			throw new ConanException(ConanExceptionConstants.GROUP_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.GROUP_EXISTS_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.GROUP_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
-		
+
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("id", uuid);
 		jsonObject.put("created_at", date);
 		jsonObject.put("updated_at", date);
 		jsonObject.put("group_name", group_name);
 		jsonObject.put("group_comment", group.getGroup_comment());
-		
+
 		return jsonObject;
 	}
-	
+
 	@Transactional
-	public JSONObject modifyGroup(String user_info_id,String group_id,String group_name,String group_comment) {
+	public JSONObject modifyGroup(String user_info_id, String group_id, String group_name, String group_comment) {
 		Group group = groupMapper.selectByPrimaryKey(group_id);
 		if (group == null || !group.getUser_info_id().equals(user_info_id)) {
 			throw new ConanException(ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
-		if(StringUtils.isNoneBlank(group_name)) {
+		if (StringUtils.isNoneBlank(group_name)) {
 			group.setGroup_name(group_name);
 		}
-		if(StringUtils.isNoneBlank(group_comment)) {
+		if (StringUtils.isNoneBlank(group_comment)) {
 			group.setGroup_comment(group_comment);
 		}
 		group.setUpdated_at(new Date());
-		
+
 		try {
 			groupMapper.updateByPrimaryKeySelective(group);
 		} catch (DuplicateKeyException e) {
@@ -120,26 +119,26 @@ public class GroupService {
 					ConanExceptionConstants.GROUP_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("id",group.getId());
+		jsonObject.put("id", group.getId());
 		jsonObject.put("created_at", group.getCreated_at());
 		jsonObject.put("updated_at", group.getUpdated_at());
 		jsonObject.put("group_name", group.getGroup_name());
 		jsonObject.put("group_comment", group.getGroup_comment());
-		
+
 		return jsonObject;
 	}
-	
+
 	@Transactional
-	public void deleteGroups(String user_info_id,String[] group_id_array) {
-		if(group_id_array == null||group_id_array.length==0) {
+	public void deleteGroups(String user_info_id, String[] group_id_array) {
+		if (group_id_array == null || group_id_array.length == 0) {
 			List<Group> groupList = groupMapper.selectByUserInfoIdAll(user_info_id);
 			List<String> groupId = new ArrayList<>();
-			for(Group Group: groupList) {
+			for (Group Group : groupList) {
 				groupId.add(Group.getId());
 			}
-			group_id_array =  groupId.toArray(new String[groupId.size()]);
+			group_id_array = groupId.toArray(new String[groupId.size()]);
 		}
-		for(String group_id:group_id_array) {
+		for (String group_id : group_id_array) {
 			Group group = groupMapper.selectByPrimaryKey(group_id);
 			if (group == null || !group.getUser_info_id().equals(user_info_id)) {
 				throw new ConanException(ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_CODE,
@@ -148,186 +147,202 @@ public class GroupService {
 			}
 			groupMapper.deleteByPrimaryKey(group_id);
 			groupMemberMapper.deleteByGroupId(group_id);
-			
+
 		}
 	}
-	
+
 	@Transactional
-	public void addIntoGroupByGroup_id(String user_info_id,String group_id,String target_group_id) {
-		
+	public void addIntoGroupByGroup_id(String user_info_id, String group_id, String target_group_id) {
+
 		Group sourceGroup = groupMapper.selectByPrimaryKey(group_id);
-		
+
 		Group targetGroup = groupMapper.selectByPrimaryKey(target_group_id);
-		
-		if (sourceGroup == null || !sourceGroup.getUser_info_id().equals(user_info_id) || targetGroup == null || !targetGroup.getUser_info_id().equals(user_info_id)) {
+
+		if (sourceGroup == null || !sourceGroup.getUser_info_id().equals(user_info_id) || targetGroup == null
+				|| !targetGroup.getUser_info_id().equals(user_info_id)) {
 			throw new ConanException(ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
-		
+
 		List<GroupMember> sourceGroupMemberList = groupMemberMapper.selectByGroupId(group_id);
 		List<GroupMember> targetGroupMemberList = groupMemberMapper.selectByGroupId(target_group_id);
 		List<String> targetDectionList = new ArrayList<>();
-		for(GroupMember groupMember:targetGroupMemberList) {
+		for (GroupMember groupMember : targetGroupMemberList) {
 			targetDectionList.add(groupMember.getDetection_id());
 		}
 		List<GroupMember> resultGroupMemberList = new ArrayList<>();
-		for(GroupMember groupMember:sourceGroupMemberList) {
-			if(!targetDectionList.contains(groupMember.getDetection_id())) {
+		for (GroupMember groupMember : sourceGroupMemberList) {
+			if (!targetDectionList.contains(groupMember.getDetection_id())) {
 				GroupMember resultGroupMember = new GroupMember();
 				resultGroupMember.setId(UUID.randomUUID().toString());
 				resultGroupMember.setDetection_id(groupMember.getDetection_id());
 				resultGroupMember.setGroup_id(target_group_id);
 				resultGroupMemberList.add(resultGroupMember);
 			}
-			if(resultGroupMemberList.size()==500) {
+			if (resultGroupMemberList.size() == 500) {
 				groupMemberMapper.insertList(resultGroupMemberList);
 				resultGroupMemberList.clear();
 			}
 		}
-		if(resultGroupMemberList.size()>0) {
+		if (resultGroupMemberList.size() > 0) {
 			groupMemberMapper.insertList(resultGroupMemberList);
 		}
 	}
-	
+
 	@Transactional
-	public void addIntoGroupByDetection_account_id(String user_info_id,String[] detection_account_id,String target_group_id) {
-		for(String detectionId:detection_account_id) {
-			DetectionAccount detectionAccount= detectionAccountMapper.selectByPrimaryKey(detectionId);
-			if ( detectionAccount == null || !detectionAccount.getUser_info_id().equals(user_info_id)) {
+	public void addIntoGroupByDetection_account_id(String user_info_id, String[] detection_account_id,
+			String target_group_id) {
+		for (String detectionId : detection_account_id) {
+			DetectionAccount detectionAccount = detectionAccountMapper.selectByPrimaryKey(detectionId);
+			if (detectionAccount == null || !detectionAccount.getUser_info_id().equals(user_info_id)) {
 				throw new ConanException(ConanExceptionConstants.DETECTION_ACCOUNT_NOT_EXISTS_EXCEPTION_CODE,
 						ConanExceptionConstants.DETECTION_ACCOUNT_NOT_EXISTS_EXCEPTION_MESSAGE,
 						ConanExceptionConstants.DETECTION_ACCOUNT_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 			}
 		}
-		
+
 		Group targetGroup = groupMapper.selectByPrimaryKey(target_group_id);
-		
-		if ( targetGroup == null || !targetGroup.getUser_info_id().equals(user_info_id)) {
+
+		if (targetGroup == null || !targetGroup.getUser_info_id().equals(user_info_id)) {
 			throw new ConanException(ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
-		
+
 		List<GroupMember> targetGroupMemberList = groupMemberMapper.selectByGroupId(target_group_id);
 		List<String> targetDectionList = new ArrayList<>();
-		for(GroupMember groupMember:targetGroupMemberList) {
+		for (GroupMember groupMember : targetGroupMemberList) {
 			targetDectionList.add(groupMember.getDetection_id());
 		}
 		List<GroupMember> resultGroupMemberList = new ArrayList<>();
-		for(String detectionId:detection_account_id) {
-			if(!targetDectionList.contains(detectionId)) {
+		for (String detectionId : detection_account_id) {
+			if (!targetDectionList.contains(detectionId)) {
 				GroupMember resultGroupMember = new GroupMember();
 				resultGroupMember.setId(UUID.randomUUID().toString());
 				resultGroupMember.setDetection_id(detectionId);
 				resultGroupMember.setGroup_id(target_group_id);
 				resultGroupMemberList.add(resultGroupMember);
 			}
-			if(resultGroupMemberList.size()==500) {
+			if (resultGroupMemberList.size() == 500) {
 				groupMemberMapper.insertList(resultGroupMemberList);
 				resultGroupMemberList.clear();
 			}
 		}
-		if(resultGroupMemberList.size()>0) {
+		if (resultGroupMemberList.size() > 0) {
 			groupMemberMapper.insertList(resultGroupMemberList);
 		}
 	}
-	
+
 	@Transactional
-	public void addIntoGroupByQuery_params(String user_info_id,Map<String,Object> query_params,String target_group_id) {
+	public void addIntoGroupByQuery_params(String user_info_id, Map<String, Object> query_params,
+			String group_id,String target_group_id) {
 		UserGetScanHistoryParameters userGetScanHistoryParameters = new UserGetScanHistoryParameters();
-		userGetScanHistoryParameters.setScan_account(query_params.get("account_name").toString());
-		userGetScanHistoryParameters.setScan_date_end(query_params.get("scan_time_end").toString());
+		if (StringUtils.isBlank(query_params.get("account_name").toString())) {
+			userGetScanHistoryParameters.setScan_account(null);
+		} else {
+			userGetScanHistoryParameters.setScan_account(query_params.get("account_name").toString());
+		}
+		if (StringUtils.isBlank(query_params.get("scan_time_end").toString())) {
+			userGetScanHistoryParameters.setScan_date_end(null);
+		} else {
+			userGetScanHistoryParameters.setScan_date_end(query_params.get("scan_time_end").toString());
+		}
 		userGetScanHistoryParameters.setScan_status(Integer.parseInt(query_params.get("scan_status").toString()));
-		userGetScanHistoryParameters.setScan_date_start(query_params.get("scan_time_start").toString());
-		
-		List<DetectionAccount> detectionAccountList= detectionAccountMapper.selectByUserGetScanHistoryAllParameters(userGetScanHistoryParameters, user_info_id);
+		if (StringUtils.isBlank(query_params.get("scan_time_start").toString())) {
+			userGetScanHistoryParameters.setScan_date_start(null);
+		} else {
+			userGetScanHistoryParameters.setScan_date_start(query_params.get("scan_time_start").toString());
+		}
+
+		List<DetectionAccount> detectionAccountList = detectionAccountMapper
+				.selectByUserGetScanHistoryAllParameters(userGetScanHistoryParameters, user_info_id);
 		Group targetGroup = groupMapper.selectByPrimaryKey(target_group_id);
-		
-		if ( targetGroup == null || !targetGroup.getUser_info_id().equals(user_info_id)) {
+
+		if (targetGroup == null || !targetGroup.getUser_info_id().equals(user_info_id)) {
 			throw new ConanException(ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
-		
+
 		List<GroupMember> targetGroupMemberList = groupMemberMapper.selectByGroupId(target_group_id);
 		List<String> targetDectionList = new ArrayList<>();
-		for(GroupMember groupMember:targetGroupMemberList) {
+		for (GroupMember groupMember : targetGroupMemberList) {
 			targetDectionList.add(groupMember.getDetection_id());
 		}
 		List<GroupMember> resultGroupMemberList = new ArrayList<>();
-		for(DetectionAccount detectionAccount:detectionAccountList) {
-			if(!targetDectionList.contains(detectionAccount.getId())) {
+		for (DetectionAccount detectionAccount : detectionAccountList) {
+			if (!targetDectionList.contains(detectionAccount.getId())) {
 				GroupMember resultGroupMember = new GroupMember();
 				resultGroupMember.setId(UUID.randomUUID().toString());
 				resultGroupMember.setDetection_id(detectionAccount.getId());
 				resultGroupMember.setGroup_id(target_group_id);
 				resultGroupMemberList.add(resultGroupMember);
 			}
-			if(resultGroupMemberList.size()==500) {
+			if (resultGroupMemberList.size() == 500) {
 				groupMemberMapper.insertList(resultGroupMemberList);
 				resultGroupMemberList.clear();
 			}
 		}
-		if(resultGroupMemberList.size()>0) {
+		if (resultGroupMemberList.size() > 0) {
 			groupMemberMapper.insertList(resultGroupMemberList);
 		}
 	}
-	
+
 	@Transactional
-	public void addIntoGroupByBill_id(String user_info_id,String bill_id,String target_group_id) {
-		List<DetectionAccount> detectionAccountList = detectionAccountMapper.selectByRecordIdAndyUserInfoId(bill_id, user_info_id);
+	public void addIntoGroupByBill_id(String user_info_id, String bill_id, String target_group_id) {
+		List<DetectionAccount> detectionAccountList = detectionAccountMapper.selectByRecordIdAndyUserInfoId(bill_id,
+				user_info_id);
 		Group targetGroup = groupMapper.selectByPrimaryKey(target_group_id);
-		
-		if ( targetGroup == null || !targetGroup.getUser_info_id().equals(user_info_id)) {
+
+		if (targetGroup == null || !targetGroup.getUser_info_id().equals(user_info_id)) {
 			throw new ConanException(ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
-		
+
 		List<GroupMember> targetGroupMemberList = groupMemberMapper.selectByGroupId(target_group_id);
 		List<String> targetDectionList = new ArrayList<>();
-		for(GroupMember groupMember:targetGroupMemberList) {
+		for (GroupMember groupMember : targetGroupMemberList) {
 			targetDectionList.add(groupMember.getDetection_id());
 		}
 		List<GroupMember> resultGroupMemberList = new ArrayList<>();
-		for(DetectionAccount detectionAccount:detectionAccountList) {
-			if(!targetDectionList.contains(detectionAccount.getId())) {
+		for (DetectionAccount detectionAccount : detectionAccountList) {
+			if (!targetDectionList.contains(detectionAccount.getId())) {
 				GroupMember resultGroupMember = new GroupMember();
 				resultGroupMember.setId(UUID.randomUUID().toString());
 				resultGroupMember.setDetection_id(detectionAccount.getId());
 				resultGroupMember.setGroup_id(target_group_id);
 				resultGroupMemberList.add(resultGroupMember);
 			}
-			if(resultGroupMemberList.size()==500) {
+			if (resultGroupMemberList.size() == 500) {
 				groupMemberMapper.insertList(resultGroupMemberList);
 				resultGroupMemberList.clear();
 			}
 		}
-		if(resultGroupMemberList.size()>0) {
+		if (resultGroupMemberList.size() > 0) {
 			groupMemberMapper.insertList(resultGroupMemberList);
 		}
 	}
-	
+
 	@Transactional
-	public void deleteFromGroup(String user_info_id,String delete_from_group_id) {
-		
+	public void deleteFromGroup(String user_info_id, String delete_from_group_id) {
+
 		Group group = groupMapper.selectByPrimaryKey(delete_from_group_id);
-		
+
 		if (group == null || !group.getUser_info_id().equals(user_info_id)) {
 			throw new ConanException(ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_MESSAGE,
 					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 		}
-		
+
 		groupMemberMapper.deleteByGroupId(delete_from_group_id);
 	}
-	
+
 	@Transactional
-	public void deleteFromGroup(String user_info_id,String[] detection_account_id,String delete_from_group_id) {
-		
+	public void deleteFromGroup(String user_info_id, String[] detection_account_id, String delete_from_group_id) {
 		Group group = groupMapper.selectByPrimaryKey(delete_from_group_id);
-		
+
 		if (group == null || !group.getUser_info_id().equals(user_info_id)) {
 			throw new ConanException(ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_CODE,
 					ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_MESSAGE,
@@ -335,138 +350,156 @@ public class GroupService {
 		}
 
 		List<String> detectionAccountList = new ArrayList<>();
-		Collections.addAll(detectionAccountList,detection_account_id);
+		Collections.addAll(detectionAccountList, detection_account_id);
 		groupMemberMapper.deleteByGroupIdAndDetectionList(delete_from_group_id, detectionAccountList);
 	}
-	
+
 	@Transactional
-	public void deleteFromGroup(String user_info_id,Map<String,Object> query_params,String delete_from_group_id) {
+	public void deleteFromGroup(String user_info_id, Map<String, Object> query_params, String delete_from_group_id) {
 		UserGetScanHistoryParameters userGetScanHistoryParameters = new UserGetScanHistoryParameters();
-		userGetScanHistoryParameters.setScan_account(query_params.get("account_name").toString());
-		userGetScanHistoryParameters.setScan_date_end(query_params.get("scan_time_end").toString());
+		if (StringUtils.isBlank(query_params.get("account_name").toString())) {
+			userGetScanHistoryParameters.setScan_account(null);
+		} else {
+			userGetScanHistoryParameters.setScan_account(query_params.get("account_name").toString());
+		}
+		if (StringUtils.isBlank(query_params.get("scan_time_end").toString())) {
+			userGetScanHistoryParameters.setScan_date_end(null);
+		} else {
+			userGetScanHistoryParameters.setScan_date_end(query_params.get("scan_time_end").toString());
+		}
 		userGetScanHistoryParameters.setScan_status(Integer.parseInt(query_params.get("scan_status").toString()));
-		userGetScanHistoryParameters.setScan_date_start(query_params.get("scan_time_end").toString());
-		
-		List<DetectionAccount> detectionAccountList= detectionAccountMapper.selectByUserGetScanHistoryAllParameters(userGetScanHistoryParameters, user_info_id);
-		if(detectionAccountList!=null && detectionAccountList.size()>0) {
+		if (StringUtils.isBlank(query_params.get("scan_time_start").toString())) {
+			userGetScanHistoryParameters.setScan_date_start(null);
+		} else {
+			userGetScanHistoryParameters.setScan_date_start(query_params.get("scan_time_start").toString());
+		}
+
+		List<DetectionAccount> detectionAccountList = detectionAccountMapper
+				.selectByUserGetScanHistoryAllParameters(userGetScanHistoryParameters, user_info_id);
+		if (detectionAccountList != null && detectionAccountList.size() > 0) {
 			List<String> detectionAccountStrList = new ArrayList<>();
-			for(DetectionAccount detectionAccount:detectionAccountList) {
+			for (DetectionAccount detectionAccount : detectionAccountList) {
 				detectionAccountStrList.add(detectionAccount.getId());
-				if(detectionAccountStrList.size()==500) {
+				if (detectionAccountStrList.size() == 500) {
 					groupMemberMapper.deleteByGroupIdAndDetectionList(delete_from_group_id, detectionAccountStrList);
 					detectionAccountStrList.clear();
 				}
 			}
-			
-			if(detectionAccountStrList.size()>0) {
+
+			if (detectionAccountStrList.size() > 0) {
 				groupMemberMapper.deleteByGroupIdAndDetectionList(delete_from_group_id, detectionAccountStrList);
 			}
-			
+
 		}
 	}
-	 
+
 	@Transactional
-	public JSONObject queryGroupDetail(String user_info_id,QueryGroupDetailParameters queryGroupDetailParameters) {
+	public JSONObject queryGroupDetail(String user_info_id, QueryGroupDetailParameters queryGroupDetailParameters) {
 		JSONObject resultJsonObject = new JSONObject();
-		List<GroupDetail> groupDetailList = groupDetailMapper.selectByQueryGroupDetailParameters(user_info_id,queryGroupDetailParameters, ConanApplicationConstants.INIT_PAGE_SIZE);
-		int total = groupDetailMapper.selectByQueryGroupDetailParametersTotal(user_info_id,queryGroupDetailParameters);
+		List<GroupDetail> groupDetailList = groupDetailMapper.selectByQueryGroupDetailParameters(user_info_id,
+				queryGroupDetailParameters, ConanApplicationConstants.INIT_PAGE_SIZE);
+		int total = groupDetailMapper.selectByQueryGroupDetailParametersTotal(user_info_id, queryGroupDetailParameters);
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setPageNo(queryGroupDetailParameters.getPageNo());
 		pageInfo.setTotal(total);
 		pageInfo.setPageSize(ConanApplicationConstants.INIT_PAGE_SIZE);
-		
+
 		resultJsonObject.put("page_info", pageInfo);
 		resultJsonObject.put("records", groupDetailList);
-		
-		
-		int totalDanger = groupDetailMapper.selectByQueryGroupDetailParametersScanStatus(user_info_id,1,queryGroupDetailParameters);
-		int totalDoubtful = groupDetailMapper.selectByQueryGroupDetailParametersScanStatus(user_info_id,2,queryGroupDetailParameters);
-		
+
+		int totalDanger = groupDetailMapper.selectByQueryGroupDetailParametersScanStatus(user_info_id, 1,
+				queryGroupDetailParameters);
+		int totalDoubtful = groupDetailMapper.selectByQueryGroupDetailParametersScanStatus(user_info_id, 2,
+				queryGroupDetailParameters);
+
 		JSONObject statsJsobObject = new JSONObject();
 		statsJsobObject.put("total", total);
 		statsJsobObject.put("danger_accounts_num", totalDanger);
 		statsJsobObject.put("doubtful_accounts_num", totalDoubtful);
-		if(totalDanger==0||total==0) {
+		if (totalDanger == 0 || total == 0) {
 			statsJsobObject.put("danger_account_percent", 0);
-		}else {
-			statsJsobObject.put("danger_account_percent", ConanUtils.fix2(totalDanger/total*100));	
+		} else {
+			statsJsobObject.put("danger_account_percent", ConanUtils.fix2(totalDanger * 1.0 / total * 100));
 		}
 		resultJsonObject.put("stats", statsJsobObject);
 		return resultJsonObject;
 	}
-	
+
 	@Transactional
-	public JSONObject queryGroupList(String user_info_id,int pageNo) {
+	public JSONObject queryGroupList(String user_info_id, int pageNo) {
 		JSONObject resultJsonObject = new JSONObject();
-		List<Group> groupList = groupMapper.selectByUserInfoId(user_info_id, pageNo, ConanApplicationConstants.INIT_PAGE_SIZE);
+		List<Group> groupList = groupMapper.selectByUserInfoId(user_info_id, pageNo,
+				ConanApplicationConstants.INIT_PAGE_SIZE);
 		int total = groupMapper.selectByUserInfoIdTotal(user_info_id);
 		PageInfo pageInfo = new PageInfo();
 		pageInfo.setPageNo(pageNo);
 		pageInfo.setTotal(total);
 		pageInfo.setPageSize(ConanApplicationConstants.INIT_PAGE_SIZE);
-		
+
 		resultJsonObject.put("page_info", pageInfo);
 		JSONArray jsonArray = new JSONArray();
-		for(Group group:groupList) {
+		for (Group group : groupList) {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("id", group.getId());
 			jsonObject.put("created_at", group.getCreated_at());
 			jsonObject.put("updated_at", group.getUpdated_at());
 			jsonObject.put("group_name", group.getGroup_name());
 			jsonObject.put("group_comment", group.getGroup_comment());
-			
-			List<GroupDetail> groupDetailList  = groupDetailMapper.selectByUserInfoIdAndGroupId(user_info_id, group.getId());
-			if(groupDetailList==null||groupDetailList.isEmpty()) {
+
+			List<GroupDetail> groupDetailList = groupDetailMapper.selectByUserInfoIdAndGroupId(user_info_id,
+					group.getId());
+			if (groupDetailList == null || groupDetailList.isEmpty()) {
 				jsonObject.put("first_detection_time", null);
 				jsonObject.put("last_detection_time", null);
 				jsonObject.put("danger_percent", 0);
-			}else {
-				Date minDate = new Date(1000,1,1);
-				Date maxDate = new Date(1,1,1);
+			} else {
+				Date minDate = new Date(1000, 1, 1);
+				Date maxDate = new Date(1, 1, 1);
 				int danger = 0;
-				for(GroupDetail groupDetail:groupDetailList) {
+				for (GroupDetail groupDetail : groupDetailList) {
 					Date date = groupDetail.getCreated_at();
-					
-					if(minDate.after(date)) {
+
+					if (minDate.after(date)) {
 						minDate = date;
 					}
-					
-					if(maxDate.before(date)) {
+
+					if (maxDate.before(date)) {
 						maxDate = date;
 					}
-					if(groupDetail.getAccount_score()>=80) {
-						danger ++;
+					if (groupDetail.getAccount_score() >= 80) {
+						danger++;
 					}
 				}
 				jsonObject.put("first_detection_time", minDate);
 				jsonObject.put("last_detection_time", maxDate);
-				if(danger==0||groupDetailList.size()==0) {
-					jsonObject.put("danger_percent", 0);	
-				}else {
-					jsonObject.put("danger_percent", ConanUtils.fix2(danger/groupDetailList.size()*100));
+				if (danger == 0 || groupDetailList.size() == 0) {
+					jsonObject.put("danger_percent", 0);
+				} else {
+					jsonObject.put("danger_percent", ConanUtils.fix2(danger * 1.0 / groupDetailList.size() * 100));
 				}
-				
+
 			}
 			jsonArray.add(jsonObject);
 		}
 		resultJsonObject.put("groups", jsonArray);
 		return resultJsonObject;
 	}
+
 	@Transactional
-	public JSONObject exportGroups(String user_info_id,String[] group_ids) {
+	public JSONObject exportGroups(String user_info_id, String[] group_ids) {
 		JSONObject resultJsonObject = new JSONObject();
 		SXSSFWorkbook xssfWorkbook = new SXSSFWorkbook();
-		
-		if(group_ids == null||group_ids.length==0) {
+
+		if (group_ids == null || group_ids.length == 0) {
 			List<Group> groupList = groupMapper.selectByUserInfoIdAll(user_info_id);
 			List<String> groupId = new ArrayList<>();
-			for(Group Group: groupList) {
+			for (Group Group : groupList) {
 				groupId.add(Group.getId());
 			}
-			group_ids =  groupId.toArray(new String[groupId.size()]);
+			group_ids = groupId.toArray(new String[groupId.size()]);
 		}
-		
-		for(String group_id:group_ids) {
+
+		for (String group_id : group_ids) {
 			Group group = groupMapper.selectByPrimaryKey(group_id);
 			if (group == null || !group.getUser_info_id().equals(user_info_id)) {
 				try {
@@ -482,8 +515,9 @@ public class GroupService {
 						ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_MESSAGE,
 						ConanExceptionConstants.GROUP_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 			}
-			List<GroupDetail> groupDetailList  = groupDetailMapper.selectByUserInfoIdAndGroupId(user_info_id, group.getId());
-			
+			List<GroupDetail> groupDetailList = groupDetailMapper.selectByUserInfoIdAndGroupId(user_info_id,
+					group.getId());
+
 			SXSSFSheet xssfSheet = xssfWorkbook.createSheet(group.getGroup_name());
 			SXSSFRow XSSFRow0 = xssfSheet.createRow(0);
 			SXSSFCell XSSFCell0_0 = XSSFRow0.createCell(0);
@@ -504,11 +538,11 @@ public class GroupService {
 			XSSFCell0_7.setCellValue("账号历史");
 			SXSSFCell XSSFCell0_8 = XSSFRow0.createCell(8);
 			XSSFCell0_8.setCellValue("检测日期");
-			
+
 			CreationHelper createHelper = xssfWorkbook.getCreationHelper();
 			CellStyle cellDateStyle = xssfWorkbook.createCellStyle();
 			cellDateStyle.setDataFormat(createHelper.createDataFormat().getFormat("yyyy/mm/dd hh:mm:ss"));
-			
+
 			for (int i = 1; i <= groupDetailList.size(); i++) {
 				GroupDetail groupDetail = groupDetailList.get(i - 1);
 				SXSSFRow SXSSFRow = xssfSheet.createRow(i);
@@ -544,7 +578,7 @@ public class GroupService {
 				cell7.setCellValue(groupDetail.getDetail_score4());
 				cell8.setCellValue(groupDetail.getCreated_at());
 			}
-			
+
 		}
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		InputStream is = null;
