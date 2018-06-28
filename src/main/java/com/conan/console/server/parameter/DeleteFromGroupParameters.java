@@ -3,15 +3,17 @@ package com.conan.console.server.parameter;
 import java.util.Map;
 
 public class DeleteFromGroupParameters {
-	private Integer add_method;
+	private Integer delete_method;
 	private String[] detection_account_id;
 	private String delete_from_group_id;
 	private Map<String,Object> query_params;
-	public Integer getAdd_method() {
-		return add_method;
+	
+	
+	public Integer getDelete_method() {
+		return delete_method;
 	}
-	public void setAdd_method(Integer add_method) {
-		this.add_method = add_method;
+	public void setDelete_method(Integer delete_method) {
+		this.delete_method = delete_method;
 	}
 	public String[] getDetection_account_id() {
 		return detection_account_id;
