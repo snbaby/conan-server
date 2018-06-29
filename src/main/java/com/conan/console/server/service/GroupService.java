@@ -444,37 +444,25 @@ public class GroupService {
 			jsonObject.put("updated_at", group.getUpdated_at());
 			jsonObject.put("group_name", group.getGroup_name());
 			jsonObject.put("group_comment", group.getGroup_comment());
-
-			List<GroupDetail> groupDetailList = groupDetailMapper.selectByUserInfoIdAndGroupId(user_info_id,
-					group.getId());
-			if (groupDetailList == null || groupDetailList.isEmpty()) {
+			
+			long detailTotal = groupDetailMapper.selectByUserInfoIdAndGroupIdCount(user_info_id, group.getId());
+			
+			if (detailTotal == 0) {
 				jsonObject.put("first_detection_time", null);
 				jsonObject.put("last_detection_time", null);
 				jsonObject.put("danger_percent", 0);
 			} else {
-				Date minDate = new Date(1000, 1, 1);
-				Date maxDate = new Date(1, 1, 1);
-				int danger = 0;
-				for (GroupDetail groupDetail : groupDetailList) {
-					Date date = groupDetail.getCreated_at();
-
-					if (minDate.after(date)) {
-						minDate = date;
-					}
-
-					if (maxDate.before(date)) {
-						maxDate = date;
-					}
-					if (groupDetail.getAccount_score() >= 80) {
-						danger++;
-					}
-				}
+				long detailDanger = groupDetailMapper.selectByUserInfoIdAndGroupIdCountDanger(user_info_id, group.getId());
+				Date maxDate = groupDetailMapper.selectByUserInfoIdAndGroupIdMaxDate(user_info_id, group.getId());
+				Date minDate = groupDetailMapper.selectByUserInfoIdAndGroupIdMinDate(user_info_id, group.getId());
+				
 				jsonObject.put("first_detection_time", minDate);
 				jsonObject.put("last_detection_time", maxDate);
-				if (danger == 0 || groupDetailList.size() == 0) {
+				
+				if (detailDanger == 0) {
 					jsonObject.put("danger_percent", 0);
 				} else {
-					jsonObject.put("danger_percent", ConanUtils.fix2(danger * 1.0 / groupDetailList.size() * 100));
+					jsonObject.put("danger_percent", ConanUtils.fix2(detailDanger * 1.0 / detailTotal * 100));
 				}
 
 			}
