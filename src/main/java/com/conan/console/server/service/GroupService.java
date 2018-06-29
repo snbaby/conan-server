@@ -281,10 +281,15 @@ public class GroupService {
 	@Transactional
 	public void addIntoGroupByBill_id(String user_info_id, Map<String, Object> query_params, String bill_id, String target_group_id) {
 		String account_name = null;
-		if(StringUtils.isNotBlank(query_params.get("account_name").toString())) {
+		if(query_params != null && StringUtils.isNotBlank(query_params.get("account_name").toString())) {
 			account_name = query_params.get("account_name").toString();
 		}
-		int scan_status = Integer.parseInt(query_params.get("scan_status").toString());
+		
+		int scan_status = 0;
+		if(query_params != null) {
+			scan_status = Integer.parseInt(query_params.get("scan_status").toString());
+		}
+		
 		List<DetectionAccount> detectionAccountList = detectionAccountMapper.selectByParams(bill_id,
 				user_info_id,account_name,scan_status);
 		Group targetGroup = groupMapper.selectByPrimaryKey(target_group_id);
