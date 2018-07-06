@@ -5,6 +5,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class GetBillDetailParameters {
 	
 	private Integer pageNo;
@@ -44,7 +46,12 @@ public class GetBillDetailParameters {
 	}
 
 	public void setAccount_name(String account_name) {
-		this.account_name = account_name;
+		if(StringUtils.isBlank(account_name)) {
+			this.account_name = null;
+		}else {
+			this.account_name = account_name;
+		}
+		
 	}
 
 	public String getAccount_score_start() {

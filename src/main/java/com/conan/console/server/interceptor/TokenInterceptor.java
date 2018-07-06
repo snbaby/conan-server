@@ -43,6 +43,7 @@ public class TokenInterceptor implements HandlerInterceptor {
 			if (userStr != null || adminStr != null) {
 				return true;
 			} else {
+				_logger.info(">>>>>用户未登陆");
 				throw new ConanException(ConanExceptionConstants.USER_NOT_LOGIN_EXCEPTION_CODE,
 						ConanExceptionConstants.USER_NOT_LOGIN_EXCEPTION_MESSAGE,
 						ConanExceptionConstants.USER_NOT_LOGIN_EXCEPTION_HTTP_STATUS);

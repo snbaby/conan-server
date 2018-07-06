@@ -23,6 +23,8 @@ import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,8 @@ import com.conan.console.server.utils.ConanUtils;
 
 @Service
 public class DetectionService {
+	private final Logger _logger = LoggerFactory.getLogger(this.getClass());
+	
 	private static HashMap<String, String> lockMap = new HashMap<>();
 	
 	@Autowired
@@ -570,7 +574,6 @@ public class DetectionService {
 		
 	}
 
-	@Transactional
 	public JSONObject scanMultiAccount(int scan_type, String scan_file, String user_info_id) throws InterruptedException {
 		while(lockMap.containsKey(user_info_id)) {
 			Thread.sleep(1000);
@@ -583,6 +586,7 @@ public class DetectionService {
 						ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_MESSAGE,
 						ConanExceptionConstants.USER_NOT_EXISTS_EXCEPTION_HTTP_STATUS);
 			}
+			int count = 0;//连续检测出10个空行，就不进行检测了
 			// 生产用户账单
 			String uuid = UUID.randomUUID().toString();// 生成唯一主键
 
@@ -604,8 +608,17 @@ public class DetectionService {
 					String scanAccountStr = null;
 					try {
 						scanAccountStr = ConanUtils.getCellValueByCell(xssfSheet.getRow(i).getCell(0));
+						count = 0;
 					} catch (Exception e) {
 						// TODO: handle exception
+						if(count>=10) {
+							_logger.info(">>>>>用户："+user_info_id);
+							_logger.info(">>>>>文件："+scan_file);
+							_logger.info(">>>>>含有连续超过10行的excel");
+							break;
+						}else {
+							count++;
+						}
 						scanAccountStr = "";
 					}
 					if (StringUtils.isBlank(scanAccountStr)) {
@@ -640,7 +653,15 @@ public class DetectionService {
 				cellDateStyle.setDataFormat(createHelper.createDataFormat().getFormat("yyyy/mm/dd hh:mm:ss"));
 				for (int i = 1; i <= xssfSheet.getLastRowNum(); i++) {
 					String dectionAccountId = UUID.randomUUID().toString();// 生成唯一主键
-					Cell cell0 = xssfSheet.getRow(i).getCell(0);
+					Cell cell0 = null;
+					try {
+						cell0 = xssfSheet.getRow(i).getCell(0);
+					}catch (Exception e) {
+						// TODO: handle exception
+						_logger.info(">>>>>文件中含有连续超过10行的excel");
+						break;
+					}
+					
 					if (StringUtils.isBlank(ConanUtils.getCellValueByCell(cell0))) {
 						continue;
 					}
