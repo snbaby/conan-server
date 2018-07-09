@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.conan.console.server.entity.PageInfo;
+import com.conan.console.server.entity.master.CostRecord;
 import com.conan.console.server.entity.master.DetectionAccount;
 import com.conan.console.server.entity.master.QueryCost;
 import com.conan.console.server.entity.master.QueryRecharge;
@@ -19,6 +20,7 @@ import com.conan.console.server.entity.master.UserBill;
 import com.conan.console.server.entity.master.UserInfo;
 import com.conan.console.server.entity.master.UserRemain;
 import com.conan.console.server.exception.ConanException;
+import com.conan.console.server.mapper.master.CostRecordMapper;
 import com.conan.console.server.mapper.master.DetectionAccountMapper;
 import com.conan.console.server.mapper.master.QueryCostMapper;
 import com.conan.console.server.mapper.master.QueryRechargeMapper;
@@ -58,6 +60,9 @@ public class ManageService {
 	
 	@Autowired
 	private DetectionAccountMapper detectionAccountMapper;
+	
+	@Autowired
+	private CostRecordMapper costRecordMapper;
 	
 	@Transactional
 	public void handleRechargeReq(String recharge_id,String action,String reason) {
@@ -219,6 +224,61 @@ public class ManageService {
 		resultJsonObject.put("total_recharge_agree_gold", total_recharge_agree_gold);
 		return resultJsonObject;
 	}
+	
+	
+	@Transactional
+	public JSONObject getUserStats(String range_date_start,String range_date_end) {
+		long range_register_user_cnt = userInfoMapper.userRegister(range_date_start, range_date_end);
+		long total_register_user_cnt = userInfoMapper.selectTtRegisteredCntTotal();
+		long range_login_user_cnt = userInfoMapper.userLogin(range_date_start, range_date_end);
+		JSONObject resultJsonObject = new JSONObject();
+		resultJsonObject.put("range_register_user_cnt", range_register_user_cnt);
+		resultJsonObject.put("total_register_user_cnt", total_register_user_cnt);
+		resultJsonObject.put("range_login_user_cnt", range_login_user_cnt);
+		return resultJsonObject;
+	}
+	
+	
+	@Transactional
+	public JSONObject getRechargeStats(String range_date_start,String range_date_end) {
+		long range_recharge_users_cnt = rechargeBillMapper.rechargeUser(range_date_start, range_date_end);
+		long range_recharge_records_cnt = rechargeBillMapper.rechargeItems(range_date_start, range_date_end);
+		Double range_recharge_rmb_amount = rechargeBillMapper.rechargeRmb(range_date_start, range_date_end);
+		Double total_recharge_rmb_amount = rechargeBillMapper.totalRechargeRmb();
+		Double range_recharge_gold_amount = rechargeBillMapper.rechargeGold(range_date_start, range_date_end);
+		Double total_recharge_gold_amount = rechargeBillMapper.totalRechargeGold();
+		JSONObject resultJsonObject = new JSONObject();
+		resultJsonObject.put("range_recharge_users_cnt", range_recharge_users_cnt);
+		resultJsonObject.put("range_recharge_records_cnt", range_recharge_records_cnt);
+		resultJsonObject.put("range_recharge_rmb_amount", range_recharge_rmb_amount);
+		resultJsonObject.put("total_recharge_rmb_amount", total_recharge_rmb_amount);
+		resultJsonObject.put("range_recharge_gold_amount", range_recharge_gold_amount);
+		resultJsonObject.put("total_recharge_gold_amount", total_recharge_gold_amount);
+		return resultJsonObject;
+	}
+	
+	@Transactional
+	public JSONObject getSingleScanStats(String range_date_start,String range_date_end) {
+		long range_single_scan_users_cnt = costRecordMapper.singleScanUser(range_date_start, range_date_end);
+		long range_single_scan_records_cnt = costRecordMapper.singleScanRecords(range_date_start, range_date_end);
+		JSONObject resultJsonObject = new JSONObject();
+		resultJsonObject.put("range_single_scan_users_cnt", range_single_scan_users_cnt);
+		resultJsonObject.put("range_single_scan_records_cnt", range_single_scan_records_cnt);
+		return resultJsonObject;
+	}
+	
+	@Transactional
+	public JSONObject getBatchScanStats(String range_date_start,String range_date_end) {
+		long range_batch_scan_users_cnt = costRecordMapper.batchScanUser(range_date_start, range_date_end);
+		long range_batch_scan_records_cnt = costRecordMapper.batchScanRecords(range_date_start, range_date_end);
+		long range_batch_scan_accounts_cnt = detectionAccountMapper.batchScanAccounts(range_date_start, range_date_end);
+		JSONObject resultJsonObject = new JSONObject();
+		resultJsonObject.put("range_batch_scan_users_cnt", range_batch_scan_users_cnt);
+		resultJsonObject.put("range_batch_scan_records_cnt", range_batch_scan_records_cnt);
+		resultJsonObject.put("range_batch_scan_accounts_cnt", range_batch_scan_accounts_cnt);
+		return resultJsonObject;
+	}
+	
 	
 	
 }

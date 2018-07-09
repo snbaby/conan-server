@@ -10,7 +10,7 @@ logging:
 conan:
   server:
     validate-url: http://120.79.152.124:8080/api/v1.0/sendValidationCode
-    account-validate-url: http://www.tkenan.com/members/
+    account-validate-url: http://127.0.0.1:4444/members/
     batch-template-file: batch_template.xlsx
 
 minio:
@@ -50,7 +50,7 @@ datasource:
 spring:
   redis:
     database: 0
-    host: 127.0.0.1
+    host: 120.79.152.124
     port: 6379
     password:
     jedis:

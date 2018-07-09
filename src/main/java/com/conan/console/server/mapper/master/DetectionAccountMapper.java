@@ -9,6 +9,9 @@ import com.conan.console.server.entity.master.DetectionAccount;
 import com.conan.console.server.parameter.UserGetScanHistoryParameters;
 
 public interface DetectionAccountMapper {
+	
+	long batchScanAccounts(@Param("range_date_start") String range_date_start,@Param("range_date_end") String range_date_end);
+	
 	List<DetectionAccount> selectByUserGetScanHistoryParameters(
 			@Param("userGetScanHistoryParameters") UserGetScanHistoryParameters userGetScanHistoryParameters,
 			@Param("user_info_id") String user_info_id, @Param("pageSize") int pageSize);
