@@ -191,8 +191,12 @@
     IFNULL(count(distinct(user_info_id)),0)
     from cost_record
     where cost_type = '1'
+    <if test="range_date_start != null">
     and created_at <![CDATA[ >= ]]>  #{range_date_start}
+    </if>
+    <if test="range_date_end != null">
     and created_at <![CDATA[ <= ]]>  #{range_date_end}
+    </if>
   </select>
   
   <select id="singleScanRecords" resultType="java.lang.Long">
@@ -205,8 +209,12 @@
     IFNULL(count(id),0)
     from cost_record
     where cost_type = '1'
-    and created_at <![CDATA[ >= ]]>  #{range_date_start}
+    <if test="range_date_start != null">
+    	and created_at <![CDATA[ >= ]]>  #{range_date_start}
+    </if>
+    <if test="range_date_end != null">
     and created_at <![CDATA[ <= ]]>  #{range_date_end}
+    </if>
   </select>
   
   <select id="batchScanUser" resultType="java.lang.Long">
@@ -219,8 +227,12 @@
     IFNULL(count(distinct(user_info_id)),0)
     from cost_record
     where cost_type = '2'
-    and created_at <![CDATA[ >= ]]>  #{range_date_start}
-    and created_at <![CDATA[ <= ]]>  #{range_date_end}
+    <if test="range_date_start != null">
+    	and created_at <![CDATA[ >= ]]>  #{range_date_start}
+    </if>
+    <if test="range_date_end != null">
+    	and created_at <![CDATA[ <= ]]>  #{range_date_end}
+    </if>
   </select>
   
   <select id="batchScanRecords" resultType="java.lang.Long">
@@ -233,8 +245,12 @@
     IFNULL(sum(cost_gold),0)
     from cost_record
     where cost_type = '2'
-    and created_at <![CDATA[ >= ]]>  #{range_date_start}
-    and created_at <![CDATA[ <= ]]>  #{range_date_end}
+    <if test="range_date_start != null">
+    	and created_at <![CDATA[ >= ]]>  #{range_date_start}
+    </if>
+    <if test="range_date_end != null">
+    	and created_at <![CDATA[ <= ]]>  #{range_date_end}
+    </if>
   </select>
   
   

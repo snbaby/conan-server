@@ -62,8 +62,13 @@
     select 
     IFNULL(count(distinct(account_name)),0)
     from detection_account
-    where created_at <![CDATA[ >= ]]>  #{range_date_start}
-    and created_at <![CDATA[ <= ]]>  #{range_date_end}
+    where 1=1
+    <if test="range_date_start != null">
+    	and created_at <![CDATA[ >= ]]>  #{range_date_start}
+    </if>
+    <if test="range_date_end != null">
+    	and created_at <![CDATA[ <= ]]>  #{range_date_end}
+    </if>
   </select>
   
   <select id="selectByRecordIdAndUserInfoId" resultMap="BaseResultMap">

@@ -98,8 +98,13 @@
     select 
     IFNULL(count(distinct(user_info_id)),0)
     from recharge_bill
-    where created_at <![CDATA[ >= ]]>  #{range_date_start}
-    and created_at <![CDATA[ <= ]]>  #{range_date_end}
+    where 1=1
+    <if test="range_date_start != null">
+    	and created_at <![CDATA[ >= ]]>  #{range_date_start}
+    </if>
+    <if test="range_date_end != null">
+    	and created_at <![CDATA[ <= ]]>  #{range_date_end}
+   	</if>
   </select>
   <select id="rechargeItems" resultType="java.lang.Long">
     <!--
@@ -110,8 +115,13 @@
     select 
     IFNULL(count(id),0)
     from recharge_bill
-    where created_at <![CDATA[ >= ]]>  #{range_date_start}
-    and created_at <![CDATA[ <= ]]>  #{range_date_end}
+    where 1=1
+    <if test="range_date_start != null">
+    	and created_at <![CDATA[ >= ]]>  #{range_date_start}
+    </if>
+    <if test="range_date_end != null">
+    	and created_at <![CDATA[ <= ]]>  #{range_date_end}
+   	</if>
   </select>
   
   <select id="rechargeRmb" resultType="java.lang.Double">
@@ -123,8 +133,13 @@
     select 
     IFNULL(sum(rmb_amount),0)
     from recharge_bill
-    where created_at <![CDATA[ >= ]]>  #{range_date_start}
-    and created_at <![CDATA[ <= ]]>  #{range_date_end}
+    where 1=1
+    <if test="range_date_start != null">
+    	and created_at <![CDATA[ >= ]]>  #{range_date_start}
+    </if>
+    <if test="range_date_end != null">
+    	and created_at <![CDATA[ <= ]]>  #{range_date_end}
+   	</if>
   </select>
   
   <select id="totalRechargeRmb" resultType="java.lang.Double">
@@ -147,8 +162,13 @@
     select 
     IFNULL(sum(gold_total),0)
     from recharge_bill
-    where created_at <![CDATA[ >= ]]>  #{range_date_start}
-    and created_at <![CDATA[ <= ]]>  #{range_date_end}
+   where 1=1
+    <if test="range_date_start != null">
+    	and created_at <![CDATA[ >= ]]>  #{range_date_start}
+    </if>
+    <if test="range_date_end != null">
+    	and created_at <![CDATA[ <= ]]>  #{range_date_end}
+   	</if>
   </select>
   
   <select id="totalRechargeGold" resultType="java.lang.Double">

@@ -91,8 +91,13 @@
     select 
     IFNULL(count(id),0)
     from user_info
-    where created_at <![CDATA[ >= ]]>  #{range_date_start}
-    and created_at <![CDATA[ <= ]]>  #{range_date_end}
+    where 1=1
+    <if test="range_date_start != null">
+    	and created_at <![CDATA[ >= ]]>  #{range_date_start}
+    </if>
+    <if test="range_date_end != null">
+    	and created_at <![CDATA[ <= ]]>  #{range_date_end}
+   	</if>
   </select>
   
   <select id="userLogin" resultType="java.lang.Long">
@@ -104,8 +109,13 @@
     select 
     IFNULL(count(id),0)
     from user_info
-    where last_login_at <![CDATA[ >= ]]>  #{range_date_start}
+    where 1=1
+    <if test="range_date_start != null">
+    and last_login_at <![CDATA[ >= ]]>  #{range_date_start}
+    </if>
+    <if test="range_date_end != null">
     and last_login_at <![CDATA[ <= ]]>  #{range_date_end}
+    </if>
   </select>
   
   <select id="selectByQueryUserListParameters" resultMap="BaseResultMap">
