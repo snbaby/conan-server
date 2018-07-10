@@ -228,13 +228,13 @@ public class ManageService {
 	
 	@Transactional
 	public JSONObject getUserStats(String range_date_start,String range_date_end) {
-		long range_register_user_cnt = userInfoMapper.userRegister(range_date_start, range_date_end);
-		long total_register_user_cnt = userInfoMapper.selectTtRegisteredCntTotal();
-		long range_login_user_cnt = userInfoMapper.userLogin(range_date_start, range_date_end);
+		long range_register_users_cnt = userInfoMapper.userRegister(range_date_start, range_date_end);
+		long total_register_users_cnt = userInfoMapper.selectTtRegisteredCntTotal();
+		long range_login_users_cnt = userInfoMapper.userLogin(range_date_start, range_date_end);
 		JSONObject resultJsonObject = new JSONObject();
-		resultJsonObject.put("range_register_user_cnt", range_register_user_cnt);
-		resultJsonObject.put("total_register_user_cnt", total_register_user_cnt);
-		resultJsonObject.put("range_login_user_cnt", range_login_user_cnt);
+		resultJsonObject.put("range_register_users_cnt", range_register_users_cnt);
+		resultJsonObject.put("total_register_users_cnt", total_register_users_cnt);
+		resultJsonObject.put("range_login_users_cnt", range_login_users_cnt);
 		return resultJsonObject;
 	}
 	
