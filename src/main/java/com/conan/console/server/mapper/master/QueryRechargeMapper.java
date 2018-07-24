@@ -12,6 +12,9 @@ public interface QueryRechargeMapper {
 			@Param("queryRechargeListParameters") QueryRechargeListParameters queryRechargeListParameters,
 			@Param("pageSize") int pageSize);
 	
+	List<QueryRecharge> selectByQueryRechargeExcelParameters(
+			@Param("queryRechargeListParameters") QueryRechargeListParameters queryRechargeListParameters);
+	
 	int selectByQueryRechargeListParametersTotal(
 			@Param("queryRechargeListParameters") QueryRechargeListParameters queryRechargeListParameters);
 }

@@ -1,5 +1,6 @@
 package com.conan.console.server.rest;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -113,6 +114,26 @@ public class ManageController {
 				manageService.queryRechargeList(queryRechargeListParameters));
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
+	
+	@PostMapping("queryRechargeExcel")
+	public ResponseEntity<ResponseSuccessResult> queryRechargeExcel(HttpServletRequest request,
+			@RequestBody @Valid QueryRechargeListParameters queryRechargeListParameters, BindingResult bindingResult) throws IOException {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+		}
+		String isAdminLogin = (String) request.getSession().getAttribute("isAdminLogin");
+		if (StringUtils.isBlank(isAdminLogin)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success",
+				manageService.queryRechargeExcel(queryRechargeListParameters));
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
+	}
 
 	@PostMapping("queryCostList")
 	public ResponseEntity<ResponseSuccessResult> queryCostList(HttpServletRequest request,
@@ -172,6 +193,7 @@ public class ManageController {
 							.equals(adminLoginParameters.getUser_passwd())) {
 				isAdminExist = true;
 				request.getSession().setAttribute("isAdminLogin", "yes");
+				request.getSession().setMaxInactiveInterval(60*30);
 			}
 		}
 
