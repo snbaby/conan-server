@@ -12,6 +12,9 @@ public interface QueryCostMapper {
 			@Param("queryCostListParameters") QueryCostListParameters queryCostListParameters,
 			@Param("pageSize") int pageSize);
 	
+	List<QueryCost> selectByQueryCostExcelParameters(
+			@Param("queryCostListParameters") QueryCostListParameters queryCostListParameters);
+	
 	int selectByQueryCostListParametersTotal(
 			@Param("queryCostListParameters") QueryCostListParameters queryCostListParameters);
 }

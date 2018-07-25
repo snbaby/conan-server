@@ -166,6 +166,74 @@ public class ManageService {
 		resultJsonObject.put("users", jsonArray);
 		return resultJsonObject;
 	}
+	
+	@Transactional
+	public JSONObject queryUserExcel(QueryUserListParameters queryUserListParameters) throws IOException {
+		JSONObject resultJsonObject = new JSONObject();
+		List<UserInfo> userInfoList = userInfoMapper.selectByQueryUserExcelParameters(queryUserListParameters);
+
+		InputStream inputStream = null;
+		XSSFWorkbook xwb = null;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		String export_link = "";
+		try {
+			inputStream = getClass().getClassLoader().getResourceAsStream("user.xlsx");
+			xwb = new XSSFWorkbook(inputStream);
+			XSSFSheet xssfSheet = xwb.getSheetAt(0);
+			
+			CreationHelper createHelper = xwb.getCreationHelper();
+			CellStyle cellDateStyle = xwb.createCellStyle();
+			cellDateStyle.setDataFormat(createHelper.createDataFormat().getFormat("yyyy/mm/dd hh:mm:ss"));
+			
+			int i=1;
+			for(UserInfo userInfo:userInfoList) {
+				xssfSheet.createRow(i);
+				Cell cell0 = xssfSheet.getRow(i).createCell(0);
+				cell0.setCellValue(userInfo.getId());
+				Cell cell1 = xssfSheet.getRow(i).createCell(1);
+				cell1.setCellValue(userInfo.getNick_name());
+				Cell cell2 = xssfSheet.getRow(i).createCell(2);
+				cell2.setCellValue(userInfo.getPhone_no());
+				Cell cell3 = xssfSheet.getRow(i).createCell(3);
+				cell3.setCellStyle(cellDateStyle);
+				cell3.setCellValue(userInfo.getCreated_at());
+				Cell cell4 = xssfSheet.getRow(i).createCell(4);
+				cell4.setCellStyle(cellDateStyle);
+				cell4.setCellValue(userInfo.getLast_login_at());
+				i++;
+			}
+			xwb.write(os);
+			byte[] content = os.toByteArray();
+			minioService.uploadFile(new ByteArrayInputStream(content), "user.xlsx", "application/octet-stream");
+			export_link = minioService.presignedGetObject("user.xlsx");
+		} finally {
+			try {
+				if (xwb != null) {
+					xwb.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				os.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				if (inputStream != null) {
+					inputStream.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		resultJsonObject.put("export_link", export_link);
+		return resultJsonObject;
+	}
 
 	@Transactional
 	public JSONObject queryRechargeList(QueryRechargeListParameters queryRechargeListParameters) {
@@ -280,6 +348,81 @@ public class ManageService {
 
 		resultJsonObject.put("page_info", pageInfo);
 		resultJsonObject.put("costs", queryCostList);
+		return resultJsonObject;
+	}
+	
+	@Transactional
+	public JSONObject queryCostExcel(QueryCostListParameters queryCostListParameters) throws IOException {
+		JSONObject resultJsonObject = new JSONObject();
+		List<QueryCost> queryCostList = queryCostMapper.selectByQueryCostExcelParameters(queryCostListParameters);
+		
+		InputStream inputStream = null;
+		XSSFWorkbook xwb = null;
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		String export_link = "";
+		try {
+			inputStream = getClass().getClassLoader().getResourceAsStream("cost.xlsx");
+			xwb = new XSSFWorkbook(inputStream);
+			XSSFSheet xssfSheet = xwb.getSheetAt(0);
+			
+			CreationHelper createHelper = xwb.getCreationHelper();
+			CellStyle cellDateStyle = xwb.createCellStyle();
+			cellDateStyle.setDataFormat(createHelper.createDataFormat().getFormat("yyyy/mm/dd hh:mm:ss"));
+			
+			int i=1;
+			for(QueryCost queryCost:queryCostList) {
+				xssfSheet.createRow(i);
+				Cell cell0 = xssfSheet.getRow(i).createCell(0);
+				cell0.setCellValue(queryCost.getId());
+				Cell cell1 = xssfSheet.getRow(i).createCell(1);
+				cell1.setCellStyle(cellDateStyle);
+				cell1.setCellValue(queryCost.getCreated_at());
+				Cell cell2 = xssfSheet.getRow(i).createCell(2);
+				cell2.setCellValue(queryCost.getUser_info_id());
+				Cell cell3 = xssfSheet.getRow(i).createCell(3);
+				cell3.setCellValue(queryCost.getPhone_no());
+				Cell cell4 = xssfSheet.getRow(i).createCell(4);
+				if(queryCost.getCost_type().equals("2")) {
+					cell4.setCellValue("批量账号查询");	
+				}else {
+					cell4.setCellValue("单账号查询");
+				}
+				
+				Cell cell5 = xssfSheet.getRow(i).createCell(5);
+				cell5.setCellValue(queryCost.getCost_gold()+"个 （账号当前剩余"+queryCost.getRemain_gold()+"个）");
+				Cell cell6 = xssfSheet.getRow(i).createCell(6);
+				i++;
+			}
+			xwb.write(os);
+			byte[] content = os.toByteArray();
+			minioService.uploadFile(new ByteArrayInputStream(content), "cost.xlsx", "application/octet-stream");
+			export_link = minioService.presignedGetObject("cost.xlsx");
+		} finally {
+			try {
+				if (xwb != null) {
+					xwb.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				os.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				if (inputStream != null) {
+					inputStream.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		resultJsonObject.put("export_link", export_link);
 		return resultJsonObject;
 	}
 

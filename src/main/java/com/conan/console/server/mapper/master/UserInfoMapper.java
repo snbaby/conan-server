@@ -70,7 +70,10 @@ public interface UserInfoMapper {
     
     List<UserInfo> selectByQueryUserListParameters(
 			@Param("queryUserListParameters") QueryUserListParameters queryUserListParameters, @Param("pageSize") int pageSize);
-
+    
+    List<UserInfo> selectByQueryUserExcelParameters(
+			@Param("queryUserListParameters") QueryUserListParameters queryUserListParameters);
+    
 	int selectByQueryUserListParametersTotal(@Param("queryUserListParameters") QueryUserListParameters queryUserListParameters);
     
 }

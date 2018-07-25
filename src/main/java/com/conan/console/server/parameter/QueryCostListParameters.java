@@ -24,8 +24,6 @@ public class QueryCostListParameters {
 	
 	private String cost_id;
 	
-	@NotNull(message = "pageNo不能为空")
-	@Min(value = 1, message = "pageNo最小为1")
 	private Integer pageNo;
 
 	public String getUser_id() {

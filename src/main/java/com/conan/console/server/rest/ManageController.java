@@ -94,6 +94,26 @@ public class ManageController {
 				manageService.queryUserList(queryUserListParameters));
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
+	
+	@PostMapping("queryUserExcel")
+	public ResponseEntity<ResponseSuccessResult> queryUserExcel(HttpServletRequest request,
+			@RequestBody @Valid QueryUserListParameters queryUserListParameters, BindingResult bindingResult) throws IOException {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+		}
+		String isAdminLogin = (String) request.getSession().getAttribute("isAdminLogin");
+		if (StringUtils.isBlank(isAdminLogin)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success",
+				manageService.queryUserExcel(queryUserListParameters));
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
+	}
 
 	@PostMapping("queryRechargeList")
 	public ResponseEntity<ResponseSuccessResult> queryRechargeList(HttpServletRequest request,
@@ -152,6 +172,26 @@ public class ManageController {
 
 		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success",
 				manageService.queryCostList(queryCostListParameters));
+		return new ResponseEntity<>(responseResult, HttpStatus.OK);
+	}
+	
+	@PostMapping("queryCostExcel")
+	public ResponseEntity<ResponseSuccessResult> queryCostExcel(HttpServletRequest request,
+			@RequestBody @Valid QueryCostListParameters queryCostListParameters, BindingResult bindingResult) throws IOException {
+		if (bindingResult.hasErrors()) {
+			throw new ConanException(ConanExceptionConstants.PARAMETER_EXCEPTION_CODE,
+					ConanExceptionConstants.PARAMETER_EXCEPTION_MESSAGE, bindingResult.getFieldError(),
+					ConanExceptionConstants.PARAMETER_EXCEPTION_HTTP_STATUS);
+		}
+		String isAdminLogin = (String) request.getSession().getAttribute("isAdminLogin");
+		if (StringUtils.isBlank(isAdminLogin)) {
+			throw new ConanException(ConanExceptionConstants.INTERNAL_SERVER_ERROR_CODE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_MESSAGE,
+					ConanExceptionConstants.INTERNAL_SERVER_ERROR_HTTP_STATUS);
+		}
+
+		ResponseSuccessResult responseResult = new ResponseSuccessResult(HttpStatus.OK.value(), "success",
+				manageService.queryCostExcel(queryCostListParameters));
 		return new ResponseEntity<>(responseResult, HttpStatus.OK);
 	}
 
