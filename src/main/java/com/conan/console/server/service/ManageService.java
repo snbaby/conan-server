@@ -389,8 +389,9 @@ public class ManageService {
 				}
 				
 				Cell cell5 = xssfSheet.getRow(i).createCell(5);
-				cell5.setCellValue(queryCost.getCost_gold()+"个 （账号当前剩余"+queryCost.getRemain_gold()+"个）");
+				cell5.setCellValue(queryCost.getCost_gold());
 				Cell cell6 = xssfSheet.getRow(i).createCell(6);
+				cell6.setCellValue(queryCost.getRemain_gold());
 				i++;
 			}
 			xwb.write(os);
