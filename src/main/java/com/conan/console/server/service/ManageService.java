@@ -199,7 +199,7 @@ public class ManageService {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		String export_link = "";
 		try {
-			inputStream = getClass().getClassLoader().getResourceAsStream("export.xlsx");
+			inputStream = getClass().getClassLoader().getResourceAsStream("recharge.xlsx");
 			xwb = new XSSFWorkbook(inputStream);
 			XSSFSheet xssfSheet = xwb.getSheetAt(0);
 			
@@ -209,6 +209,7 @@ public class ManageService {
 			
 			int i=1;
 			for(QueryRecharge queryRecharge:queryRechargeList) {
+				xssfSheet.createRow(i);
 				Cell cell0 = xssfSheet.getRow(i).createCell(0);
 				cell0.setCellValue(queryRecharge.getId());
 				Cell cell1 = xssfSheet.getRow(i).createCell(1);
@@ -234,8 +235,8 @@ public class ManageService {
 			}
 			xwb.write(os);
 			byte[] content = os.toByteArray();
-			minioService.uploadFile(new ByteArrayInputStream(content), "export.xlsx", "application/octet-stream");
-			export_link = minioService.presignedGetObject("export.xlsx");
+			minioService.uploadFile(new ByteArrayInputStream(content), "recharge.xlsx", "application/octet-stream");
+			export_link = minioService.presignedGetObject("recharge.xlsx");
 		} finally {
 			try {
 				if (xwb != null) {
